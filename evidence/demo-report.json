@@ -1,24 +1,24 @@
 {
   "summary": {
     "document": "examples/demo.md",
-    "generated_at": "2026-09-09T20:38:09+00:00",
+    "generated_at": "2026-09-09T20:40:20+00:00",
     "tool_version": "0.1.0",
-    "total_citations": 13,
+    "total_citations": 14,
     "verified": 8,
-    "mismatch": 0,
+    "mismatch": 1,
     "not_found": 4,
     "malformed": 0,
     "unreachable": 1,
     "unverifiable": 0,
-    "conclusive_checks": 12,
-    "integrity_score": 0.6666666666666666
+    "conclusive_checks": 13,
+    "integrity_score": 0.6153846153846154
   },
   "findings": [
     {
       "citation": {
         "raw": "doi:10.1038/nature14539",
         "kind": "doi",
-        "line": 42,
+        "line": 43,
         "identifier": "10.1038/nature14539",
         "claimed_title": "Deep learning",
         "claimed_authors": [
@@ -42,13 +42,13 @@
       "title_similarity": 100.0,
       "author_overlap": 1.0,
       "evidence_url": "https://doi.org/10.1038/nature14539",
-      "checked_at": "2026-09-09T20:38:03+00:00"
+      "checked_at": "2026-09-09T20:40:12+00:00"
     },
     {
       "citation": {
         "raw": "arXiv:1706.03762",
         "kind": "arxiv",
-        "line": 44,
+        "line": 45,
         "identifier": "1706.03762",
         "claimed_title": "Attention Is All You Need",
         "claimed_authors": [
@@ -77,13 +77,13 @@
       "title_similarity": 100.0,
       "author_overlap": 1.0,
       "evidence_url": "https://arxiv.org/abs/1706.03762",
-      "checked_at": "2026-09-09T20:38:02+00:00"
+      "checked_at": "2026-09-09T20:40:12+00:00"
     },
     {
       "citation": {
         "raw": "arXiv:1810.04805",
         "kind": "arxiv",
-        "line": 46,
+        "line": 47,
         "identifier": "1810.04805",
         "claimed_title": "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
         "claimed_authors": [
@@ -109,13 +109,13 @@
       "title_similarity": 100.0,
       "author_overlap": 1.0,
       "evidence_url": "https://arxiv.org/abs/1810.04805",
-      "checked_at": "2026-09-09T20:38:02+00:00"
+      "checked_at": "2026-09-09T20:40:12+00:00"
     },
     {
       "citation": {
         "raw": "doi:10.1016/j.jpuba.2021.02.014",
         "kind": "doi",
-        "line": 48,
+        "line": 49,
         "identifier": "10.1016/j.jpuba.2021.02.014",
         "claimed_title": "Automated compliance frameworks in Australian social security administration",
         "claimed_authors": [
@@ -134,13 +134,13 @@
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": "https://api.crossref.org/works/10.1016/j.jpuba.2021.02.014",
-      "checked_at": "2026-09-09T20:38:02+00:00"
+      "checked_at": "2026-09-09T20:40:13+00:00"
     },
     {
       "citation": {
         "raw": "doi:10.9911/erla.2020.13.4.055",
         "kind": "doi",
-        "line": 50,
+        "line": 51,
         "identifier": "10.9911/erla.2020.13.4.055",
         "claimed_title": "Comparative analysis of algorithmic welfare assessment across European Union member states",
         "claimed_authors": [
@@ -158,13 +158,13 @@
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": "https://api.crossref.org/works/10.9911/erla.2020.13.4.055",
-      "checked_at": "2026-09-09T20:38:02+00:00"
+      "checked_at": "2026-09-09T20:40:13+00:00"
     },
     {
       "citation": {
         "raw": "Crawford, L. B. (2022). \"The reasoned decision requirement and automated administrative action\". Public Law Review, 33(1).",
         "kind": "bibliographic",
-        "line": 52,
+        "line": 53,
         "identifier": null,
         "claimed_title": "The reasoned decision requirement and automated administrative action",
         "claimed_authors": [
@@ -182,13 +182,13 @@
       "title_similarity": 58.208955223880594,
       "author_overlap": null,
       "evidence_url": "https://doi.org/10.31390/gradschool_disstheses.1478",
-      "checked_at": "2026-09-09T20:38:04+00:00"
+      "checked_at": "2026-09-09T20:40:13+00:00"
     },
     {
       "citation": {
         "raw": "doi:10.1109/CVPR.2009.5206848",
         "kind": "doi",
-        "line": 54,
+        "line": 55,
         "identifier": "10.1109/cvpr.2009.5206848",
         "claimed_title": "ImageNet: A large-scale hierarchical image database",
         "claimed_authors": [
@@ -217,13 +217,13 @@
       "title_similarity": 100.0,
       "author_overlap": 0.8,
       "evidence_url": "https://doi.org/10.1109/cvpr.2009.5206848",
-      "checked_at": "2026-09-09T20:38:03+00:00"
+      "checked_at": "2026-09-09T20:40:13+00:00"
     },
     {
       "citation": {
         "raw": "arXiv:1906.02530",
         "kind": "arxiv",
-        "line": 56,
+        "line": 57,
         "identifier": "1906.02530",
         "claimed_title": "Can you trust your model's uncertainty? Evaluating predictive uncertainty under dataset shift",
         "claimed_authors": [
@@ -253,13 +253,13 @@
       "title_similarity": 100.0,
       "author_overlap": 1.0,
       "evidence_url": "https://arxiv.org/abs/1906.02530",
-      "checked_at": "2026-09-09T20:38:03+00:00"
+      "checked_at": "2026-09-09T20:40:13+00:00"
     },
     {
       "citation": {
         "raw": "Ashworth, R. T. (2023). \"Procedural fairness in machine-assisted eligibility determination: a longitudinal study of appeal outcomes\". Administrative Science Quarterly Review, 68(3), 401-429.",
         "kind": "bibliographic",
-        "line": 58,
+        "line": 59,
         "identifier": null,
         "claimed_title": "Procedural fairness in machine-assisted eligibility determination: a longitudinal study of appeal outcomes",
         "claimed_authors": [
@@ -277,13 +277,13 @@
       "title_similarity": 55.33980582524272,
       "author_overlap": null,
       "evidence_url": "https://doi.org/10.3109/01658109309038141",
-      "checked_at": "2026-09-09T20:38:05+00:00"
+      "checked_at": "2026-09-09T20:40:13+00:00"
     },
     {
       "citation": {
         "raw": "arXiv:1703.01365",
         "kind": "arxiv",
-        "line": 60,
+        "line": 61,
         "identifier": "1703.01365",
         "claimed_title": "Axiomatic attribution for deep networks",
         "claimed_authors": [
@@ -305,13 +305,41 @@
       "title_similarity": 100.0,
       "author_overlap": 1.0,
       "evidence_url": "https://arxiv.org/abs/1703.01365",
-      "checked_at": "2026-09-09T20:38:03+00:00"
+      "checked_at": "2026-09-09T20:40:13+00:00"
+    },
+    {
+      "citation": {
+        "raw": "doi:10.1038/nature14539",
+        "kind": "doi",
+        "line": 63,
+        "identifier": "10.1038/nature14539",
+        "claimed_title": "Procedural baselines for administrative automation in social welfare",
+        "claimed_authors": [
+          "Harper"
+        ],
+        "claimed_year": 2016,
+        "context": "Harper, S. J. (2016). \"Procedural baselines for administrative automation in social welfare\". Administrative Law Quarterly, 29(4), 312-340. doi:10.1038/nature14539"
+      },
+      "verdict": "mismatch",
+      "authority": "crossref",
+      "detail": "identifier resolves to a DIFFERENT work. Document claims 'Procedural baselines for administrative automation in social welfare'; record holds 'Deep learning' (22% similarity)",
+      "resolved_title": "Deep learning",
+      "resolved_authors": [
+        "LeCun",
+        "Bengio",
+        "Hinton"
+      ],
+      "resolved_year": 2015,
+      "title_similarity": 22.22222222222223,
+      "author_overlap": 0.0,
+      "evidence_url": "https://doi.org/10.1038/nature14539",
+      "checked_at": "2026-09-09T20:40:13+00:00"
     },
     {
       "citation": {
         "raw": "https://www.crossref.org/documentation/",
         "kind": "url",
-        "line": 62,
+        "line": 65,
         "identifier": "https://www.crossref.org/documentation/",
         "claimed_title": null,
         "claimed_authors": [],
@@ -327,13 +355,13 @@
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": "https://www.crossref.org/documentation/",
-      "checked_at": "2026-09-09T20:38:03+00:00"
+      "checked_at": "2026-09-09T20:40:13+00:00"
     },
     {
       "citation": {
         "raw": "https://arxiv.org/help/api/",
         "kind": "url",
-        "line": 63,
+        "line": 66,
         "identifier": "https://arxiv.org/help/api/",
         "claimed_title": null,
         "claimed_authors": [],
@@ -349,13 +377,13 @@
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": "https://arxiv.org/help/api/",
-      "checked_at": "2026-09-09T20:38:03+00:00"
+      "checked_at": "2026-09-09T20:40:13+00:00"
     },
     {
       "citation": {
         "raw": "https://this-domain-does-not-resolve-citeaudit.invalid/report.pdf",
         "kind": "url",
-        "line": 63,
+        "line": 66,
         "identifier": "https://this-domain-does-not-resolve-citeaudit.invalid/report.pdf",
         "claimed_title": null,
         "claimed_authors": [],
@@ -371,7 +399,7 @@
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": null,
-      "checked_at": "2026-09-09T20:38:09+00:00"
+      "checked_at": "2026-09-09T20:40:20+00:00"
     }
   ]
 }

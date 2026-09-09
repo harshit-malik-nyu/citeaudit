@@ -1,7 +1,7 @@
 {
-  "generated_utc": "2026-09-09T20:38:32+00:00",
-  "commit": "428b4cb1000cb709a61378fad8c5874cb80a2264",
-  "run_url": "https://github.com/harshit-malik-nyu/citeaudit/actions/runs/34402143161",
+  "generated_utc": "2026-09-09T20:40:43+00:00",
+  "commit": "fc2e14aabe76c451d70cd491fe87f454bd2c13f7",
+  "run_url": "https://github.com/harshit-malik-nyu/citeaudit/actions/runs/34402376332",
   "python": "3.12.14",
   "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
   "authorities": [
@@ -23,23 +23,23 @@
   ],
   "demo_summary": {
     "document": "examples/demo.md",
-    "generated_at": "2026-09-09T20:38:09+00:00",
+    "generated_at": "2026-09-09T20:40:20+00:00",
     "tool_version": "0.1.0",
-    "total_citations": 13,
+    "total_citations": 14,
     "verified": 8,
-    "mismatch": 0,
+    "mismatch": 1,
     "not_found": 4,
     "malformed": 0,
     "unreachable": 1,
     "unverifiable": 0,
-    "conclusive_checks": 12,
-    "integrity_score": 0.6666666666666666
+    "conclusive_checks": 13,
+    "integrity_score": 0.6153846153846154
   },
   "artifact_hashes": {
-    "evidence/demo-report.json": "c3a5fc3d98aa2c1bef72cf738b46cc3bb4c31175431d9a9cd2930002e51dbdff",
-    "evidence/demo-report.md": "73baa3e0b190a2a425d0ab511b1ad135cc844f1f3a9f42abc5a3e4bf4e709f71",
-    "examples/demo.md": "a22a27eadec7511b584ff7cc992a40e5c2c7eface39087863c8f4a5882afba5b",
-    "docs/index.html": "6757eb2cbde19b2dbe5f1bf92c47e5d8707907d061dbfab9c673d077359b9481"
+    "evidence/demo-report.json": "12229454c11b8c595212feb1dda361e3cca00ee22c3934236363abf6daa072d9",
+    "evidence/demo-report.md": "a8843f68df4a91b638330b03d16f9a08d62b7e8290c52b548dffe955a766962c",
+    "examples/demo.md": "38113d6b50ca2734002ac2004bab609abd5f84fc382568b5e8fb125adb531517",
+    "docs/index.html": "36ea4bbf09331ab3ccddc0eeb7d334c36864482366175f20ffbf3c0ec5ce0cff"
   },
   "note": "Every verdict here came from a live call to the named authority at the timestamp above. Each finding in demo-report.json carries an evidence_url that reproduces the check independently of this tool."
 }

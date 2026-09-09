@@ -1,0 +1,80 @@
+
+note: 2 request(s) could not be completed; those citations are reported as inconclusive rather than as failures.
+citeaudit 0.1.0  —  examples/demo.md
+==============================================================================
+
+No such record (4)
+------------------------------------------------------------------------------
+  FAIL line 48    10.1016/j.jpuba.2021.02.014
+       document says: 'Automated compliance frameworks in Australian social security admi'
+       Crossref holds no record for this DOI. No registrant has ever
+       deposited it.
+       check it: https://api.crossref.org/works/10.1016/j.jpuba.2021.02.014
+
+  FAIL line 50    10.9911/erla.2020.13.4.055
+       document says: 'Comparative analysis of algorithmic welfare assessment across Euro'
+       Crossref holds no record for this DOI. No registrant has ever
+       deposited it.
+       check it: https://api.crossref.org/works/10.9911/erla.2020.13.4.055
+
+  FAIL line 52    The reasoned decision requirement and automated administrative action
+       document says: 'The reasoned decision requirement and automated administrative act'
+       no Crossref record matches this description. Closest was 'Choline
+       Requirement, Distribution and Concentration in Laying Hens.' at 58%
+       similarity, below the threshold for a match.
+       check it: https://doi.org/10.31390/gradschool_disstheses.1478
+
+  FAIL line 58    Procedural fairness in machine-assisted eligibility determination: a l
+       document says: 'Procedural fairness in machine-assisted eligibility determination:'
+       no Crossref record matches this description. Closest was 'A
+       longitudinal study of visual function in multiple sclerosis: With a
+       note on the Cambridge Grating Test' at 55% similarity, below the
+       threshold for a match.
+       check it: https://doi.org/10.3109/01658109309038141
+
+
+Could not check (1)
+------------------------------------------------------------------------------
+  ??   line 63    https://this-domain-does-not-resolve-citeaudit.invalid/report.pdf
+       check could not be completed:
+       https://this-domain-does-not-resolve-citeaudit.invalid/report.pdf
+
+
+Verified (8)
+------------------------------------------------------------------------------
+  OK   line 42    10.1038/nature14539
+       title matches record (100% similarity)
+       check it: https://doi.org/10.1038/nature14539
+
+  OK   line 44    1706.03762
+       title matches record (100% similarity)
+       check it: https://arxiv.org/abs/1706.03762
+
+  OK   line 46    1810.04805
+       title matches record (100% similarity)
+       check it: https://arxiv.org/abs/1810.04805
+
+  OK   line 54    10.1109/cvpr.2009.5206848
+       title matches record (100% similarity)
+       check it: https://doi.org/10.1109/cvpr.2009.5206848
+
+  OK   line 56    1906.02530
+       title matches record (100% similarity)
+       check it: https://arxiv.org/abs/1906.02530
+
+  OK   line 60    1703.01365
+       title matches record (100% similarity)
+       check it: https://arxiv.org/abs/1703.01365
+
+  OK   line 62    https://www.crossref.org/documentation/
+       link responded HTTP 200
+       check it: https://www.crossref.org/documentation/
+
+  OK   line 63    https://arxiv.org/help/api/
+       link responded HTTP 200
+       check it: https://arxiv.org/help/api/
+
+==============================================================================
+13 citations  |  8 verified  |  4 not found  |  0 mismatched  |  0 malformed
+inconclusive: 1 unreachable, 0 not machine-checkable (excluded from the score, not counted as failures)
+integrity: 67% of 12 conclusive checks passed

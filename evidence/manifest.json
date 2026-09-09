@@ -1,0 +1,45 @@
+{
+  "generated_utc": "2026-09-09T20:38:32+00:00",
+  "commit": "428b4cb1000cb709a61378fad8c5874cb80a2264",
+  "run_url": "https://github.com/harshit-malik-nyu/citeaudit/actions/runs/34402143161",
+  "python": "3.12.14",
+  "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+  "authorities": [
+    {
+      "name": "Crossref",
+      "endpoint": "https://api.crossref.org",
+      "role": "DOI registration agency; authority for DOI existence"
+    },
+    {
+      "name": "arXiv",
+      "endpoint": "https://export.arxiv.org/api/query",
+      "role": "authority for preprint identifiers"
+    },
+    {
+      "name": "HTTP",
+      "endpoint": "-",
+      "role": "liveness only; proves a URL responds, not that its described content ever existed"
+    }
+  ],
+  "demo_summary": {
+    "document": "examples/demo.md",
+    "generated_at": "2026-09-09T20:38:09+00:00",
+    "tool_version": "0.1.0",
+    "total_citations": 13,
+    "verified": 8,
+    "mismatch": 0,
+    "not_found": 4,
+    "malformed": 0,
+    "unreachable": 1,
+    "unverifiable": 0,
+    "conclusive_checks": 12,
+    "integrity_score": 0.6666666666666666
+  },
+  "artifact_hashes": {
+    "evidence/demo-report.json": "c3a5fc3d98aa2c1bef72cf738b46cc3bb4c31175431d9a9cd2930002e51dbdff",
+    "evidence/demo-report.md": "73baa3e0b190a2a425d0ab511b1ad135cc844f1f3a9f42abc5a3e4bf4e709f71",
+    "examples/demo.md": "a22a27eadec7511b584ff7cc992a40e5c2c7eface39087863c8f4a5882afba5b",
+    "docs/index.html": "6757eb2cbde19b2dbe5f1bf92c47e5d8707907d061dbfab9c673d077359b9481"
+  },
+  "note": "Every verdict here came from a live call to the named authority at the timestamp above. Each finding in demo-report.json carries an evidence_url that reproduces the check independently of this tool."
+}

@@ -1,0 +1,377 @@
+{
+  "summary": {
+    "document": "examples/demo.md",
+    "generated_at": "2026-09-09T20:38:09+00:00",
+    "tool_version": "0.1.0",
+    "total_citations": 13,
+    "verified": 8,
+    "mismatch": 0,
+    "not_found": 4,
+    "malformed": 0,
+    "unreachable": 1,
+    "unverifiable": 0,
+    "conclusive_checks": 12,
+    "integrity_score": 0.6666666666666666
+  },
+  "findings": [
+    {
+      "citation": {
+        "raw": "doi:10.1038/nature14539",
+        "kind": "doi",
+        "line": 42,
+        "identifier": "10.1038/nature14539",
+        "claimed_title": "Deep learning",
+        "claimed_authors": [
+          "LeCun",
+          "Bengio",
+          "Hinton"
+        ],
+        "claimed_year": 2015,
+        "context": "LeCun, Y., Bengio, Y., & Hinton, G. (2015). \"Deep learning\". Nature, 521(7553), 436-444. doi:10.1038/nature14539"
+      },
+      "verdict": "verified",
+      "authority": "crossref",
+      "detail": "title matches record (100% similarity)",
+      "resolved_title": "Deep learning",
+      "resolved_authors": [
+        "LeCun",
+        "Bengio",
+        "Hinton"
+      ],
+      "resolved_year": 2015,
+      "title_similarity": 100.0,
+      "author_overlap": 1.0,
+      "evidence_url": "https://doi.org/10.1038/nature14539",
+      "checked_at": "2026-09-09T20:38:03+00:00"
+    },
+    {
+      "citation": {
+        "raw": "arXiv:1706.03762",
+        "kind": "arxiv",
+        "line": 44,
+        "identifier": "1706.03762",
+        "claimed_title": "Attention Is All You Need",
+        "claimed_authors": [
+          "Vaswani",
+          "Shazeer",
+          "Parmar"
+        ],
+        "claimed_year": 2017,
+        "context": "Vaswani, A., Shazeer, N., Parmar, N., et al. (2017). \"Attention Is All You Need\". arXiv:1706.03762"
+      },
+      "verdict": "verified",
+      "authority": "arxiv",
+      "detail": "title matches record (100% similarity)",
+      "resolved_title": "Attention Is All You Need",
+      "resolved_authors": [
+        "Vaswani",
+        "Shazeer",
+        "Parmar",
+        "Uszkoreit",
+        "Jones",
+        "Gomez",
+        "Kaiser",
+        "Polosukhin"
+      ],
+      "resolved_year": 2017,
+      "title_similarity": 100.0,
+      "author_overlap": 1.0,
+      "evidence_url": "https://arxiv.org/abs/1706.03762",
+      "checked_at": "2026-09-09T20:38:02+00:00"
+    },
+    {
+      "citation": {
+        "raw": "arXiv:1810.04805",
+        "kind": "arxiv",
+        "line": 46,
+        "identifier": "1810.04805",
+        "claimed_title": "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
+        "claimed_authors": [
+          "Devlin",
+          "Chang",
+          "Lee",
+          "Toutanova"
+        ],
+        "claimed_year": 2018,
+        "context": "Devlin, J., Chang, M., Lee, K., & Toutanova, K. (2018). \"BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding\". arXiv:1810.04805"
+      },
+      "verdict": "verified",
+      "authority": "arxiv",
+      "detail": "title matches record (100% similarity)",
+      "resolved_title": "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
+      "resolved_authors": [
+        "Devlin",
+        "Chang",
+        "Lee",
+        "Toutanova"
+      ],
+      "resolved_year": 2018,
+      "title_similarity": 100.0,
+      "author_overlap": 1.0,
+      "evidence_url": "https://arxiv.org/abs/1810.04805",
+      "checked_at": "2026-09-09T20:38:02+00:00"
+    },
+    {
+      "citation": {
+        "raw": "doi:10.1016/j.jpuba.2021.02.014",
+        "kind": "doi",
+        "line": 48,
+        "identifier": "10.1016/j.jpuba.2021.02.014",
+        "claimed_title": "Automated compliance frameworks in Australian social security administration",
+        "claimed_authors": [
+          "Whitford",
+          "Mannheim"
+        ],
+        "claimed_year": 2021,
+        "context": "Whitford, K., & Mannheim, D. (2021). \"Automated compliance frameworks in Australian social security administration\". Journal of Public Administration Research, 47(2), 188-206. doi:10.1016/j.jpuba.2021.02.014"
+      },
+      "verdict": "not_found",
+      "authority": "crossref",
+      "detail": "Crossref holds no record for this DOI. No registrant has ever deposited it.",
+      "resolved_title": null,
+      "resolved_authors": [],
+      "resolved_year": null,
+      "title_similarity": null,
+      "author_overlap": null,
+      "evidence_url": "https://api.crossref.org/works/10.1016/j.jpuba.2021.02.014",
+      "checked_at": "2026-09-09T20:38:02+00:00"
+    },
+    {
+      "citation": {
+        "raw": "doi:10.9911/erla.2020.13.4.055",
+        "kind": "doi",
+        "line": 50,
+        "identifier": "10.9911/erla.2020.13.4.055",
+        "claimed_title": "Comparative analysis of algorithmic welfare assessment across European Union member states",
+        "claimed_authors": [
+          "Lindqvist"
+        ],
+        "claimed_year": 2020,
+        "context": "Lindqvist, P. (2020). \"Comparative analysis of algorithmic welfare assessment across European Union member states\". European Review of Administrative Law, 13(4), 55-79. doi:10.9911/erla.2020.13.4.055"
+      },
+      "verdict": "not_found",
+      "authority": "crossref",
+      "detail": "Crossref holds no record for this DOI. No registrant has ever deposited it.",
+      "resolved_title": null,
+      "resolved_authors": [],
+      "resolved_year": null,
+      "title_similarity": null,
+      "author_overlap": null,
+      "evidence_url": "https://api.crossref.org/works/10.9911/erla.2020.13.4.055",
+      "checked_at": "2026-09-09T20:38:02+00:00"
+    },
+    {
+      "citation": {
+        "raw": "Crawford, L. B. (2022). \"The reasoned decision requirement and automated administrative action\". Public Law Review, 33(1).",
+        "kind": "bibliographic",
+        "line": 52,
+        "identifier": null,
+        "claimed_title": "The reasoned decision requirement and automated administrative action",
+        "claimed_authors": [
+          "Crawford"
+        ],
+        "claimed_year": 2022,
+        "context": "Crawford, L. B. (2022). \"The reasoned decision requirement and automated administrative action\". Public Law Review, 33(1)."
+      },
+      "verdict": "not_found",
+      "authority": "crossref",
+      "detail": "no Crossref record matches this description. Closest was 'Choline Requirement, Distribution and Concentration in Laying Hens.' at 58% similarity, below the threshold for a match.",
+      "resolved_title": "Choline Requirement, Distribution and Concentration in Laying Hens.",
+      "resolved_authors": [],
+      "resolved_year": null,
+      "title_similarity": 58.208955223880594,
+      "author_overlap": null,
+      "evidence_url": "https://doi.org/10.31390/gradschool_disstheses.1478",
+      "checked_at": "2026-09-09T20:38:04+00:00"
+    },
+    {
+      "citation": {
+        "raw": "doi:10.1109/CVPR.2009.5206848",
+        "kind": "doi",
+        "line": 54,
+        "identifier": "10.1109/cvpr.2009.5206848",
+        "claimed_title": "ImageNet: A large-scale hierarchical image database",
+        "claimed_authors": [
+          "Deng",
+          "Dong",
+          "Socher",
+          "Li",
+          "Fei-Fei"
+        ],
+        "claimed_year": 2009,
+        "context": "Deng, J., Dong, W., Socher, R., Li, L., Li, K., & Fei-Fei, L. (2009). \"ImageNet: A large-scale hierarchical image database\". doi:10.1109/CVPR.2009.5206848"
+      },
+      "verdict": "verified",
+      "authority": "crossref",
+      "detail": "title matches record (100% similarity)",
+      "resolved_title": "ImageNet: A large-scale hierarchical image database",
+      "resolved_authors": [
+        "Deng",
+        "Dong",
+        "Socher",
+        "Li",
+        "Kai Li",
+        "Li Fei-Fei"
+      ],
+      "resolved_year": 2009,
+      "title_similarity": 100.0,
+      "author_overlap": 0.8,
+      "evidence_url": "https://doi.org/10.1109/cvpr.2009.5206848",
+      "checked_at": "2026-09-09T20:38:03+00:00"
+    },
+    {
+      "citation": {
+        "raw": "arXiv:1906.02530",
+        "kind": "arxiv",
+        "line": 56,
+        "identifier": "1906.02530",
+        "claimed_title": "Can you trust your model's uncertainty? Evaluating predictive uncertainty under dataset shift",
+        "claimed_authors": [
+          "Ovadia",
+          "Fertig",
+          "Ren"
+        ],
+        "claimed_year": 2019,
+        "context": "Ovadia, Y., Fertig, E., Ren, J., et al. (2019). \"Can you trust your model's uncertainty? Evaluating predictive uncertainty under dataset shift\". arXiv:1906.02530"
+      },
+      "verdict": "verified",
+      "authority": "arxiv",
+      "detail": "title matches record (100% similarity)",
+      "resolved_title": "Can You Trust Your Model's Uncertainty? Evaluating Predictive Uncertainty Under Dataset Shift",
+      "resolved_authors": [
+        "Ovadia",
+        "Fertig",
+        "Ren",
+        "Nado",
+        "Sculley",
+        "Nowozin",
+        "Dillon",
+        "Lakshminarayanan",
+        "Snoek"
+      ],
+      "resolved_year": 2019,
+      "title_similarity": 100.0,
+      "author_overlap": 1.0,
+      "evidence_url": "https://arxiv.org/abs/1906.02530",
+      "checked_at": "2026-09-09T20:38:03+00:00"
+    },
+    {
+      "citation": {
+        "raw": "Ashworth, R. T. (2023). \"Procedural fairness in machine-assisted eligibility determination: a longitudinal study of appeal outcomes\". Administrative Science Quarterly Review, 68(3), 401-429.",
+        "kind": "bibliographic",
+        "line": 58,
+        "identifier": null,
+        "claimed_title": "Procedural fairness in machine-assisted eligibility determination: a longitudinal study of appeal outcomes",
+        "claimed_authors": [
+          "Ashworth"
+        ],
+        "claimed_year": 2023,
+        "context": "Ashworth, R. T. (2023). \"Procedural fairness in machine-assisted eligibility determination: a longitudinal study of appeal outcomes\". Administrative Science Quarterly Review, 68(3), 401-429."
+      },
+      "verdict": "not_found",
+      "authority": "crossref",
+      "detail": "no Crossref record matches this description. Closest was 'A longitudinal study of visual function in multiple sclerosis: With a note on the Cambridge Grating Test' at 55% similarity, below the threshold for a match.",
+      "resolved_title": "A longitudinal study of visual function in multiple sclerosis: With a note on the Cambridge Grating Test",
+      "resolved_authors": [],
+      "resolved_year": null,
+      "title_similarity": 55.33980582524272,
+      "author_overlap": null,
+      "evidence_url": "https://doi.org/10.3109/01658109309038141",
+      "checked_at": "2026-09-09T20:38:05+00:00"
+    },
+    {
+      "citation": {
+        "raw": "arXiv:1703.01365",
+        "kind": "arxiv",
+        "line": 60,
+        "identifier": "1703.01365",
+        "claimed_title": "Axiomatic attribution for deep networks",
+        "claimed_authors": [
+          "Sundararajan"
+        ],
+        "claimed_year": 2018,
+        "context": "Sundararajan, M. (2018). \"Axiomatic attribution for deep networks\". arXiv:1703.01365"
+      },
+      "verdict": "verified",
+      "authority": "arxiv",
+      "detail": "title matches record (100% similarity)",
+      "resolved_title": "Axiomatic Attribution for Deep Networks",
+      "resolved_authors": [
+        "Sundararajan",
+        "Taly",
+        "Yan"
+      ],
+      "resolved_year": 2017,
+      "title_similarity": 100.0,
+      "author_overlap": 1.0,
+      "evidence_url": "https://arxiv.org/abs/1703.01365",
+      "checked_at": "2026-09-09T20:38:03+00:00"
+    },
+    {
+      "citation": {
+        "raw": "https://www.crossref.org/documentation/",
+        "kind": "url",
+        "line": 62,
+        "identifier": "https://www.crossref.org/documentation/",
+        "claimed_title": null,
+        "claimed_authors": [],
+        "claimed_year": null,
+        "context": "Further reading is available at https://www.crossref.org/documentation/ and"
+      },
+      "verdict": "verified",
+      "authority": "http",
+      "detail": "link responded HTTP 200",
+      "resolved_title": null,
+      "resolved_authors": [],
+      "resolved_year": null,
+      "title_similarity": null,
+      "author_overlap": null,
+      "evidence_url": "https://www.crossref.org/documentation/",
+      "checked_at": "2026-09-09T20:38:03+00:00"
+    },
+    {
+      "citation": {
+        "raw": "https://arxiv.org/help/api/",
+        "kind": "url",
+        "line": 63,
+        "identifier": "https://arxiv.org/help/api/",
+        "claimed_title": null,
+        "claimed_authors": [],
+        "claimed_year": null,
+        "context": "https://arxiv.org/help/api/ and at https://this-domain-does-not-resolve-citeaudit.invalid/report.pdf"
+      },
+      "verdict": "verified",
+      "authority": "http",
+      "detail": "link responded HTTP 200",
+      "resolved_title": null,
+      "resolved_authors": [],
+      "resolved_year": null,
+      "title_similarity": null,
+      "author_overlap": null,
+      "evidence_url": "https://arxiv.org/help/api/",
+      "checked_at": "2026-09-09T20:38:03+00:00"
+    },
+    {
+      "citation": {
+        "raw": "https://this-domain-does-not-resolve-citeaudit.invalid/report.pdf",
+        "kind": "url",
+        "line": 63,
+        "identifier": "https://this-domain-does-not-resolve-citeaudit.invalid/report.pdf",
+        "claimed_title": null,
+        "claimed_authors": [],
+        "claimed_year": null,
+        "context": "https://arxiv.org/help/api/ and at https://this-domain-does-not-resolve-citeaudit.invalid/report.pdf"
+      },
+      "verdict": "unreachable",
+      "authority": "-",
+      "detail": "check could not be completed: https://this-domain-does-not-resolve-citeaudit.invalid/report.pdf",
+      "resolved_title": null,
+      "resolved_authors": [],
+      "resolved_year": null,
+      "title_similarity": null,
+      "author_overlap": null,
+      "evidence_url": null,
+      "checked_at": "2026-09-09T20:38:09+00:00"
+    }
+  ]
+}

@@ -513,3 +513,40 @@ class TestReporting:
         assert "No citations found." in to_markdown(r)
         assert to_html(r).startswith("<!doctype html>")
         assert json.loads(to_json(r))["summary"]["total_citations"] == 0
+
+
+# ===========================================================================
+# Deduplication semantics
+# ===========================================================================
+
+class TestDeduplication:
+
+    def test_same_identifier_same_claim_is_one_citation(self):
+        doc = (
+            "References\n\n"
+            '[1] Lee, K. (2015). "Deep learning". Nature. doi:10.1038/nature14539\n'
+            '[2] Lee, K. (2015). "Deep learning". Nature. doi:10.1038/nature14539\n'
+        )
+        assert len(extract(doc)) == 1
+
+    def test_same_identifier_different_claims_kept_separately(self):
+        """
+        REGRESSION. Keying duplicates on the identifier alone dropped the
+        second assertion — discarding the exact signal that reveals a DOI
+        attached to the wrong paper. At most one of these two claims can be
+        true, so both must be checked.
+        """
+        doc = (
+            "References\n\n"
+            '[1] LeCun, Y. (2015). "Deep learning". Nature. doi:10.1038/nature14539\n'
+            '[2] Harper, S. J. (2016). "Procedural baselines for administrative '
+            'automation". Admin Law Quarterly. doi:10.1038/nature14539\n'
+        )
+        cits = extract(doc)
+        assert len(cits) == 2
+        titles = {c.claimed_title for c in cits}
+        assert "Deep learning" in titles
+        assert any("Procedural baselines" in (t or "") for t in titles)
+
+    def test_bare_repeated_identifier_still_deduplicates(self):
+        assert len(extract("10.1038/nature14539 and 10.1038/nature14539")) == 1

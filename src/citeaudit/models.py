@@ -84,7 +84,19 @@ class Citation:
     context: str = ""
 
     def key(self) -> str:
-        return f"{self.kind.value}:{self.identifier or self.claimed_title or self.raw}"
+        """
+        Deduplication key.
+
+        Includes the claimed title, not just the identifier. The same DOI cited
+        twice with the same claim is a genuine duplicate and only needs one
+        check. The same DOI cited with two *different* claims is two separate
+        assertions, at most one of which can be right — and collapsing them on
+        the identifier alone would discard exactly the signal this tool exists
+        to find.
+        """
+        claim = (self.claimed_title or "").strip().casefold()[:120]
+        ident = self.identifier or self.raw
+        return f"{self.kind.value}:{ident}|{claim}"
 
 
 @dataclass

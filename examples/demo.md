@@ -30,7 +30,8 @@ administration. The Australian experience has been examined in detail [4], and
 comparative work covering European implementations followed [5].
 
 Legal scholarship has questioned whether such systems satisfy administrative
-law requirements for reasoned decision-making [6].
+law requirements for reasoned decision-making [6]. Earlier work established the
+procedural baseline against which these systems are assessed [11].
 
 ## 3. Evaluation
 
@@ -58,6 +59,8 @@ Recent work on calibration under distribution shift is also relevant [8].
 [9] Ashworth, R. T. (2023). "Procedural fairness in machine-assisted eligibility determination: a longitudinal study of appeal outcomes". Administrative Science Quarterly Review, 68(3), 401-429.
 
 [10] Sundararajan, M. (2018). "Axiomatic attribution for deep networks". arXiv:1703.01365
+
+[11] Harper, S. J. (2016). "Procedural baselines for administrative automation in social welfare". Administrative Law Quarterly, 29(4), 312-340. doi:10.1038/nature14539
 
 Further reading is available at https://www.crossref.org/documentation/ and
 https://arxiv.org/help/api/ and at https://this-domain-does-not-resolve-citeaudit.invalid/report.pdf

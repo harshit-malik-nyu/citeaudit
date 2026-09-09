@@ -134,6 +134,35 @@ for finding in report.failures:
 
 This repository does not ask you to take its word for anything.
 
+**Most recent live run** against the real Crossref and arXiv APIs
+([full JSON](evidence/demo-report.json)):
+
+| | |
+|---|---:|
+| Citations checked | 14 |
+| Verified | 8 |
+| Resolves to a different work | 1 |
+| No such record | 4 |
+| Could not check (inconclusive) | 1 |
+| **Integrity** | **62% of 13 conclusive checks** |
+
+The mismatch is the one worth looking at:
+
+```
+line 63   10.1038/nature14539
+  document claims : Procedural baselines for administrative automation in social welfare
+  record holds    : Deep learning
+  similarity      : 22%
+  evidence        : https://doi.org/10.1038/nature14539
+```
+
+That DOI is real. [Open it](https://doi.org/10.1038/nature14539) — you land on a
+genuine Nature paper by LeCun, Bengio and Hinton. Every link checker passes it.
+It is still the wrong source for the claim it was attached to.
+
+The unreachable link is equally deliberate: an unresolvable domain, reported as
+inconclusive rather than counted as a fabrication.
+
 A [scheduled workflow](.github/workflows/live-verification.yml) runs the tool
 against the real Crossref and arXiv APIs every week and commits what they
 returned:

@@ -1,0 +1,90 @@
+name: 'citeaudit'
+description: 'Verify that the citations in your documents actually exist.'
+author: 'citeaudit'
+branding:
+  icon: 'check-circle'
+  color: 'purple'
+
+inputs:
+  paths:
+    description: 'Files to check (space-separated, globs allowed)'
+    required: true
+  fail-on-findings:
+    description: 'Fail the job when a citation does not hold up'
+    required: false
+    default: 'true'
+  strict:
+    description: 'Also fail on inconclusive checks'
+    required: false
+    default: 'false'
+  fail-under:
+    description: 'Fail if the integrity score falls below this percentage'
+    required: false
+    default: ''
+  mailto:
+    description: 'Contact address sent to scholarly APIs (polite pool)'
+    required: false
+    default: ''
+  report-path:
+    description: 'Where to write the HTML report'
+    required: false
+    default: 'citeaudit-report.html'
+
+outputs:
+  total:
+    description: 'Citations checked'
+    value: ${{ steps.run.outputs.total }}
+  failures:
+    description: 'Citations that did not hold up'
+    value: ${{ steps.run.outputs.failures }}
+  score:
+    description: 'Integrity score, 0-100, over conclusive checks'
+    value: ${{ steps.run.outputs.score }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Install citeaudit
+      shell: bash
+      run: pip install --quiet "citeaudit[all] @ git+https://github.com/${{ github.action_repository || 'harshit-malik-nyu/citeaudit' }}"
+
+    - name: Run citeaudit
+      id: run
+      shell: bash
+      env:
+        CITEAUDIT_MAILTO: ${{ inputs.mailto }}
+      run: |
+        set +e
+        args=""
+        [ "${{ inputs.strict }}" = "true" ] && args="$args --strict"
+        [ -n "${{ inputs.fail-under }}" ] && args="$args --fail-under ${{ inputs.fail-under }}"
+
+        citeaudit ${{ inputs.paths }} --format json -o citeaudit.json $args
+        code=$?
+        citeaudit ${{ inputs.paths }} --format html -o "${{ inputs.report-path }}" --quiet
+        citeaudit ${{ inputs.paths }} --format terminal $args
+
+        python - <<'PY' >> "$GITHUB_OUTPUT"
+        import json
+        s = json.load(open("citeaudit.json"))["summary"]
+        score = s["integrity_score"]
+        print(f"total={s['total_citations']}")
+        print(f"failures={s['not_found'] + s['mismatch'] + s['malformed']}")
+        print(f"score={'' if score is None else round(score*100, 1)}")
+        PY
+
+        if [ "${{ inputs.fail-on-findings }}" = "true" ]; then exit $code; fi
+        exit 0
+
+    - name: Upload report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: citeaudit-report
+        path: ${{ inputs.report-path }}
+        if-no-files-found: ignore

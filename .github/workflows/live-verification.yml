@@ -1,0 +1,161 @@
+name: live-verification
+
+# Runs the tool against the real Crossref and arXiv APIs, then commits what
+# they actually returned. The committed artifacts in evidence/ are the proof
+# that this project works on real data — not a screenshot, not a claim in a
+# README, but the authorities' own answers, timestamped and re-runnable.
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    # Weekly. A citation that resolves today may be retracted or its metadata
+    # corrected later, so the evidence is refreshed rather than frozen.
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: live-verification
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install
+        run: pip install -e ".[dev]"
+
+      - name: Live tests against Crossref and arXiv
+        id: livetests
+        continue-on-error: true
+        run: |
+          pytest -q -m live --no-header -rs 2>&1 | tee evidence/live-tests.txt
+          echo "exit=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
+
+      - name: Audit the demo document
+        run: |
+          mkdir -p evidence docs
+          citeaudit examples/demo.md \
+            --format json -o evidence/demo-report.json \
+            --mailto citeaudit-ci@users.noreply.github.com \
+            --no-cache || true
+          citeaudit examples/demo.md \
+            --format html -o docs/index.html --quiet \
+            --mailto citeaudit-ci@users.noreply.github.com \
+            --no-cache || true
+          citeaudit examples/demo.md \
+            --format markdown -o evidence/demo-report.md --quiet \
+            --mailto citeaudit-ci@users.noreply.github.com \
+            --no-cache || true
+          citeaudit examples/demo.md --format terminal --show-verified \
+            --mailto citeaudit-ci@users.noreply.github.com --no-cache \
+            2>&1 | tee evidence/demo-terminal.txt || true
+
+      - name: Audit this repository's own documentation
+        run: |
+          citeaudit README.md docs/*.md \
+            --format markdown -o evidence/self-audit.md --quiet \
+            --mailto citeaudit-ci@users.noreply.github.com --no-cache || true
+
+      - name: Record run provenance
+        run: |
+          python - <<'PY'
+          import json, os, platform, subprocess, sys
+          from datetime import datetime, timezone
+
+          def sha(path):
+              import hashlib
+              try:
+                  return hashlib.sha256(open(path,'rb').read()).hexdigest()
+              except OSError:
+                  return None
+
+          try:
+              report = json.load(open("evidence/demo-report.json"))
+              summary = report["summary"]
+          except Exception:
+              summary = None
+
+          manifest = {
+              "generated_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+              "commit": os.environ.get("GITHUB_SHA"),
+              "run_url": (
+                  f"{os.environ.get('GITHUB_SERVER_URL')}/"
+                  f"{os.environ.get('GITHUB_REPOSITORY')}/actions/runs/"
+                  f"{os.environ.get('GITHUB_RUN_ID')}"
+              ),
+              "python": sys.version.split()[0],
+              "platform": platform.platform(),
+              "authorities": [
+                  {"name": "Crossref", "endpoint": "https://api.crossref.org",
+                   "role": "DOI registration agency; authority for DOI existence"},
+                  {"name": "arXiv", "endpoint": "https://export.arxiv.org/api/query",
+                   "role": "authority for preprint identifiers"},
+                  {"name": "HTTP", "endpoint": "-",
+                   "role": "liveness only; proves a URL responds, not that its "
+                           "described content ever existed"},
+              ],
+              "demo_summary": summary,
+              "artifact_hashes": {
+                  p: sha(p) for p in [
+                      "evidence/demo-report.json",
+                      "evidence/demo-report.md",
+                      "examples/demo.md",
+                      "docs/index.html",
+                  ]
+              },
+              "note": (
+                  "Every verdict here came from a live call to the named "
+                  "authority at the timestamp above. Each finding in "
+                  "demo-report.json carries an evidence_url that reproduces "
+                  "the check independently of this tool."
+              ),
+          }
+          os.makedirs("evidence", exist_ok=True)
+          with open("evidence/manifest.json", "w") as fh:
+              json.dump(manifest, fh, indent=2)
+          print(json.dumps(manifest.get("demo_summary") or {}, indent=2))
+          PY
+
+      - name: Job summary
+        run: |
+          {
+            echo "## Live verification"
+            echo
+            cat evidence/demo-report.md 2>/dev/null || echo "(no report)"
+            echo
+            echo "<details><summary>Live test output</summary>"
+            echo
+            echo '```'
+            cat evidence/live-tests.txt 2>/dev/null || true
+            echo '```'
+            echo "</details>"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Commit evidence
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A evidence docs
+          if git diff --staged --quiet; then
+            echo "no change in evidence"
+          else
+            git commit -m "evidence: live verification run [skip ci]"
+            git pull --rebase --autostash origin main || true
+            git push
+          fi
+
+      - name: Fail if live tests failed
+        if: steps.livetests.outputs.exit != '0'
+        run: |
+          echo "Live tests reported failures — see evidence/live-tests.txt"
+          exit 1

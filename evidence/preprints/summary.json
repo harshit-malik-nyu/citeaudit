@@ -1,0 +1,155 @@
+{
+  "method": {
+    "corpus": "arXiv author-written bibliographies (.bbl / .bib source)",
+    "papers_sampled": 50,
+    "papers_with_bibliography": 34,
+    "total_checks": 329,
+    "started_utc": "2026-09-11T03:43:12+00:00",
+    "finished_utc": "2026-09-11T03:47:44+00:00",
+    "claim_boundary": "Measures whether a reference as written can be verified. An unverified reference is NOT thereby fabricated. Reported in aggregate; no paper is named and no claim is made about any author."
+  },
+  "overall": {
+    "checks": 329,
+    "conclusive": 327,
+    "verified": 298,
+    "not_found": 21,
+    "mismatch": 8,
+    "unverifiable": 2,
+    "unreachable": 0,
+    "unverified_rate": 0.08868501529051988,
+    "unverified_ci95": [
+      0.06245685231960074,
+      0.12446522761230625
+    ]
+  },
+  "by_reference_kind": {
+    "bibliographic": {
+      "checks": 220,
+      "conclusive": 219,
+      "verified": 198,
+      "not_found": 21,
+      "mismatch": 0,
+      "unverifiable": 1,
+      "unreachable": 0,
+      "unverified_rate": 0.0958904109589041,
+      "unverified_ci95": [
+        0.06357475847056406,
+        0.14213907593019415
+      ]
+    },
+    "url": {
+      "checks": 1,
+      "conclusive": 0,
+      "verified": 0,
+      "not_found": 0,
+      "mismatch": 0,
+      "unverifiable": 1,
+      "unreachable": 0,
+      "unverified_rate": null,
+      "unverified_ci95": [
+        null,
+        null
+      ]
+    },
+    "arxiv": {
+      "checks": 18,
+      "conclusive": 18,
+      "verified": 14,
+      "not_found": 0,
+      "mismatch": 4,
+      "unverifiable": 0,
+      "unreachable": 0,
+      "unverified_rate": 0.2222222222222222,
+      "unverified_ci95": [
+        0.09000781913382,
+        0.4521502645230549
+      ]
+    },
+    "doi": {
+      "checks": 90,
+      "conclusive": 90,
+      "verified": 86,
+      "not_found": 0,
+      "mismatch": 4,
+      "unverifiable": 0,
+      "unreachable": 0,
+      "unverified_rate": 0.044444444444444446,
+      "unverified_ci95": [
+        0.01741696001324882,
+        0.1087701467709492
+      ]
+    }
+  },
+  "by_category": {
+    "physics.soc-ph": {
+      "checks": 43,
+      "conclusive": 43,
+      "verified": 39,
+      "not_found": 1,
+      "mismatch": 3,
+      "unverifiable": 0,
+      "unreachable": 0,
+      "unverified_rate": 0.09302325581395349,
+      "unverified_ci95": [
+        0.036771045103346514,
+        0.2160298839853268
+      ]
+    },
+    "q-bio.QM": {
+      "checks": 50,
+      "conclusive": 48,
+      "verified": 46,
+      "not_found": 2,
+      "mismatch": 0,
+      "unverifiable": 2,
+      "unreachable": 0,
+      "unverified_rate": 0.041666666666666664,
+      "unverified_ci95": [
+        0.011501652078965613,
+        0.13975911147771472
+      ]
+    },
+    "econ.GN": {
+      "checks": 60,
+      "conclusive": 60,
+      "verified": 57,
+      "not_found": 2,
+      "mismatch": 1,
+      "unverifiable": 0,
+      "unreachable": 0,
+      "unverified_rate": 0.05,
+      "unverified_ci95": [
+        0.01714919117914121,
+        0.13700734625099836
+      ]
+    },
+    "stat.AP": {
+      "checks": 72,
+      "conclusive": 72,
+      "verified": 63,
+      "not_found": 9,
+      "mismatch": 0,
+      "unverifiable": 0,
+      "unreachable": 0,
+      "unverified_rate": 0.125,
+      "unverified_ci95": [
+        0.06717708293105555,
+        0.22081262192749168
+      ]
+    },
+    "cs.LG": {
+      "checks": 104,
+      "conclusive": 104,
+      "verified": 93,
+      "not_found": 7,
+      "mismatch": 4,
+      "unverifiable": 0,
+      "unreachable": 0,
+      "unverified_rate": 0.10576923076923077,
+      "unverified_ci95": [
+        0.060092726304192594,
+        0.17953279853965243
+      ]
+    }
+  }
+}

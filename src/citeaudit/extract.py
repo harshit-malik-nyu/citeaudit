@@ -224,11 +224,22 @@ def extract(text: str) -> list[Citation]:
         is_entry = bool(entry) or (in_bibliography and len(stripped) > 40)
         body = entry.group(4) if entry else stripped
 
+        ref_no = None
+        if entry:
+            raw_no = entry.group(1) or entry.group(2) or entry.group(3)
+            try:
+                ref_no = int(raw_no) if raw_no else None
+            except (TypeError, ValueError):
+                ref_no = None
+
         ids = find_identifiers(body, line_no=i)
 
         if ids:
             for c in ids:
-                add(_attach_claims(c, body) if is_entry else c)
+                if is_entry:
+                    _attach_claims(c, body)
+                    c.ref_number = ref_no
+                add(c)
             continue
 
         # A reference entry with no identifier at all. Still checkable by
@@ -243,6 +254,7 @@ def extract(text: str) -> list[Citation]:
                     raw=body[:300], kind=Kind.BIBLIOGRAPHIC, line=i,
                     claimed_title=title, claimed_authors=authors,
                     claimed_year=year, context=body.strip()[:400],
+                    ref_number=ref_no,
                 ))
 
     return citations

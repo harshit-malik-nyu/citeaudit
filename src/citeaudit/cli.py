@@ -51,6 +51,10 @@ def build_parser() -> argparse.ArgumentParser:
                    help="skip liveness checks on plain web links")
     p.add_argument("--no-search", action="store_true",
                    help="do not search for references that carry no identifier")
+    p.add_argument("--check-quotes", action="store_true",
+                   help="also verify quoted passages against open source text "
+                        "where available (slower; coverage is limited by "
+                        "paywalls)")
     p.add_argument("--strict", action="store_true",
                    help="also fail on inconclusive checks")
     p.add_argument("--fail-under", type=float, metavar="PCT", default=None,
@@ -101,6 +105,7 @@ def main(argv: list[str] | None = None) -> int:
         client,
         check_urls=not args.no_urls,
         search_unidentified=not args.no_search,
+        check_quotes=args.check_quotes,
         workers=args.workers,
     )
 
@@ -148,7 +153,7 @@ def main(argv: list[str] | None = None) -> int:
             pass
 
     # -- exit code ---------------------------------------------------------
-    failed = len(report.failures) > 0
+    failed = len(report.failures) > 0 or len(report.quote_failures) > 0
     if args.strict and report.inconclusive:
         failed = True
     if args.fail_under is not None:

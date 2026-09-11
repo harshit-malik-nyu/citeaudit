@@ -196,6 +196,42 @@ every assumption.
 Every input in that model is labelled OBSERVED, ESTIMATE, or DERIVED, and the
 weakest one is named rather than buried.
 
+## Quote verification
+
+Checking that a cited work *exists* and checking that it *says what you claim*
+are different questions. Deloitte's retracted report contained a fabricated
+quote attributed to a real federal court judge: the case was real, the judge
+was real, the reference resolved. The quote was simply never said.
+
+```bash
+citeaudit report.docx --check-quotes
+```
+
+citeaudit extracts quoted passages, resolves which source each is attributed to
+— following numbered markers into the bibliography, not just proximity — and
+looks for the passage in openly available source text.
+
+| Verdict | Meaning | Counts as failure |
+|---|---|:---:|
+| `FOUND` | Passage located in the retrieved text | |
+| `NOT_FOUND` | **Complete body text retrieved and the passage is absent** | ✓ |
+| `ABSENT_FROM_ABSTRACT` | Only an abstract was available and it is not there | |
+| `SOURCE_UNAVAILABLE` | No open text; no conclusion | |
+| `NOT_ATTRIBUTED` | No citation attached to check against | |
+
+**Every tier can confirm a quote. Only full text can refute one.**
+
+That asymmetry is the whole design. Refuting a quotation accuses a person of
+fabrication, which is a graver claim than saying a reference is unresolvable,
+so it demands a higher bar. A passage missing from an *abstract* may sit in the
+body — reporting that as fabrication would accuse someone on the strength of a
+paywall.
+
+**The honest ceiling:** most scholarly text is paywalled, so most quotes cannot
+be refuted at all. arXiv is the main corpus where full text is openly
+retrievable at scale. Coverage is reported with every run rather than implied,
+and low coverage is a licensing limit, not a finding.
+
 ## Verdicts
 
 The taxonomy is the most important design decision in the tool.

@@ -82,6 +82,10 @@ class Citation:
     claimed_authors: list[str] = field(default_factory=list)
     claimed_year: int | None = None
     context: str = ""
+    ref_number: int | None = None
+    """Bibliography marker, when the entry was numbered — the 3 in '[3] Smith,
+    J. ...'. Body text cites by that marker rather than by proximity, so quote
+    attribution needs it to connect a claim to the source it rests on."""
 
     def key(self) -> str:
         """
@@ -130,6 +134,12 @@ class Report:
 
     document: str
     findings: list[Finding] = field(default_factory=list)
+    quote_findings: list = field(default_factory=list)
+    """Quotation checks. Kept in a separate list, and out of the citation
+    integrity score, because they answer a different question: whether a source
+    says what the document claims, rather than whether it exists. Folding them
+    into one number would let sparse quote coverage — most scholarly text is
+    paywalled — silently move a score that reads as being about citations."""
     generated_at: str = field(
         default_factory=lambda: datetime.now(timezone.utc).isoformat(timespec="seconds")
     )
@@ -188,8 +198,23 @@ class Report:
             "integrity_score": self.integrity_score,
         }
 
+    def quote_summary(self) -> dict[str, Any] | None:
+        if not self.quote_findings:
+            return None
+        from .quotes import summarise
+        return summarise(self.quote_findings)
+
+    @property
+    def quote_failures(self) -> list:
+        return [f for f in self.quote_findings if f.verdict.is_failure]
+
     def to_dict(self) -> dict[str, Any]:
-        return {
+        out: dict[str, Any] = {
             "summary": self.summary(),
             "findings": [f.to_dict() for f in self.findings],
         }
+        qs = self.quote_summary()
+        if qs is not None:
+            out["quote_summary"] = qs
+            out["quote_findings"] = [f.to_dict() for f in self.quote_findings]
+        return out

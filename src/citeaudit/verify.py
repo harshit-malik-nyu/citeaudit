@@ -25,6 +25,7 @@ from .models import Citation, Finding, Kind, Report, Verdict
 from .sources.arxiv import Arxiv
 from .sources.crossref import Crossref
 from .sources.openalex import OpenAlex
+from .quotes import QuoteVerifier, extract_quotes
 
 log = logging.getLogger(__name__)
 
@@ -42,6 +43,7 @@ class Verifier:
         check_urls: bool = True,
         search_unidentified: bool = True,
         use_fallback: bool = True,
+        check_quotes: bool = False,
         workers: int = 4,
     ):
         self.client = client or Client(version=__version__)
@@ -51,6 +53,7 @@ class Verifier:
         self.check_urls = check_urls
         self.search_unidentified = search_unidentified
         self.use_fallback = use_fallback
+        self.check_quotes = check_quotes
         self.workers = max(1, workers)
 
     # -- per-citation routing ---------------------------------------------
@@ -299,7 +302,14 @@ class Verifier:
                       tool_version=__version__)
 
     def verify_text(self, text: str, document: str = "-") -> Report:
-        return self.verify_citations(extract(text), document)
+        citations = extract(text)
+        report = self.verify_citations(citations, document)
+        if self.check_quotes:
+            quotes = extract_quotes(text, citations)
+            if quotes:
+                report.quote_findings = QuoteVerifier(self.client).verify(quotes)
+        return report
 
     def verify_file(self, path: str | Path) -> Report:
-        return self.verify_citations(extract_from_file(path), str(path))
+        from .extract import read_document
+        return self.verify_text(read_document(path), str(path))

@@ -23,6 +23,16 @@ Attention-based models were subsequently adapted for bidirectional language
 representation [3], which enabled the classification approaches now common in
 automated correspondence triage.
 
+The original transformer work motivated itself against prior architectures,
+noting that "dominant sequence transduction models are based on complex
+recurrent or convolutional neural networks" [2].
+
+A second passage is attributed to the same paper, which states that "welfare
+eligibility determinations should be fully delegated to automated systems
+without human review" [2]. Whether that sentence appears in the source is not
+asserted here — the live run against arXiv decides, and the result is recorded
+in `evidence/`.
+
 ## 2. Compliance frameworks
 
 Several jurisdictions have deployed automated compliance assessment in welfare

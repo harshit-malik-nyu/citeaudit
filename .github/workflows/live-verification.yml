@@ -46,6 +46,7 @@ jobs:
           mkdir -p evidence docs
           citeaudit examples/demo.md \
             --format json -o evidence/demo-report.json \
+            --check-quotes \
             --mailto citeaudit-ci@users.noreply.github.com \
             --no-cache || true
           citeaudit examples/demo.md \
@@ -54,9 +55,11 @@ jobs:
             --no-cache || true
           citeaudit examples/demo.md \
             --format markdown -o evidence/demo-report.md --quiet \
+            --check-quotes \
             --mailto citeaudit-ci@users.noreply.github.com \
             --no-cache || true
           citeaudit examples/demo.md --format terminal --show-verified \
+            --check-quotes \
             --mailto citeaudit-ci@users.noreply.github.com --no-cache \
             2>&1 | tee evidence/demo-terminal.txt || true
 

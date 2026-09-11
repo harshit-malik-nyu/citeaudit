@@ -106,6 +106,33 @@ def to_terminal(report: Report, *, colour: bool = True,
                 lines.append(f"       check it: {f.evidence_url}")
             lines.append("")
 
+    qs = report.quote_summary()
+    if qs:
+        lines.append("")
+        lines.append("QUOTATIONS")
+        lines.append("-" * 78)
+        for f in report.quote_findings:
+            if f.verdict.value == "found":
+                continue
+            tag = {"not_found": "FAIL", "absent_from_abstract": "??  ",
+                   "source_unavailable": "--  ", "not_attributed": "--  "}.get(
+                       f.verdict.value, "??  ")
+            lines.append(f"  {tag} line {f.quote.line:<5} \"{f.quote.text[:56]}...\"")
+            for chunk in _wrap(f.detail, 68):
+                lines.append(f"       {chunk}")
+            if f.evidence_url:
+                lines.append(f"       source: {f.evidence_url}")
+            lines.append("")
+        lines.append(
+            f"  {qs['total_quotes']} quotations | {qs['found']} located | "
+            f"{qs['not_found']} absent from full text | "
+            f"{qs['source_unavailable'] + qs['absent_from_abstract'] + qs['not_attributed']} "
+            f"not checkable"
+        )
+        if qs["coverage_rate"] is not None:
+            lines.append(f"  quote coverage: {qs['coverage_rate']:.0%} "
+                         "(limited by open-access availability, not by the tool)")
+
     s = report.summary()
     lines.append("=" * 78)
     lines.append(
@@ -193,6 +220,32 @@ def to_markdown(report: Report) -> str:
             out.append(
                 f"| {cit.line} | `{ref}` | {LABEL[f.verdict]} | {detail} | {ev} |"
             )
+
+    qs = report.quote_summary()
+    if qs:
+        out.append("")
+        out.append("### Quotations")
+        out.append("")
+        out.append("| | count |")
+        out.append("|---|---:|")
+        out.append(f"| Located in source | {qs['found']} |")
+        out.append(f"| **Absent from full text** | **{qs['not_found']}** |")
+        out.append(f"| Not in abstract (inconclusive) | {qs['absent_from_abstract']} |")
+        out.append(f"| No open text available | {qs['source_unavailable']} |")
+        out.append(f"| No citation attached | {qs['not_attributed']} |")
+        if qs["coverage_rate"] is not None:
+            out.append("")
+            out.append(
+                f"Quote coverage {qs['coverage_rate']:.0%}. Most scholarly text "
+                "is paywalled; only complete retrieved text can establish that "
+                "a passage is absent, so the rest are inconclusive rather than "
+                "failures."
+            )
+        for f in report.quote_failures:
+            out.append("")
+            out.append(f"> **Line {f.quote.line}** — not present in the source")
+            out.append(f"> `{f.quote.text[:180]}`")
+            out.append(f"> {f.detail}")
 
     inconclusive = report.inconclusive
     if inconclusive:

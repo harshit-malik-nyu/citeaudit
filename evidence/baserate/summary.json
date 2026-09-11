@@ -1,62 +1,12 @@
 {
-  "false_positive_examples": [
-    {
-      "mode": "described",
-      "reference_doi": "10.1007/978-3-319-17308-5_2",
-      "claimed_title": "Responsible innovation 2: Concepts, approaches, and applications",
-      "verdict": "not_found",
-      "authority": "crossref+openalex"
-    },
-    {
-      "mode": "described",
-      "reference_doi": "10.1007/978-3-319-56469-2_2",
-      "claimed_title": "Climate change, extreme events and disaster risk reduction: towards sustainable development goals",
-      "verdict": "not_found",
-      "authority": "crossref+openalex"
-    },
-    {
-      "mode": "described",
-      "reference_doi": "10.1016/s1130-1473(02)70628-3",
-      "claimed_title": "Proposal and justification of aprotocol",
-      "verdict": "not_found",
-      "authority": "crossref+openalex"
-    },
-    {
-      "mode": "identified",
-      "reference_doi": "10.11159/icnfa17.2017",
-      "claimed_title": "The 3rd world congress on new technologies",
-      "verdict": "not_found",
-      "authority": "crossref+openalex"
-    },
-    {
-      "mode": "described",
-      "reference_doi": "10.11159/icnfa17.2017",
-      "claimed_title": "The 3rd world congress on new technologies",
-      "verdict": "not_found",
-      "authority": "crossref+openalex"
-    },
-    {
-      "mode": "described",
-      "reference_doi": "10.2991/aebmr.k.220501.006",
-      "claimed_title": "Tenth international conference on entrepreneurship and business management 2021 (ICEBM 2021)",
-      "verdict": "not_found",
-      "authority": "crossref+openalex"
-    },
-    {
-      "mode": "described",
-      "reference_doi": "10.1378/chest.14-0733",
-      "claimed_title": "Task Force for Mass Critical Care. Surge capacity principles: Care of the critically ill and injured during pandemics and disasters: CHEST consensus statement",
-      "verdict": "not_found",
-      "authority": "crossref+openalex"
-    }
-  ],
+  "false_positive_examples": [],
   "method": {
     "design": "References deposited by publishers in real published papers. Ground truth is guaranteed by construction: every reference carries a DOI, so the cited work exists. Any NOT_FOUND is therefore a definite false positive.",
     "source_works": 72,
-    "total_checks": 598,
+    "total_checks": 620,
     "seed": 20260909,
-    "started_utc": "2026-09-11T03:38:05+00:00",
-    "finished_utc": "2026-09-11T03:43:03+00:00",
+    "started_utc": "2026-09-11T20:36:04+00:00",
+    "finished_utc": "2026-09-11T20:40:55+00:00",
     "strata": [
       2014,
       2017,
@@ -68,42 +18,42 @@
     "notes": []
   },
   "identified_mode": {
-    "checks": 299,
-    "conclusive": 299,
-    "verified": 297,
-    "not_found": 1,
-    "mismatch": 1,
-    "malformed": 0,
-    "unreachable": 0,
-    "unverifiable": 0,
-    "false_positive_rate": 0.0033444816053511705,
-    "false_positive_ci95": [
-      0.0005906120949380513,
-      0.01869867973286896
-    ],
-    "verified_rate_of_conclusive": 0.9933110367892977
-  },
-  "described_mode": {
-    "checks": 299,
-    "conclusive": 299,
-    "verified": 293,
-    "not_found": 6,
+    "checks": 310,
+    "conclusive": 310,
+    "verified": 310,
+    "not_found": 0,
     "mismatch": 0,
     "malformed": 0,
     "unreachable": 0,
     "unverifiable": 0,
-    "false_positive_rate": 0.020066889632107024,
+    "false_positive_rate": 0.0,
     "false_positive_ci95": [
-      0.009228373326794069,
-      0.04308148106573326
+      0.0,
+      0.012240569765129924
     ],
-    "verified_rate_of_conclusive": 0.979933110367893
+    "verified_rate_of_conclusive": 1.0
+  },
+  "described_mode": {
+    "checks": 310,
+    "conclusive": 310,
+    "verified": 310,
+    "not_found": 0,
+    "mismatch": 0,
+    "malformed": 0,
+    "unreachable": 0,
+    "unverifiable": 0,
+    "false_positive_rate": 0.0,
+    "false_positive_ci95": [
+      0.0,
+      0.012240569765129924
+    ],
+    "verified_rate_of_conclusive": 1.0
   },
   "described_by_year": {
     "2014": {
-      "checks": 50,
-      "conclusive": 50,
-      "verified": 50,
+      "checks": 49,
+      "conclusive": 49,
+      "verified": 49,
       "not_found": 0,
       "mismatch": 0,
       "malformed": 0,
@@ -112,46 +62,14 @@
       "false_positive_rate": 0.0,
       "false_positive_ci95": [
         0.0,
-        0.07135003417431873
+        0.07270029673590504
       ],
       "verified_rate_of_conclusive": 1.0
     },
     "2017": {
-      "checks": 51,
-      "conclusive": 51,
-      "verified": 50,
-      "not_found": 1,
-      "mismatch": 0,
-      "malformed": 0,
-      "unreachable": 0,
-      "unverifiable": 0,
-      "false_positive_rate": 0.0196078431372549,
-      "false_positive_ci95": [
-        0.003469603253442241,
-        0.10304807675589372
-      ],
-      "verified_rate_of_conclusive": 0.9803921568627451
-    },
-    "2020": {
-      "checks": 56,
-      "conclusive": 56,
-      "verified": 54,
-      "not_found": 2,
-      "mismatch": 0,
-      "malformed": 0,
-      "unreachable": 0,
-      "unverifiable": 0,
-      "false_positive_rate": 0.03571428571428571,
-      "false_positive_ci95": [
-        0.009849218502577639,
-        0.12119005852210082
-      ],
-      "verified_rate_of_conclusive": 0.9642857142857143
-    },
-    "2022": {
-      "checks": 44,
-      "conclusive": 44,
-      "verified": 44,
+      "checks": 52,
+      "conclusive": 52,
+      "verified": 52,
       "not_found": 0,
       "mismatch": 0,
       "malformed": 0,
@@ -159,43 +77,75 @@
       "unverifiable": 0,
       "false_positive_rate": 0.0,
       "false_positive_ci95": [
-        6.938893903907228e-18,
-        0.08029831778201396
+        0.0,
+        0.06879459041288215
+      ],
+      "verified_rate_of_conclusive": 1.0
+    },
+    "2020": {
+      "checks": 52,
+      "conclusive": 52,
+      "verified": 52,
+      "not_found": 0,
+      "mismatch": 0,
+      "malformed": 0,
+      "unreachable": 0,
+      "unverifiable": 0,
+      "false_positive_rate": 0.0,
+      "false_positive_ci95": [
+        0.0,
+        0.06879459041288215
+      ],
+      "verified_rate_of_conclusive": 1.0
+    },
+    "2022": {
+      "checks": 53,
+      "conclusive": 53,
+      "verified": 53,
+      "not_found": 0,
+      "mismatch": 0,
+      "malformed": 0,
+      "unreachable": 0,
+      "unverifiable": 0,
+      "false_positive_rate": 0.0,
+      "false_positive_ci95": [
+        0.0,
+        0.06758430445307662
       ],
       "verified_rate_of_conclusive": 1.0
     },
     "2023": {
-      "checks": 44,
-      "conclusive": 44,
-      "verified": 43,
-      "not_found": 1,
+      "checks": 56,
+      "conclusive": 56,
+      "verified": 56,
+      "not_found": 0,
       "mismatch": 0,
       "malformed": 0,
       "unreachable": 0,
       "unverifiable": 0,
-      "false_positive_rate": 0.022727272727272728,
+      "false_positive_rate": 0.0,
       "false_positive_ci95": [
-        0.004023148385637013,
-        0.11807979131537633
+        0.0,
+        0.06419614448811528
       ],
-      "verified_rate_of_conclusive": 0.9772727272727273
+      "verified_rate_of_conclusive": 1.0
     },
     "2024": {
-      "checks": 54,
-      "conclusive": 54,
-      "verified": 52,
-      "not_found": 2,
+      "checks": 48,
+      "conclusive": 48,
+      "verified": 48,
+      "not_found": 0,
       "mismatch": 0,
       "malformed": 0,
       "unreachable": 0,
       "unverifiable": 0,
-      "false_positive_rate": 0.037037037037037035,
+      "false_positive_rate": 0.0,
       "false_positive_ci95": [
-        0.010216153585413057,
-        0.12535409343403314
+        0.0,
+        0.0741026511527422
       ],
-      "verified_rate_of_conclusive": 0.9629629629629629
+      "verified_rate_of_conclusive": 1.0
     }
   },
-  "fallback_rescues": 20
+  "fallback_rescues": 19
 }

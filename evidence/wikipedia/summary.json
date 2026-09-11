@@ -1,0 +1,75 @@
+{
+  "method": {
+    "corpus": "English Wikipedia citation templates",
+    "articles_sampled": 2,
+    "articles_with_citations": 2,
+    "total_checks": 16,
+    "started_utc": "2026-09-11T21:03:47+00:00",
+    "finished_utc": "2026-09-11T21:04:41+00:00",
+    "claim_boundary": "Not an audit of Wikipedia and not a judgment about its reliability. The unit is the reference; results are aggregate and no article is named. Wikipedia cites a great deal of material no scholarly index covers, so an unverifiable reference here is expected, not an error."
+  },
+  "overall": {
+    "checks": 16,
+    "conclusive": 16,
+    "verified": 4,
+    "not_found": 12,
+    "mismatch": 0,
+    "unverified_rate": 0.75,
+    "unverified_ci95": [
+      0.5050123107060135,
+      0.8981809801576265
+    ]
+  },
+  "by_template": {
+    "book": {
+      "checks": 1,
+      "conclusive": 1,
+      "verified": 0,
+      "not_found": 1,
+      "mismatch": 0,
+      "unverified_rate": 1.0,
+      "unverified_ci95": [
+        0.20654329147389294,
+        1.0
+      ]
+    },
+    "journal": {
+      "checks": 1,
+      "conclusive": 1,
+      "verified": 0,
+      "not_found": 1,
+      "mismatch": 0,
+      "unverified_rate": 1.0,
+      "unverified_ci95": [
+        0.20654329147389294,
+        1.0
+      ]
+    },
+    "web": {
+      "checks": 14,
+      "conclusive": 14,
+      "verified": 4,
+      "not_found": 10,
+      "mismatch": 0,
+      "unverified_rate": 0.7142857142857143,
+      "unverified_ci95": [
+        0.4535045882751561,
+        0.882788120898909
+      ]
+    }
+  },
+  "by_reference_kind": {
+    "bibliographic": {
+      "checks": 16,
+      "conclusive": 16,
+      "verified": 4,
+      "not_found": 12,
+      "mismatch": 0,
+      "unverified_rate": 0.75,
+      "unverified_ci95": [
+        0.5050123107060135,
+        0.8981809801576265
+      ]
+    }
+  }
+}

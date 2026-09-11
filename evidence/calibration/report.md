@@ -1,6 +1,6 @@
 # Calibration: why the mismatch threshold is what it is
 
-**2,503 labelled pairs** built from **260 real Crossref records** — 1,723 same-work and 780 different-work. Seed 20260909.
+**2,472 labelled pairs** built from **260 real Crossref records** — 1,692 same-work and 780 different-work. Seed 20260909.
 
 ## Ground truth by construction
 
@@ -12,37 +12,37 @@ No text is invented and no label is a judgment call. Both follow from how the pa
 
 ## Is this set actually hard?
 
-Same-work similarity spans 44–100%; different-work spans 3–60%.
+Same-work similarity spans 17–100%; different-work spans 3–82%.
 
-The ranges **overlap**, with 541 different-work pairs scoring at or above the weakest same-work pair. Those are the cases the threshold has to adjudicate, and their presence is what makes the curve below meaningful.
+The ranges **overlap**, with 772 different-work pairs scoring at or above the weakest same-work pair. Those are the cases the threshold has to adjudicate, and their presence is what makes the curve below meaningful.
 
 ## The trade-off
 
 | Threshold | Precision | Recall | F1 | False accusations |
 |---:|---:|---:|---:|---:|
-| 24 | 1.000 | 0.017 | 0.033 | 0 |
-| 30 | 1.000 | 0.038 | 0.074 | 0 |
-| 36 | 1.000 | 0.094 | 0.171 | 0 |
-| 42 | 1.000 | 0.253 | 0.403 | 0 |
-| 48 | 1.000 | 0.486 | 0.654 | 0 |
-| 54 | 1.000 | 0.928 | 0.963 | 0 |
-| 60 | 1.000 | 0.990 | 0.995 | 0 |
-| 62 ← | 1.000 | 0.995 | 0.997 | 0 |
-| 66 | 1.000 | 0.995 | 0.997 | 0 |
-| 72 | 1.000 | 0.995 | 0.997 | 0 |
-| 78 | 1.000 | 0.995 | 0.997 | 0 |
-| 84 | 1.000 | 0.995 | 0.997 | 0 |
-| 90 | 1.000 | 0.995 | 0.997 | 0 |
+| 24 | 1.000 | 0.018 | 0.035 | 0 |
+| 30 | 1.000 | 0.033 | 0.065 | 0 |
+| 36 | 1.000 | 0.099 | 0.180 | 0 |
+| 42 | 1.000 | 0.251 | 0.402 | 0 |
+| 48 | 1.000 | 0.438 | 0.610 | 0 |
+| 54 | 1.000 | 0.855 | 0.922 | 0 |
+| 60 | 1.000 | 0.959 | 0.979 | 0 |
+| 66 | 1.000 | 0.982 | 0.991 | 0 |
+| 72 | 1.000 | 0.994 | 0.997 | 0 |
+| 78 | 1.000 | 0.994 | 0.997 | 0 |
+| 82 ← | 1.000 | 1.000 | 1.000 | 0 |
+| 84 | 1.000 | 1.000 | 1.000 | 0 |
+| 90 | 1.000 | 1.000 | 1.000 | 0 |
 
 ```
 precision ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-recall    ▁▁▁▁▁▁▁▁▁▁▂▂▃▃▄▅▆▇▇▇▇███████████████
+recall    ▁▁▁▁▁▁▁▁▁▁▂▂▃▃▄▄▆▆▇▇▇▇▇▇▇▇▇▇▇▇▇█████
           threshold 20 -> 90
 ```
 
 ## Chosen operating point
 
-**Threshold 62** — precision 1.000, recall 0.995, 0 false accusations across 1,723 genuine pairs.
+**Threshold 82** — precision 1.000, recall 1.000, 0 false accusations across 1,692 genuine pairs.
 
 Selected as the highest recall available subject to a precision floor, not by maximising F1. F1 treats the two errors as equally costly. They are not: a false accusation against a real citation is what makes a user switch the tool off, and a tool that is off catches nothing.
 

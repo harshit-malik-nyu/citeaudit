@@ -1,6 +1,6 @@
 # Author-written bibliographies: what happens outside the pipeline
 
-**329 references** from **34 arXiv preprints** (50 sampled), parsed from the authors' own `.bbl` and `.bib` source files.
+**1,247 references** from **122 arXiv preprints** (168 sampled), parsed from the authors' own `.bbl` and `.bib` source files.
 
 ## Why a second corpus
 
@@ -16,22 +16,22 @@ Measures whether a reference as written can be verified. An unverified reference
 
 | | count |
 |---|---:|
-| References checked | 329 |
-| Verified | 298 |
-| Not found | 21 |
-| Resolves to a different work | 8 |
-| Not machine-checkable | 2 |
+| References checked | 1,247 |
+| Verified | 1,043 |
+| Not found | 147 |
+| Resolves to a different work | 11 |
+| Not machine-checkable | 46 |
 | Could not check | 0 |
 
-**Unverified rate: 8.9%** of 327 conclusive checks (95% CI 6.2%–12.4%).
+**Unverified rate: 13.2%** of 1,201 conclusive checks (95% CI 11.4%–15.2%).
 
 ## By how the reference was written
 
 | Form | Conclusive | Unverified | 95% CI |
 |---|---:|---:|---|
-| arxiv | 18 | 22.2% | 9.0%–45.2% |
-| bibliographic | 219 | 9.6% | 6.4%–14.2% |
-| doi | 90 | 4.4% | 1.7%–10.9% |
+| arxiv | 66 | 6.1% | 2.4%–14.6% |
+| bibliographic | 786 | 18.1% | 15.5%–20.9% |
+| doi | 349 | 3.4% | 2.0%–5.9% |
 | url | 0 | n/a | — |
 
 The gap between identifier-bearing and description-only references is the cost of omitting a DOI, measured rather than asserted.
@@ -40,11 +40,18 @@ The gap between identifier-bearing and description-only references is the cost o
 
 | Category | Conclusive | Unverified |
 |---|---:|---:|
-| cs.LG | 104 | 10.6% |
-| econ.GN | 60 | 5.0% |
-| physics.soc-ph | 43 | 9.3% |
-| q-bio.QM | 48 | 4.2% |
-| stat.AP | 72 | 12.5% |
+| astro-ph.GA | 39 | 12.8% |
+| cond-mat.stat-mech | 77 | 6.5% |
+| cs.CR | 112 | 12.5% |
+| cs.CY | 98 | 25.5% |
+| cs.LG | 147 | 16.3% |
+| econ.GN | 82 | 11.0% |
+| eess.SY | 138 | 7.2% |
+| math.ST | 127 | 5.5% |
+| physics.soc-ph | 81 | 12.3% |
+| q-bio.QM | 96 | 11.5% |
+| q-fin.GN | 98 | 18.4% |
+| stat.AP | 106 | 18.9% |
 
 ## Limits
 

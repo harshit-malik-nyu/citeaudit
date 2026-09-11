@@ -1,7 +1,7 @@
 {
   "summary": {
     "document": "examples/demo.md",
-    "generated_at": "2026-09-11T03:49:43+00:00",
+    "generated_at": "2026-09-11T06:11:12+00:00",
     "tool_version": "0.1.0",
     "total_citations": 14,
     "verified": 8,
@@ -18,7 +18,7 @@
       "citation": {
         "raw": "doi:10.1038/nature14539",
         "kind": "doi",
-        "line": 43,
+        "line": 53,
         "identifier": "10.1038/nature14539",
         "claimed_title": "Deep learning",
         "claimed_authors": [
@@ -27,7 +27,8 @@
           "Hinton"
         ],
         "claimed_year": 2015,
-        "context": "LeCun, Y., Bengio, Y., & Hinton, G. (2015). \"Deep learning\". Nature, 521(7553), 436-444. doi:10.1038/nature14539"
+        "context": "LeCun, Y., Bengio, Y., & Hinton, G. (2015). \"Deep learning\". Nature, 521(7553), 436-444. doi:10.1038/nature14539",
+        "ref_number": 1
       },
       "verdict": "verified",
       "authority": "crossref",
@@ -42,13 +43,13 @@
       "title_similarity": 100.0,
       "author_overlap": 1.0,
       "evidence_url": "https://doi.org/10.1038/nature14539",
-      "checked_at": "2026-09-11T03:49:36+00:00"
+      "checked_at": "2026-09-11T06:11:05+00:00"
     },
     {
       "citation": {
         "raw": "arXiv:1706.03762",
         "kind": "arxiv",
-        "line": 45,
+        "line": 55,
         "identifier": "1706.03762",
         "claimed_title": "Attention Is All You Need",
         "claimed_authors": [
@@ -57,7 +58,8 @@
           "Parmar"
         ],
         "claimed_year": 2017,
-        "context": "Vaswani, A., Shazeer, N., Parmar, N., et al. (2017). \"Attention Is All You Need\". arXiv:1706.03762"
+        "context": "Vaswani, A., Shazeer, N., Parmar, N., et al. (2017). \"Attention Is All You Need\". arXiv:1706.03762",
+        "ref_number": 2
       },
       "verdict": "verified",
       "authority": "arxiv",
@@ -77,13 +79,13 @@
       "title_similarity": 100.0,
       "author_overlap": 1.0,
       "evidence_url": "https://arxiv.org/abs/1706.03762",
-      "checked_at": "2026-09-11T03:49:36+00:00"
+      "checked_at": "2026-09-11T06:11:04+00:00"
     },
     {
       "citation": {
         "raw": "arXiv:1810.04805",
         "kind": "arxiv",
-        "line": 47,
+        "line": 57,
         "identifier": "1810.04805",
         "claimed_title": "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
         "claimed_authors": [
@@ -93,7 +95,8 @@
           "Toutanova"
         ],
         "claimed_year": 2018,
-        "context": "Devlin, J., Chang, M., Lee, K., & Toutanova, K. (2018). \"BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding\". arXiv:1810.04805"
+        "context": "Devlin, J., Chang, M., Lee, K., & Toutanova, K. (2018). \"BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding\". arXiv:1810.04805",
+        "ref_number": 3
       },
       "verdict": "verified",
       "authority": "arxiv",
@@ -109,13 +112,13 @@
       "title_similarity": 100.0,
       "author_overlap": 1.0,
       "evidence_url": "https://arxiv.org/abs/1810.04805",
-      "checked_at": "2026-09-11T03:49:36+00:00"
+      "checked_at": "2026-09-11T06:11:05+00:00"
     },
     {
       "citation": {
         "raw": "doi:10.1016/j.jpuba.2021.02.014",
         "kind": "doi",
-        "line": 49,
+        "line": 59,
         "identifier": "10.1016/j.jpuba.2021.02.014",
         "claimed_title": "Automated compliance frameworks in Australian social security administration",
         "claimed_authors": [
@@ -123,7 +126,8 @@
           "Mannheim"
         ],
         "claimed_year": 2021,
-        "context": "Whitford, K., & Mannheim, D. (2021). \"Automated compliance frameworks in Australian social security administration\". Journal of Public Administration Research, 47(2), 188-206. doi:10.1016/j.jpuba.2021.02.014"
+        "context": "Whitford, K., & Mannheim, D. (2021). \"Automated compliance frameworks in Australian social security administration\". Journal of Public Administration Research, 47(2), 188-206. doi:10.1016/j.jpuba.2021.02.014",
+        "ref_number": 4
       },
       "verdict": "not_found",
       "authority": "crossref+openalex",
@@ -134,20 +138,21 @@
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": "https://api.crossref.org/works/10.1016/j.jpuba.2021.02.014",
-      "checked_at": "2026-09-11T03:49:36+00:00"
+      "checked_at": "2026-09-11T06:11:05+00:00"
     },
     {
       "citation": {
         "raw": "doi:10.9911/erla.2020.13.4.055",
         "kind": "doi",
-        "line": 51,
+        "line": 61,
         "identifier": "10.9911/erla.2020.13.4.055",
         "claimed_title": "Comparative analysis of algorithmic welfare assessment across European Union member states",
         "claimed_authors": [
           "Lindqvist"
         ],
         "claimed_year": 2020,
-        "context": "Lindqvist, P. (2020). \"Comparative analysis of algorithmic welfare assessment across European Union member states\". European Review of Administrative Law, 13(4), 55-79. doi:10.9911/erla.2020.13.4.055"
+        "context": "Lindqvist, P. (2020). \"Comparative analysis of algorithmic welfare assessment across European Union member states\". European Review of Administrative Law, 13(4), 55-79. doi:10.9911/erla.2020.13.4.055",
+        "ref_number": 5
       },
       "verdict": "not_found",
       "authority": "crossref+openalex",
@@ -158,20 +163,21 @@
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": "https://api.crossref.org/works/10.9911/erla.2020.13.4.055",
-      "checked_at": "2026-09-11T03:49:36+00:00"
+      "checked_at": "2026-09-11T06:11:05+00:00"
     },
     {
       "citation": {
         "raw": "Crawford, L. B. (2022). \"The reasoned decision requirement and automated administrative action\". Public Law Review, 33(1).",
         "kind": "bibliographic",
-        "line": 53,
+        "line": 63,
         "identifier": null,
         "claimed_title": "The reasoned decision requirement and automated administrative action",
         "claimed_authors": [
           "Crawford"
         ],
         "claimed_year": 2022,
-        "context": "Crawford, L. B. (2022). \"The reasoned decision requirement and automated administrative action\". Public Law Review, 33(1)."
+        "context": "Crawford, L. B. (2022). \"The reasoned decision requirement and automated administrative action\". Public Law Review, 33(1).",
+        "ref_number": 6
       },
       "verdict": "not_found",
       "authority": "crossref+openalex",
@@ -182,13 +188,13 @@
       "title_similarity": 58.208955223880594,
       "author_overlap": null,
       "evidence_url": "https://doi.org/10.31390/gradschool_disstheses.1478",
-      "checked_at": "2026-09-11T03:49:37+00:00"
+      "checked_at": "2026-09-11T06:11:05+00:00"
     },
     {
       "citation": {
         "raw": "doi:10.1109/CVPR.2009.5206848",
         "kind": "doi",
-        "line": 55,
+        "line": 65,
         "identifier": "10.1109/cvpr.2009.5206848",
         "claimed_title": "ImageNet: A large-scale hierarchical image database",
         "claimed_authors": [
@@ -199,7 +205,8 @@
           "Fei-Fei"
         ],
         "claimed_year": 2009,
-        "context": "Deng, J., Dong, W., Socher, R., Li, L., Li, K., & Fei-Fei, L. (2009). \"ImageNet: A large-scale hierarchical image database\". doi:10.1109/CVPR.2009.5206848"
+        "context": "Deng, J., Dong, W., Socher, R., Li, L., Li, K., & Fei-Fei, L. (2009). \"ImageNet: A large-scale hierarchical image database\". doi:10.1109/CVPR.2009.5206848",
+        "ref_number": 7
       },
       "verdict": "verified",
       "authority": "crossref",
@@ -217,13 +224,13 @@
       "title_similarity": 100.0,
       "author_overlap": 0.8,
       "evidence_url": "https://doi.org/10.1109/cvpr.2009.5206848",
-      "checked_at": "2026-09-11T03:49:37+00:00"
+      "checked_at": "2026-09-11T06:11:05+00:00"
     },
     {
       "citation": {
         "raw": "arXiv:1906.02530",
         "kind": "arxiv",
-        "line": 57,
+        "line": 67,
         "identifier": "1906.02530",
         "claimed_title": "Can you trust your model's uncertainty? Evaluating predictive uncertainty under dataset shift",
         "claimed_authors": [
@@ -232,7 +239,8 @@
           "Ren"
         ],
         "claimed_year": 2019,
-        "context": "Ovadia, Y., Fertig, E., Ren, J., et al. (2019). \"Can you trust your model's uncertainty? Evaluating predictive uncertainty under dataset shift\". arXiv:1906.02530"
+        "context": "Ovadia, Y., Fertig, E., Ren, J., et al. (2019). \"Can you trust your model's uncertainty? Evaluating predictive uncertainty under dataset shift\". arXiv:1906.02530",
+        "ref_number": 8
       },
       "verdict": "verified",
       "authority": "arxiv",
@@ -253,20 +261,21 @@
       "title_similarity": 100.0,
       "author_overlap": 1.0,
       "evidence_url": "https://arxiv.org/abs/1906.02530",
-      "checked_at": "2026-09-11T03:49:36+00:00"
+      "checked_at": "2026-09-11T06:11:05+00:00"
     },
     {
       "citation": {
         "raw": "Ashworth, R. T. (2023). \"Procedural fairness in machine-assisted eligibility determination: a longitudinal study of appeal outcomes\". Administrative Science Quarterly Review, 68(3), 401-429.",
         "kind": "bibliographic",
-        "line": 59,
+        "line": 69,
         "identifier": null,
         "claimed_title": "Procedural fairness in machine-assisted eligibility determination: a longitudinal study of appeal outcomes",
         "claimed_authors": [
           "Ashworth"
         ],
         "claimed_year": 2023,
-        "context": "Ashworth, R. T. (2023). \"Procedural fairness in machine-assisted eligibility determination: a longitudinal study of appeal outcomes\". Administrative Science Quarterly Review, 68(3), 401-429."
+        "context": "Ashworth, R. T. (2023). \"Procedural fairness in machine-assisted eligibility determination: a longitudinal study of appeal outcomes\". Administrative Science Quarterly Review, 68(3), 401-429.",
+        "ref_number": 9
       },
       "verdict": "not_found",
       "authority": "crossref+openalex",
@@ -277,20 +286,21 @@
       "title_similarity": 55.33980582524272,
       "author_overlap": null,
       "evidence_url": "https://doi.org/10.3109/01658109309038141",
-      "checked_at": "2026-09-11T03:49:37+00:00"
+      "checked_at": "2026-09-11T06:11:07+00:00"
     },
     {
       "citation": {
         "raw": "arXiv:1703.01365",
         "kind": "arxiv",
-        "line": 61,
+        "line": 71,
         "identifier": "1703.01365",
         "claimed_title": "Axiomatic attribution for deep networks",
         "claimed_authors": [
           "Sundararajan"
         ],
         "claimed_year": 2018,
-        "context": "Sundararajan, M. (2018). \"Axiomatic attribution for deep networks\". arXiv:1703.01365"
+        "context": "Sundararajan, M. (2018). \"Axiomatic attribution for deep networks\". arXiv:1703.01365",
+        "ref_number": 10
       },
       "verdict": "verified",
       "authority": "arxiv",
@@ -305,20 +315,21 @@
       "title_similarity": 100.0,
       "author_overlap": 1.0,
       "evidence_url": "https://arxiv.org/abs/1703.01365",
-      "checked_at": "2026-09-11T03:49:36+00:00"
+      "checked_at": "2026-09-11T06:11:05+00:00"
     },
     {
       "citation": {
         "raw": "doi:10.1038/nature14539",
         "kind": "doi",
-        "line": 63,
+        "line": 73,
         "identifier": "10.1038/nature14539",
         "claimed_title": "Procedural baselines for administrative automation in social welfare",
         "claimed_authors": [
           "Harper"
         ],
         "claimed_year": 2016,
-        "context": "Harper, S. J. (2016). \"Procedural baselines for administrative automation in social welfare\". Administrative Law Quarterly, 29(4), 312-340. doi:10.1038/nature14539"
+        "context": "Harper, S. J. (2016). \"Procedural baselines for administrative automation in social welfare\". Administrative Law Quarterly, 29(4), 312-340. doi:10.1038/nature14539",
+        "ref_number": 11
       },
       "verdict": "mismatch",
       "authority": "crossref",
@@ -333,18 +344,19 @@
       "title_similarity": 22.22222222222223,
       "author_overlap": 0.0,
       "evidence_url": "https://doi.org/10.1038/nature14539",
-      "checked_at": "2026-09-11T03:49:37+00:00"
+      "checked_at": "2026-09-11T06:11:05+00:00"
     },
     {
       "citation": {
         "raw": "https://www.crossref.org/documentation/",
         "kind": "url",
-        "line": 65,
+        "line": 75,
         "identifier": "https://www.crossref.org/documentation/",
         "claimed_title": null,
         "claimed_authors": [],
         "claimed_year": null,
-        "context": "Further reading is available at https://www.crossref.org/documentation/ and"
+        "context": "Further reading is available at https://www.crossref.org/documentation/ and",
+        "ref_number": null
       },
       "verdict": "verified",
       "authority": "http",
@@ -355,18 +367,19 @@
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": "https://www.crossref.org/documentation/",
-      "checked_at": "2026-09-11T03:49:37+00:00"
+      "checked_at": "2026-09-11T06:11:05+00:00"
     },
     {
       "citation": {
         "raw": "https://arxiv.org/help/api/",
         "kind": "url",
-        "line": 66,
+        "line": 76,
         "identifier": "https://arxiv.org/help/api/",
         "claimed_title": null,
         "claimed_authors": [],
         "claimed_year": null,
-        "context": "https://arxiv.org/help/api/ and at https://this-domain-does-not-resolve-citeaudit.invalid/report.pdf"
+        "context": "https://arxiv.org/help/api/ and at https://this-domain-does-not-resolve-citeaudit.invalid/report.pdf",
+        "ref_number": null
       },
       "verdict": "verified",
       "authority": "http",
@@ -377,18 +390,19 @@
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": "https://arxiv.org/help/api/",
-      "checked_at": "2026-09-11T03:49:37+00:00"
+      "checked_at": "2026-09-11T06:11:05+00:00"
     },
     {
       "citation": {
         "raw": "https://this-domain-does-not-resolve-citeaudit.invalid/report.pdf",
         "kind": "url",
-        "line": 66,
+        "line": 76,
         "identifier": "https://this-domain-does-not-resolve-citeaudit.invalid/report.pdf",
         "claimed_title": null,
         "claimed_authors": [],
         "claimed_year": null,
-        "context": "https://arxiv.org/help/api/ and at https://this-domain-does-not-resolve-citeaudit.invalid/report.pdf"
+        "context": "https://arxiv.org/help/api/ and at https://this-domain-does-not-resolve-citeaudit.invalid/report.pdf",
+        "ref_number": null
       },
       "verdict": "unreachable",
       "authority": "-",
@@ -399,7 +413,79 @@
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": null,
-      "checked_at": "2026-09-11T03:49:43+00:00"
+      "checked_at": "2026-09-11T06:11:12+00:00"
+    }
+  ],
+  "quote_summary": {
+    "total_quotes": 2,
+    "found": 1,
+    "not_found": 1,
+    "absent_from_abstract": 0,
+    "source_unavailable": 0,
+    "not_attributed": 0,
+    "conclusive_checks": 2,
+    "coverage_rate": 1.0
+  },
+  "quote_findings": [
+    {
+      "quote": {
+        "text": "dominant sequence transduction models are based on complex recurrent or convolutional neural networks",
+        "line": 27,
+        "attributed_to": {
+          "raw": "arXiv:1706.03762",
+          "kind": "arxiv",
+          "line": 55,
+          "identifier": "1706.03762",
+          "claimed_title": "Attention Is All You Need",
+          "claimed_authors": [
+            "Vaswani",
+            "Shazeer",
+            "Parmar"
+          ],
+          "claimed_year": 2017,
+          "context": "Vaswani, A., Shazeer, N., Parmar, N., et al. (2017). \"Attention Is All You Need\". arXiv:1706.03762",
+          "ref_number": 2
+        },
+        "context": "inal transformer work motivated itself against prior architectures, noting that \"dominant sequence transduction models are based on complex recurrent or convolutional neural networks\" [2]. A second passage is attributed to the same paper, which states that \"welf"
+      },
+      "verdict": "found",
+      "coverage": "full",
+      "similarity": 100.0,
+      "best_passage": "scholarly works center abstract the dominant sequence transduction models are based on complex recurrent or convolutional neural networks that include",
+      "source_origin": "arxiv-source",
+      "evidence_url": "https://arxiv.org/abs/1706.03762",
+      "detail": "passage located in the full text (100% match)",
+      "checked_at": "2026-09-11T06:11:12+00:00"
+    },
+    {
+      "quote": {
+        "text": "welfare eligibility determinations should be fully delegated to automated systems without human review",
+        "line": 30,
+        "attributed_to": {
+          "raw": "arXiv:1706.03762",
+          "kind": "arxiv",
+          "line": 55,
+          "identifier": "1706.03762",
+          "claimed_title": "Attention Is All You Need",
+          "claimed_authors": [
+            "Vaswani",
+            "Shazeer",
+            "Parmar"
+          ],
+          "claimed_year": 2017,
+          "context": "Vaswani, A., Shazeer, N., Parmar, N., et al. (2017). \"Attention Is All You Need\". arXiv:1706.03762",
+          "ref_number": 2
+        },
+        "context": "orks\" [2]. A second passage is attributed to the same paper, which states that \"welfare eligibility determinations should be fully delegated to automated systems without human review\" [2]. Whether that sentence appears in the source is not asserted here — the liv"
+      },
+      "verdict": "not_found",
+      "coverage": "full",
+      "similarity": 49.01960784313726,
+      "best_passage": "queries simultaneously packed together into a matrix q the keys and values are also packed together into matrices k and",
+      "source_origin": "arxiv-source",
+      "evidence_url": "https://arxiv.org/abs/1706.03762",
+      "detail": "complete text of the source was retrieved (4,716 words) and this passage does not appear in it. Closest match scored 49%.",
+      "checked_at": "2026-09-11T06:11:12+00:00"
     }
   ]
 }

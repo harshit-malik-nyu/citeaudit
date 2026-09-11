@@ -24,6 +24,7 @@ from .http import Client, NotFound, Unreachable
 from .models import Citation, Finding, Kind, Report, Verdict
 from .sources.arxiv import Arxiv
 from .sources.crossref import Crossref
+from .sources.openalex import OpenAlex
 
 log = logging.getLogger(__name__)
 
@@ -40,13 +41,16 @@ class Verifier:
         *,
         check_urls: bool = True,
         search_unidentified: bool = True,
+        use_fallback: bool = True,
         workers: int = 4,
     ):
         self.client = client or Client(version=__version__)
         self.crossref = Crossref(self.client)
         self.arxiv = Arxiv(self.client)
+        self.openalex = OpenAlex(self.client)
         self.check_urls = check_urls
         self.search_unidentified = search_unidentified
+        self.use_fallback = use_fallback
         self.workers = max(1, workers)
 
     # -- per-citation routing ---------------------------------------------
@@ -83,10 +87,17 @@ class Verifier:
         try:
             work = self.crossref.resolve(doi)
         except NotFound:
+            # Crossref said no. Ask a broader index before accusing the
+            # citation of being fabricated — Crossref does not cover books,
+            # reports, theses, or most grey literature.
+            fallback = self._fallback_doi(c, doi)
+            if fallback is not None:
+                return fallback
             return Finding(
-                citation=c, verdict=Verdict.NOT_FOUND, authority="crossref",
-                detail=("Crossref holds no record for this DOI. No registrant "
-                        "has ever deposited it."),
+                citation=c, verdict=Verdict.NOT_FOUND, authority="crossref+openalex",
+                detail=("Neither Crossref nor OpenAlex holds a record for this "
+                        "DOI. Two independent indexes have no registration for "
+                        "it."),
                 evidence_url=f"https://api.crossref.org/works/{doi}",
             )
 
@@ -167,12 +178,15 @@ class Verifier:
         author = c.claimed_authors[0] if c.claimed_authors else None
         candidates = self.crossref.search(title, author=author)
         if not candidates:
+            fb = self._fallback_search(c, title)
+            if fb is not None:
+                return fb
             return Finding(
-                citation=c, verdict=Verdict.NOT_FOUND, authority="crossref",
-                detail=("no work matching this title appears in Crossref. "
-                        "Either the reference is to something outside Crossref's "
-                        "coverage (books, reports, grey literature) or it "
-                        "describes a work that does not exist."),
+                citation=c, verdict=Verdict.NOT_FOUND, authority="crossref+openalex",
+                detail=("no work matching this description appears in either "
+                        "Crossref or OpenAlex. Note that coverage of books, "
+                        "government reports and grey literature is incomplete "
+                        "even in OpenAlex, so this is evidence, not proof."),
                 evidence_url=(
                     "https://search.crossref.org/?q="
                     + title[:120].replace(" ", "+")
@@ -197,15 +211,78 @@ class Verifier:
                     evidence_url=cand.evidence_url,
                 )
 
+        fb = self._fallback_search(c, title)
+        if fb is not None:
+            return fb
+
         return Finding(
-            citation=c, verdict=Verdict.NOT_FOUND, authority="crossref",
-            detail=(f"no Crossref record matches this description. Closest was "
+            citation=c, verdict=Verdict.NOT_FOUND, authority="crossref+openalex",
+            detail=(f"no indexed record matches this description. Closest was "
                     f"{(best.title if best else 'nothing')!r} at {best_sim:.0f}% "
                     "similarity, below the threshold for a match."),
             resolved_title=best.title if best else None,
             title_similarity=best_sim or None,
             evidence_url=best.evidence_url if best else None,
         )
+
+
+    # -- fallback authority ------------------------------------------------
+
+    def _fallback_doi(self, c: Citation, doi: str) -> Finding | None:
+        """
+        Second opinion on a DOI Crossref does not hold.
+
+        Returns a Finding when OpenAlex resolves it, or None to let the caller
+        report NOT_FOUND. An Unreachable fallback also returns None rather than
+        propagating: failing to get a second opinion is not itself evidence,
+        and the Crossref miss already stands on its own.
+        """
+        if not self.use_fallback:
+            return None
+        try:
+            rec = self.openalex.resolve_doi(doi)
+        except (NotFound, Unreachable):
+            return None
+
+        mismatch, sim, overlap, detail = match.assess(
+            c.claimed_title, c.claimed_authors, c.claimed_year,
+            rec.title, rec.authors, rec.year,
+        )
+        return Finding(
+            citation=c,
+            verdict=Verdict.MISMATCH if mismatch else Verdict.VERIFIED,
+            authority="openalex",
+            detail=(f"not in Crossref, but OpenAlex holds it"
+                    f"{' (' + (rec.type or 'work') + ')'}: {detail}"),
+            resolved_title=rec.title, resolved_authors=rec.authors,
+            resolved_year=rec.year, title_similarity=sim,
+            author_overlap=overlap, evidence_url=rec.evidence_url,
+        )
+
+    def _fallback_search(self, c: Citation, title: str) -> Finding | None:
+        """Second opinion on a description Crossref cannot match."""
+        if not self.use_fallback:
+            return None
+        try:
+            candidates = self.openalex.search_title(title)
+        except (NotFound, Unreachable):
+            return None
+
+        for cand in candidates:
+            ok, sim = match.is_plausible_search_hit(
+                title, cand.title or "", c.claimed_authors, cand.authors
+            )
+            if ok:
+                return Finding(
+                    citation=c, verdict=Verdict.VERIFIED, authority="openalex",
+                    detail=(f"not found in Crossref, but OpenAlex holds a "
+                            f"matching {cand.type or 'work'} "
+                            f"({sim:.0f}% title similarity)"),
+                    resolved_title=cand.title, resolved_authors=cand.authors,
+                    resolved_year=cand.year, title_similarity=sim,
+                    evidence_url=cand.evidence_url,
+                )
+        return None
 
     # -- document level ----------------------------------------------------
 

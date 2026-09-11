@@ -31,6 +31,7 @@ from citeaudit.models import Citation, Finding, Kind, Report, Verdict
 from citeaudit.report import to_html, to_json, to_markdown, to_terminal
 from citeaudit.sources.arxiv import Arxiv, parse_feed
 from citeaudit.sources.crossref import Crossref, to_work
+from citeaudit.sources.openalex import OpenAlex, to_record
 from citeaudit.verify import Verifier
 
 
@@ -381,12 +382,18 @@ class TestVerifier:
                      claimed_authors=["Kowalski"], claimed_year=2013)
         assert v.check(c).verdict is Verdict.VERIFIED
 
-    def test_nonexistent_doi_is_not_found(self):
-        v = Verifier(StubClient({"/works/": (404, "")}), workers=1)
+    def test_nonexistent_doi_is_not_found_after_both_authorities_miss(self):
+        """Both Crossref and the OpenAlex fallback must miss before accusing."""
+        stub = StubClient({"/works/": (404, "")})
+        v = Verifier(stub, workers=1)
         c = Citation(raw="x", kind=Kind.DOI, identifier="10.9999/nope")
         f = v.check(c)
         assert f.verdict is Verdict.NOT_FOUND
-        assert "no record" in f.detail.lower()
+        assert f.authority == "crossref+openalex"
+        assert "no registration" in f.detail.lower()
+        # both authorities were actually consulted
+        assert any("api.crossref.org" in u for u in stub.calls)
+        assert any("api.openalex.org" in u for u in stub.calls)
 
     def test_real_doi_wrong_paper_is_mismatch(self):
         """The dangerous case: link resolves, but to something else entirely."""
@@ -550,3 +557,107 @@ class TestDeduplication:
 
     def test_bare_repeated_identifier_still_deduplicates(self):
         assert len(extract("10.1038/nature14539 and 10.1038/nature14539")) == 1
+
+
+# ===========================================================================
+# Fallback authority
+# ===========================================================================
+
+OPENALEX_HIT = json.dumps({
+    "id": "https://openalex.org/W123",
+    "doi": "https://doi.org/10.5555/lawreview.2022.33.1",
+    "title": "The reasoned decision requirement and automated administrative action",
+    "authorships": [{"author": {"display_name": "Lisa Burton Crawford"}}],
+    "publication_year": 2022,
+    "type": "article",
+    "primary_location": {"source": {"display_name": "Public Law Review"}},
+})
+
+OPENALEX_SEARCH = json.dumps({"results": [json.loads(OPENALEX_HIT)]})
+OPENALEX_EMPTY = json.dumps({"results": []})
+
+
+class TestFallbackAuthority:
+
+    def test_doi_missing_from_crossref_but_held_by_openalex_verifies(self):
+        """
+        The false-positive guard. Crossref does not cover law reviews, books,
+        reports or theses; flagging those as fabricated would make the tool
+        untrustworthy on exactly the documents it is meant to check.
+        """
+        stub = StubClient({
+            "api.crossref.org": (404, ""),
+            "api.openalex.org/works/doi:": (200, OPENALEX_HIT),
+        })
+        v = Verifier(stub, workers=1)
+        c = Citation(
+            raw="x", kind=Kind.DOI, identifier="10.5555/lawreview.2022.33.1",
+            claimed_title="The reasoned decision requirement and automated administrative action",
+            claimed_authors=["Crawford"], claimed_year=2022,
+        )
+        f = v.check(c)
+        assert f.verdict is Verdict.VERIFIED
+        assert f.authority == "openalex"
+        assert "not in Crossref" in f.detail
+
+    def test_fallback_still_detects_mismatch(self):
+        """Broader coverage must not become laxer checking."""
+        stub = StubClient({
+            "api.crossref.org": (404, ""),
+            "api.openalex.org/works/doi:": (200, OPENALEX_HIT),
+        })
+        v = Verifier(stub, workers=1)
+        c = Citation(
+            raw="x", kind=Kind.DOI, identifier="10.5555/lawreview.2022.33.1",
+            claimed_title="Crystal structure of ribosomal protein L7",
+            claimed_authors=["Kowalski"], claimed_year=1998,
+        )
+        assert v.check(c).verdict is Verdict.MISMATCH
+
+    def test_unreachable_fallback_does_not_mask_the_crossref_miss(self):
+        """A failed second opinion is not evidence; the first verdict stands."""
+        stub = StubClient({
+            "api.crossref.org": (404, ""),
+            "api.openalex.org": (503, ""),
+        })
+        v = Verifier(stub, workers=1)
+        c = Citation(raw="x", kind=Kind.DOI, identifier="10.9999/nope")
+        assert v.check(c).verdict is Verdict.NOT_FOUND
+
+    def test_fallback_can_be_disabled(self):
+        stub = StubClient({"api.crossref.org": (404, "")})
+        v = Verifier(stub, use_fallback=False, workers=1)
+        c = Citation(raw="x", kind=Kind.DOI, identifier="10.9999/nope")
+        f = v.check(c)
+        assert f.verdict is Verdict.NOT_FOUND
+        assert not any("openalex" in u for u in stub.calls)
+
+    def test_bibliographic_reference_found_only_in_openalex(self):
+        stub = StubClient({
+            "api.crossref.org": (200, json.dumps({"message": {"items": []}})),
+            "api.openalex.org/works?": (200, OPENALEX_SEARCH),
+        })
+        v = Verifier(stub, workers=1)
+        c = Citation(
+            raw="x", kind=Kind.BIBLIOGRAPHIC,
+            claimed_title="The reasoned decision requirement and automated administrative action",
+            claimed_authors=["Crawford"], claimed_year=2022,
+        )
+        f = v.check(c)
+        assert f.verdict is Verdict.VERIFIED
+        assert f.authority == "openalex"
+
+    def test_bibliographic_missing_everywhere_is_not_found(self):
+        stub = StubClient({
+            "api.crossref.org": (200, json.dumps({"message": {"items": []}})),
+            "api.openalex.org/works?": (200, OPENALEX_EMPTY),
+        })
+        v = Verifier(stub, workers=1)
+        c = Citation(
+            raw="x", kind=Kind.BIBLIOGRAPHIC,
+            claimed_title="A study of imaginary compliance systems in nowhere",
+            claimed_authors=["Nguyen"], claimed_year=2022,
+        )
+        f = v.check(c)
+        assert f.verdict is Verdict.NOT_FOUND
+        assert "evidence, not proof" in f.detail

@@ -1,0 +1,93 @@
+name: studies
+
+# Runs the base-rate and calibration studies against live Crossref and OpenAlex,
+# then commits the results. These are the two measurements that let a reader
+# interpret any citeaudit score: what normal looks like, and what the detector's
+# error rates actually are.
+#
+# Deliberately not run on every push. Each execution makes a few thousand calls
+# to free scholarly APIs maintained on public goodwill, so it runs on a monthly
+# schedule or on explicit request.
+
+on:
+  schedule:
+    - cron: '23 4 1 * *'
+  # Touch .studies-trigger to request an out-of-band run. A path filter rather
+  # than a bare push trigger, so ordinary commits do not spend a few thousand
+  # calls against free scholarly APIs.
+  push:
+    paths:
+      - '.studies-trigger'
+  workflow_dispatch:
+    inputs:
+      study:
+        description: 'Which study to run'
+        required: false
+        default: 'both'
+        type: choice
+        options: [both, baserate, calibration]
+      max_checks:
+        description: 'Cap on base-rate checks'
+        required: false
+        default: '2400'
+      per_year:
+        description: 'Source works sampled per year stratum'
+        required: false
+        default: '12'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: studies
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install
+        run: pip install -e ".[dev]"
+
+      - name: Run studies
+        run: |
+          python scripts/run_studies.py \
+            --study "${{ inputs.study || 'both' }}" \
+            --max-checks "${{ inputs.max_checks || '2400' }}" \
+            --per-year "${{ inputs.per_year || '12' }}" \
+            --mailto citeaudit-ci@users.noreply.github.com \
+            2>&1 | tee evidence/studies-run.txt
+
+      - name: Job summary
+        if: always()
+        run: |
+          {
+            echo "## Studies"
+            echo
+            [ -f evidence/baserate/report.md ] && cat evidence/baserate/report.md
+            echo
+            echo "---"
+            echo
+            [ -f evidence/calibration/report.md ] && cat evidence/calibration/report.md
+          } >> "$GITHUB_STEP_SUMMARY" || true
+
+      - name: Commit results
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A evidence
+          if git diff --staged --quiet; then
+            echo "no change"
+          else
+            git commit -m "studies: base rate and calibration run [skip ci]"
+            git pull --rebase --autostash origin main || true
+            git push
+          fi

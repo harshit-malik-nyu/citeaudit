@@ -23,9 +23,9 @@ on:
       study:
         description: 'Which study to run'
         required: false
-        default: 'both'
+        default: 'all'
         type: choice
-        options: [both, baserate, calibration]
+        options: [all, baserate, calibration, preprints]
       max_checks:
         description: 'Cap on base-rate checks'
         required: false
@@ -59,7 +59,7 @@ jobs:
       - name: Run studies
         run: |
           python scripts/run_studies.py \
-            --study "${{ inputs.study || 'both' }}" \
+            --study "${{ inputs.study || 'all' }}" \
             --max-checks "${{ inputs.max_checks || '2400' }}" \
             --per-year "${{ inputs.per_year || '12' }}" \
             --mailto citeaudit-ci@users.noreply.github.com \
@@ -76,6 +76,10 @@ jobs:
             echo "---"
             echo
             [ -f evidence/calibration/report.md ] && cat evidence/calibration/report.md
+            echo
+            echo "---"
+            echo
+            [ -f evidence/preprints/report.md ] && cat evidence/preprints/report.md
           } >> "$GITHUB_STEP_SUMMARY" || true
 
       - name: Commit results

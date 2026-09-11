@@ -306,3 +306,112 @@ class TestStudyNormalisation:
         from citeaudit.extract import normalise_doi
         assert normalise_doi("10.1016/s2542-5196(17)30162-6.") == \
             "10.1016/s2542-5196(17)30162-6"
+
+
+# ===========================================================================
+# Preprint corpus: author-written bibliographies
+# ===========================================================================
+
+from citeaudit.preprints import (
+    bibliography_from_source, delatex, parse_bibtex, split_bibitems,
+)
+
+
+class TestLatexBibliography:
+
+    def test_delatex_unwraps_formatting_commands(self):
+        raw = r"J.~Smith, \emph{A Study of Things}, \textbf{Nature} 521 (2015)"
+        out = delatex(raw)
+        assert "emph" not in out and "textbf" not in out
+        assert "A Study of Things" in out
+        assert "Nature" in out
+
+    def test_delatex_normalises_latex_quotes(self):
+        assert '"' in delatex(r"``A Quoted Title''")
+
+    def test_delatex_strips_braces_and_tildes(self):
+        assert delatex(r"{Smith}, J.~A.") == "Smith, J. A."
+
+    def test_split_bibitems_separates_entries(self):
+        bbl = r"""
+\begin{thebibliography}{9}
+\bibitem{a} A.~Author, \emph{First paper about something interesting}, Journal of Things, 2019. doi:10.1/aaa
+\bibitem{b} B.~Writer, \emph{Second paper about other interesting matters}, Review of Stuff, 2020.
+\end{thebibliography}
+"""
+        entries = split_bibitems(bbl)
+        assert len(entries) == 2
+        assert "First paper" in entries[0]
+        assert "Second paper" in entries[1]
+        assert r"\end{thebibliography}" not in entries[1]
+
+    def test_split_bibitems_handles_optional_label(self):
+        bbl = r"\bibitem[Smith et al.(2019)]{smith19} Smith, J., Title of the work here, 2019."
+        assert len(split_bibitems(bbl)) == 1
+
+    def test_split_bibitems_returns_nothing_without_bibitems(self):
+        assert split_bibitems("just some prose with no bibliography at all") == []
+
+    def test_parse_bibtex_reconstructs_a_reference_string(self):
+        bib = """
+@article{smith2019,
+  author = {Smith, John and Doe, Jane},
+  title = {A sufficiently long and genuine sounding title},
+  journal = {Journal of Testing},
+  year = {2019},
+  doi = {10.1234/jot.2019.001}
+}
+"""
+        out = parse_bibtex(bib)
+        assert len(out) == 1
+        assert "A sufficiently long and genuine sounding title" in out[0]
+        assert "10.1234/jot.2019.001" in out[0]
+
+    def test_parse_bibtex_skips_entries_without_a_usable_title(self):
+        assert parse_bibtex("@misc{x, author={A}, year={2020}}") == []
+
+    def test_malformed_archive_returns_empty_not_an_exception(self):
+        """A bad source package must skip the paper, never abort the study."""
+        assert bibliography_from_source(b"not a tarball at all") == []
+        assert bibliography_from_source(b"") == []
+
+    def test_real_tarball_is_parsed(self):
+        import io, tarfile
+
+        bbl = (r"\bibitem{a} A.~Author, \emph{A genuine looking title of "
+               r"sufficient length}, Journal, 2019.")
+        buf = io.BytesIO()
+        with tarfile.open(fileobj=buf, mode="w:gz") as tar:
+            data = bbl.encode()
+            info = tarfile.TarInfo(name="main.bbl")
+            info.size = len(data)
+            tar.addfile(info, io.BytesIO(data))
+        entries = bibliography_from_source(buf.getvalue())
+        assert len(entries) == 1
+        assert "genuine looking title" in entries[0]
+
+    def test_bbl_preferred_over_bib(self):
+        """
+        .bbl is the rendered bibliography. .bib is a source database that may
+        list works the paper never cites, which would inflate the sample with
+        references no author actually made.
+        """
+        import io, tarfile
+
+        buf = io.BytesIO()
+        with tarfile.open(fileobj=buf, mode="w:gz") as tar:
+            for name, content in (
+                ("refs.bib", "@article{x, title={A bibtex only entry title here}, "
+                             "author={A}, year={2020}}"),
+                ("main.bbl", r"\bibitem{a} Author, \emph{The rendered bbl title "
+                             r"which should win}, 2019."),
+            ):
+                data = content.encode()
+                info = tarfile.TarInfo(name=name)
+                info.size = len(data)
+                tar.addfile(info, io.BytesIO(data))
+
+        entries = bibliography_from_source(buf.getvalue())
+        joined = " ".join(entries)
+        assert "rendered bbl title" in joined
+        assert "bibtex only entry" not in joined

@@ -1,7 +1,7 @@
 {
   "summary": {
     "document": "examples/demo.md",
-    "generated_at": "2026-09-11T20:33:58+00:00",
+    "generated_at": "2026-09-11T20:36:26+00:00",
     "tool_version": "0.1.0",
     "total_citations": 14,
     "verified": 8,
@@ -43,7 +43,7 @@
       "title_similarity": 100.0,
       "author_overlap": 1.0,
       "evidence_url": "https://doi.org/10.1038/nature14539",
-      "checked_at": "2026-09-11T20:33:51+00:00"
+      "checked_at": "2026-09-11T20:36:19+00:00"
     },
     {
       "citation": {
@@ -79,7 +79,7 @@
       "title_similarity": 100.0,
       "author_overlap": 1.0,
       "evidence_url": "https://arxiv.org/abs/1706.03762",
-      "checked_at": "2026-09-11T20:33:50+00:00"
+      "checked_at": "2026-09-11T20:36:19+00:00"
     },
     {
       "citation": {
@@ -112,7 +112,7 @@
       "title_similarity": 100.0,
       "author_overlap": 1.0,
       "evidence_url": "https://arxiv.org/abs/1810.04805",
-      "checked_at": "2026-09-11T20:33:50+00:00"
+      "checked_at": "2026-09-11T20:36:19+00:00"
     },
     {
       "citation": {
@@ -138,7 +138,7 @@
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": "https://api.crossref.org/works/10.1016/j.jpuba.2021.02.014",
-      "checked_at": "2026-09-11T20:33:51+00:00"
+      "checked_at": "2026-09-11T20:36:19+00:00"
     },
     {
       "citation": {
@@ -163,7 +163,7 @@
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": "https://api.crossref.org/works/10.9911/erla.2020.13.4.055",
-      "checked_at": "2026-09-11T20:33:51+00:00"
+      "checked_at": "2026-09-11T20:36:19+00:00"
     },
     {
       "citation": {
@@ -188,7 +188,7 @@
       "title_similarity": 58.208955223880594,
       "author_overlap": null,
       "evidence_url": "https://doi.org/10.31390/gradschool_disstheses.1478",
-      "checked_at": "2026-09-11T20:33:51+00:00"
+      "checked_at": "2026-09-11T20:36:20+00:00"
     },
     {
       "citation": {
@@ -224,7 +224,7 @@
       "title_similarity": 100.0,
       "author_overlap": 0.8,
       "evidence_url": "https://doi.org/10.1109/cvpr.2009.5206848",
-      "checked_at": "2026-09-11T20:33:51+00:00"
+      "checked_at": "2026-09-11T20:36:19+00:00"
     },
     {
       "citation": {
@@ -261,7 +261,7 @@
       "title_similarity": 100.0,
       "author_overlap": 1.0,
       "evidence_url": "https://arxiv.org/abs/1906.02530",
-      "checked_at": "2026-09-11T20:33:51+00:00"
+      "checked_at": "2026-09-11T20:36:19+00:00"
     },
     {
       "citation": {
@@ -286,7 +286,7 @@
       "title_similarity": 55.33980582524272,
       "author_overlap": null,
       "evidence_url": "https://doi.org/10.3109/01658109309038141",
-      "checked_at": "2026-09-11T20:33:52+00:00"
+      "checked_at": "2026-09-11T20:36:20+00:00"
     },
     {
       "citation": {
@@ -315,7 +315,7 @@
       "title_similarity": 100.0,
       "author_overlap": 1.0,
       "evidence_url": "https://arxiv.org/abs/1703.01365",
-      "checked_at": "2026-09-11T20:33:51+00:00"
+      "checked_at": "2026-09-11T20:36:19+00:00"
     },
     {
       "citation": {
@@ -344,7 +344,7 @@
       "title_similarity": 22.22222222222223,
       "author_overlap": 0.0,
       "evidence_url": "https://doi.org/10.1038/nature14539",
-      "checked_at": "2026-09-11T20:33:51+00:00"
+      "checked_at": "2026-09-11T20:36:19+00:00"
     },
     {
       "citation": {
@@ -367,7 +367,7 @@
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": "https://www.crossref.org/documentation/",
-      "checked_at": "2026-09-11T20:33:51+00:00"
+      "checked_at": "2026-09-11T20:36:20+00:00"
     },
     {
       "citation": {
@@ -390,7 +390,7 @@
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": "https://arxiv.org/help/api/",
-      "checked_at": "2026-09-11T20:33:51+00:00"
+      "checked_at": "2026-09-11T20:36:20+00:00"
     },
     {
       "citation": {
@@ -413,7 +413,7 @@
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": null,
-      "checked_at": "2026-09-11T20:33:58+00:00"
+      "checked_at": "2026-09-11T20:36:26+00:00"
     }
   ],
   "quote_summary": {
@@ -455,7 +455,7 @@
       "source_origin": "arxiv-source",
       "evidence_url": "https://arxiv.org/abs/1706.03762",
       "detail": "passage located in the full text (100% match)",
-      "checked_at": "2026-09-11T20:33:59+00:00"
+      "checked_at": "2026-09-11T20:36:27+00:00"
     },
     {
       "quote": {
@@ -485,7 +485,7 @@
       "source_origin": "arxiv-source",
       "evidence_url": "https://arxiv.org/abs/1706.03762",
       "detail": "complete text of the source was retrieved (4,716 words) and this passage does not appear in it. Closest match scored 49%.",
-      "checked_at": "2026-09-11T20:33:59+00:00"
+      "checked_at": "2026-09-11T20:36:27+00:00"
     }
   ]
 }

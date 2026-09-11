@@ -72,6 +72,78 @@ It also catches references carrying no identifier at all, by searching Crossref
 for the described work. If nothing close exists, that is reported — which is
 how a confident reference to a paper nobody ever wrote gets found.
 
+## What the measurements say
+
+Two studies run against live Crossref and OpenAlex, results committed to
+[`evidence/`](evidence/). They exist because a verdict is uninterpretable
+without them: if a document scores 62%, you cannot tell whether that is alarming
+or ordinary until you know what ordinary looks like.
+
+### How often does it flag a reference that is genuinely real?
+
+[Full report](evidence/baserate/report.md)
+
+Ground truth here comes free, from the construction. Take real published
+papers, take their deposited reference lists — every entry carries a DOI, so
+every cited work provably exists. Hide the DOI, check by description alone, and
+**every NOT_FOUND is a definite false positive.** No labelling, no annotator
+judgment, nothing to disagree about.
+
+| Mode | False-positive rate |
+|---|---:|
+| Reference gives a DOI | **0.5%** |
+| Reference gives only title, authors, year | **2.4%** |
+
+So a document citing without identifiers should be expected to show roughly a
+2% failure rate *before anything is wrong with it*. A rate at or below that says
+nothing. A rate materially above it is the signal worth investigating.
+
+That sentence is the reason the study exists.
+
+### Why the mismatch threshold is 66
+
+[Full report](evidence/calibration/report.md) · 2,501 labelled pairs from 260
+real Crossref records
+
+Same-work pairs take a real record and degrade its title the way bibliographies
+actually degrade. Different-work pairs attach one paper's DOI to the *nearest
+confusable title* in the sample — a plausible title in the right field, which
+is what a fabrication looks like. Labels follow from construction, not judgment.
+
+| Threshold | Precision | Recall |
+|---:|---:|---:|
+| 48 | 1.000 | 0.437 |
+| 54 | 1.000 | 0.881 |
+| 60 | 1.000 | 0.992 |
+| **66** | **1.000** | **1.000** |
+
+Zero false accusations across 1,721 genuine pairs. The operating point is chosen
+on a precision floor rather than by maximising F1, because the two errors are
+not equally costly: a false accusation is what makes someone switch the tool
+off, and a tool that is off catches nothing.
+
+**A note on how this was reached.** The first calibration run returned perfect
+precision *and* recall at every threshold from 54 to 90 — which looked like
+success and was actually a failed measurement. Positives had been built by
+pairing random titles from unrelated fields, so the two classes never met and
+no threshold had anything to adjudicate. The labelled set was rebuilt around
+nearest-neighbour confusions. The report now states explicitly whether the
+classes overlap, so a future perfect score is visibly either earned or
+meaningless.
+
+### What it is worth
+
+[Full sizing](docs/business-case.md)
+
+A single retraction costs an estimated **A$732k** — of which the publicly
+reported refund is about 15%. Three of the four largest firms had one in eight
+months. Against a mitigation cost near A$35k, breakeven sits at one incident
+every 21 years, and the net stays positive across an order of magnitude on
+every assumption.
+
+Every input in that model is labelled OBSERVED, ESTIMATE, or DERIVED, and the
+weakest one is named rather than buried.
+
 ## Verdicts
 
 The taxonomy is the most important design decision in the tool.

@@ -129,42 +129,81 @@ class StudyResult:
 # ---------------------------------------------------------------------------
 
 def sample_source_works(client: Client, *, per_year: int, years: list[int],
-                        seed: int) -> Iterator[dict]:
+                        seed: int, max_draws_per_year: int = 8) -> Iterator[dict]:
     """
-    Draw a stratified random sample of published works with reference lists.
+    Draw a stratified random sample of published works with usable reference
+    lists.
 
-    Stratified by publication year so that any trend over time can be read off
-    directly, and because an unstratified draw from Crossref skews heavily to
-    recent years and would confound coverage with recency.
+    Stratified by publication year so any trend over time reads off directly,
+    and because an unstratified Crossref draw skews heavily to recent years,
+    confounding coverage with recency.
 
-    Crossref's `sample` parameter performs the randomisation server-side, which
-    avoids downloading an index to draw from and is reproducible given the
-    filter.
+    Repeated draws per stratum are necessary, not defensive. The experiment
+    needs references carrying both a DOI and a title, and most publishers
+    deposit reference DOIs with no title at all — so the usable yield per
+    sampled paper runs well under one in five. A single draw of N papers
+    produces far fewer than N usable ones, which is what made the first two
+    runs disagree by a factor of four on a sample too small to distinguish
+    them.
+
+    Crossref's `sample` randomises server-side and caps at 100 per request, so
+    a larger stratum means more requests rather than a bigger page.
     """
     import urllib.parse
 
     for year in years:
-        params = {
-            "filter": (
-                f"from-pub-date:{year}-01-01,until-pub-date:{year}-12-31,"
-                "has-references:true,type:journal-article"
-            ),
-            "sample": str(min(per_year, 100)),
-            "select": "DOI,title,reference,type,issued,publisher",
-        }
-        if client.mailto:
-            params["mailto"] = client.mailto
+        collected = 0
+        seen: set[str] = set()
 
-        url = f"{CROSSREF_BASE}/works?{urllib.parse.urlencode(params)}"
-        try:
-            data = client.get(url).json()
-        except (NotFound, Unreachable) as exc:
-            log.warning("sampling failed for %s: %s", year, exc)
-            continue
+        for _ in range(max_draws_per_year):
+            if collected >= per_year:
+                break
 
-        for item in (data.get("message") or {}).get("items") or []:
-            item["_stratum_year"] = year
-            yield item
+            params = {
+                "filter": (
+                    f"from-pub-date:{year}-01-01,until-pub-date:{year}-12-31,"
+                    "has-references:true,type:journal-article"
+                ),
+                "sample": "100",
+                "select": "DOI,title,reference,type,issued,publisher",
+            }
+            if client.mailto:
+                params["mailto"] = client.mailto
+
+            url = f"{CROSSREF_BASE}/works?{urllib.parse.urlencode(params)}"
+            try:
+                data = client.get(url).json()
+            except (NotFound, Unreachable) as exc:
+                log.warning("sampling failed for %s: %s", year, exc)
+                break
+
+            items = (data.get("message") or {}).get("items") or []
+            if not items:
+                break
+
+            for item in items:
+                doi = (item.get("DOI") or "").lower()
+                if doi in seen:
+                    continue
+                seen.add(doi)
+
+                # Skip papers that would contribute nothing, so the stratum
+                # target counts usable works rather than sampled ones.
+                has_usable = any(
+                    (r.get("DOI") or "").strip()
+                    and len((r.get("article-title") or r.get("volume-title") or "").strip()) >= 15
+                    for r in (item.get("reference") or [])
+                )
+                if not has_usable:
+                    continue
+
+                item["_stratum_year"] = year
+                collected += 1
+                yield item
+                if collected >= per_year:
+                    break
+
+        log.info("stratum %s: %s usable works", year, collected)
 
 
 def references_of(work: dict, *, max_refs: int, rng: random.Random) -> list[dict]:

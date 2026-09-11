@@ -547,10 +547,18 @@ def to_markdown(pairs: list[Pair], curve: list[dict],
         "do not model translated titles, transliteration, or non-Latin scripts."
     )
     out.append(
-        "- Different-work pairs are drawn at random across the sample. Real "
-        "fabrications may be *topically* closer to the claim than a random "
-        "draw, which would make them harder to catch than this measures. "
-        "Recall here is therefore an optimistic bound."
+        "- Different-work pairs are the nearest confusable title available "
+        "within the sample, which is harder than a random draw but still "
+        "bounded by what the sample happens to contain. A fabrication "
+        "engineered to match a specific claim could be closer still, so recall "
+        "here remains an optimistic bound."
+    )
+    out.append(
+        "- Precision holds at 1.000 across the whole swept range. That is not "
+        "the threshold's doing: the author-overlap corroboration rule in "
+        "`match.assess` blocks an accusation whenever the claimed authors agree "
+        "with the record, which protects genuine pairs independently of title "
+        "similarity. The threshold governs recall; that rule governs precision."
     )
     out.append(
         "- The sample is journal articles with abstracts, which skews toward "

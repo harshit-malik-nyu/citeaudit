@@ -26,7 +26,20 @@ import unicodedata
 from rapidfuzz import fuzz
 
 # A resolved title this dissimilar to the claim indicates a different work.
-TITLE_MISMATCH_THRESHOLD = 60.0
+#
+# CALIBRATED, not asserted. See evidence/calibration/report.md: 2,501
+# labelled pairs built from 260 real Crossref records, ground truth fixed by
+# construction. Across the swept range, precision holds at 1.000 while recall
+# climbs with the threshold — 60 catches 99.2% of genuine mismatches, 66
+# catches 100% with zero false accusations across 1,721 genuine pairs.
+#
+# Chosen on a precision floor rather than by maximising F1. F1 treats the two
+# errors as equally costly; here a false accusation is what makes a user
+# switch the tool off, after which missed detections stop mattering because
+# nobody is looking. Among thresholds tied at maximum recall, the lowest is
+# taken: it flags least aggressively and so carries least risk on data harder
+# than the labelled set.
+TITLE_MISMATCH_THRESHOLD = 66.0
 
 # Above this, treat as the same work regardless of author noise.
 TITLE_STRONG_MATCH = 85.0

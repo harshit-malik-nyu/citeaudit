@@ -98,6 +98,30 @@ def strip_punctuation(title: str, rng: random.Random) -> str | None:
     return out if out != title else None
 
 
+def keep_opening_words(title: str, rng: random.Random) -> str | None:
+    """
+    Severe truncation to the first few words.
+
+    Some citation styles and many hand-built bibliographies record only the
+    opening of a long title. This is the hardest same-work case: the text
+    genuinely is a fragment of the real title, and a naive matcher will score
+    it low.
+    """
+    words = title.split()
+    if len(words) < 9:
+        return None
+    return " ".join(words[:rng.randint(4, 5)])
+
+
+def compound_degrade(title: str, rng: random.Random) -> str | None:
+    """Several degradations at once, as accumulates through re-citation."""
+    out = drop_subtitle(title, rng) or title
+    out = truncate(out, rng) or out
+    out = strip_punctuation(out, rng) or out
+    out = introduce_typo(out, rng) or out
+    return out if len(out) >= 12 and out != title else None
+
+
 PERTURBATIONS = {
     "identity": lambda t, r: t,
     "drop_subtitle": drop_subtitle,
@@ -105,12 +129,32 @@ PERTURBATIONS = {
     "typo": introduce_typo,
     "case": flatten_case,
     "punctuation": strip_punctuation,
+    "opening_words": keep_opening_words,
+    "compound": compound_degrade,
 }
 
 
 # ---------------------------------------------------------------------------
 # Labelled pairs
 # ---------------------------------------------------------------------------
+
+# Guarding the "different work" label.
+#
+# A high title similarity alone cannot separate "two different papers on
+# adjacent topics" from "one paper deposited twice". Excluding every
+# high-similarity pair would throw away exactly the hard cases the calibration
+# needs — "...in emerging markets" versus "...in developed markets" is a
+# genuinely different paper and a genuinely difficult one.
+#
+# Authors resolve it. Two records with near-identical titles AND substantially
+# the same author list are plausibly the same work; near-identical titles by
+# different research groups are two papers. A pair is excluded only when both
+# conditions hold.
+NEAR_DUPLICATE_CEILING = 92.0
+NEAR_DUPLICATE_AUTHOR_OVERLAP = 0.6
+
+# How many hardest-available confusions to generate per work.
+HARD_POSITIVES_PER_WORK = 2
 
 @dataclass
 class Pair:
@@ -132,29 +176,63 @@ class Pair:
 
 def fetch_reference_works(client: Client, *, count: int, seed: int,
                           years: tuple[int, int] = (2010, 2024)) -> list[Work]:
-    """Draw a random sample of real works to build pairs from."""
+    """
+    Draw a random sample of real works to build pairs from.
+
+    Crossref caps `sample` at 100 per request, so larger samples accumulate
+    across year windows. Sampling by window rather than repeatedly from the
+    same filter also spreads the draw over time instead of re-rolling the same
+    recency-skewed pool.
+
+    Pool size matters here more than it looks. Positives are built by finding
+    each work's nearest confusable neighbour, so a thin pool yields only
+    distant pairs — which is exactly the defect that made the first calibration
+    report a meaningless perfect score.
+    """
     import urllib.parse
-
-    params = {
-        "filter": (
-            f"from-pub-date:{years[0]}-01-01,until-pub-date:{years[1]}-12-31,"
-            "type:journal-article,has-abstract:true"
-        ),
-        "sample": str(min(count, 100)),
-        "select": "DOI,title,author,issued,container-title,type",
-    }
-    if client.mailto:
-        params["mailto"] = client.mailto
-
     from .sources.crossref import BASE, to_work
-    url = f"{BASE}/works?{urllib.parse.urlencode(params)}"
-    try:
-        data = client.get(url).json()
-    except (NotFound, Unreachable):
-        return []
-    items = (data.get("message") or {}).get("items") or []
-    works = [to_work(i) for i in items]
-    return [w for w in works if w.title and len(w.title) >= 20 and w.authors]
+
+    lo, hi = years
+    span = max(1, hi - lo + 1)
+    n_windows = max(1, min(span, (count + 99) // 100))
+    width = max(1, span // n_windows)
+
+    works: list[Work] = []
+    seen: set[str] = set()
+
+    for k in range(n_windows):
+        w_lo = lo + k * width
+        w_hi = min(hi, w_lo + width - 1)
+        params = {
+            "filter": (
+                f"from-pub-date:{w_lo}-01-01,until-pub-date:{w_hi}-12-31,"
+                "type:journal-article,has-abstract:true"
+            ),
+            "sample": str(min(100, count)),
+            "select": "DOI,title,author,issued,container-title,type",
+        }
+        if client.mailto:
+            params["mailto"] = client.mailto
+
+        url = f"{BASE}/works?{urllib.parse.urlencode(params)}"
+        try:
+            data = client.get(url).json()
+        except (NotFound, Unreachable):
+            continue
+
+        for item in (data.get("message") or {}).get("items") or []:
+            w = to_work(item)
+            if not w.title or len(w.title) < 20 or not w.authors:
+                continue
+            if w.doi in seen:
+                continue
+            seen.add(w.doi)
+            works.append(w)
+
+        if len(works) >= count:
+            break
+
+    return works[:count]
 
 
 def build_pairs(works: list[Work], *, seed: int = 20260909) -> list[Pair]:
@@ -177,24 +255,48 @@ def build_pairs(works: list[Work], *, seed: int = 20260909) -> list[Pair]:
             ))
 
     # --- positives: DOI of A, title of B ---------------------------------
-    # Pairing is random across the sample, which is what a fabricated citation
-    # looks like: a real identifier attached to an unrelated description.
+    #
+    # Pairing is by NEAREST TITLE, not at random.
+    #
+    # A random pair draws two papers from unrelated fields, whose titles share
+    # almost no vocabulary. Those are trivially separable, and a calibration
+    # built on them reports perfect scores across every threshold — which looks
+    # like success and is actually a measurement that failed to measure
+    # anything.
+    #
+    # A real fabricated citation is not a random swap. It is a plausible title
+    # in the right field, sharing the domain's vocabulary with the work it is
+    # confused with. Pairing each DOI with the most similar *other* title in
+    # the sample manufactures exactly that contested case, which is the only
+    # region where the threshold does any work.
+    #
+    # NEAR_DUPLICATE_CEILING guards the label: above it, two records may be the
+    # same work deposited twice, and calling that pair "different" would poison
+    # precision.
     n = len(works)
     for i, w in enumerate(works):
-        for _ in range(3):
-            j = rng.randrange(n)
-            if j == i:
+        scored: list[tuple[float, Work]] = []
+        for j, other in enumerate(works):
+            if j == i or not other.title:
                 continue
-            other = works[j]
-            if not other.title:
-                continue
-            # Guard against the sample accidentally containing near-duplicates,
-            # which would poison the positive labels.
             sim = match.title_similarity(other.title, w.title) or 0.0
-            if sim > 70:
-                continue
+            if sim > NEAR_DUPLICATE_CEILING:
+                ov = match.author_overlap(other.authors, w.authors)
+                if ov is not None and ov >= NEAR_DUPLICATE_AUTHOR_OVERLAP:
+                    continue          # plausibly the same work, not a confusion
+            scored.append((sim, other))
+
+        scored.sort(key=lambda t: -t[0])
+        # The hardest available cases, plus one random draw so the easy region
+        # of the curve is still populated and the sweep spans the full range.
+        chosen = scored[:HARD_POSITIVES_PER_WORK]
+        if len(scored) > HARD_POSITIVES_PER_WORK:
+            chosen = chosen + [rng.choice(scored[HARD_POSITIVES_PER_WORK:])]
+
+        for sim, other in chosen:
             pairs.append(Pair(
-                label="different_work", perturbation="swapped_title",
+                label="different_work",
+                perturbation=("nearest_title" if sim >= 40 else "random_title"),
                 doi=w.doi, claimed_title=other.title, resolved_title=w.title,
                 claimed_authors=other.authors[:3], resolved_authors=w.authors,
                 claimed_year=other.year, resolved_year=w.year,
@@ -278,7 +380,13 @@ def choose_operating_point(curve: list[dict], *,
                 if r["precision"] is not None and r["precision"] >= min_precision]
     if not eligible:
         return None
-    return max(eligible, key=lambda r: (r["recall"] or 0, r["threshold"]))
+
+    best_recall = max(r["recall"] or 0 for r in eligible)
+    # Among thresholds achieving the best recall, take the LOWEST. A higher
+    # threshold flags more aggressively; if several are tied on this labelled
+    # set, the conservative one carries less risk on data harder than the set.
+    at_best = [r for r in eligible if (r["recall"] or 0) >= best_recall - 1e-9]
+    return min(at_best, key=lambda r: r["threshold"])
 
 
 # ---------------------------------------------------------------------------
@@ -334,6 +442,36 @@ def to_markdown(pairs: list[Pair], curve: list[dict],
         "how the pair was assembled."
     )
     out.append("")
+
+    same_sims = [p.similarity for p in pairs
+                 if p.label == "same_work" and p.similarity is not None]
+    diff_sims = [p.similarity for p in pairs
+                 if p.label == "different_work" and p.similarity is not None]
+    if same_sims and diff_sims:
+        overlap = min(same_sims) <= max(diff_sims)
+        contested = sum(1 for s_ in diff_sims if s_ >= min(same_sims))
+        out.append("## Is this set actually hard?")
+        out.append("")
+        out.append(
+            f"Same-work similarity spans {min(same_sims):.0f}–{max(same_sims):.0f}%; "
+            f"different-work spans {min(diff_sims):.0f}–{max(diff_sims):.0f}%."
+        )
+        out.append("")
+        if overlap:
+            out.append(
+                f"The ranges **overlap**, with {contested} different-work pairs "
+                "scoring at or above the weakest same-work pair. Those are the "
+                "cases the threshold has to adjudicate, and their presence is "
+                "what makes the curve below meaningful."
+            )
+        else:
+            out.append(
+                "**The ranges do not overlap.** No pair in this set is "
+                "contested, so any threshold between them scores perfectly and "
+                "the curve below measures nothing. Treat the reported operating "
+                "point as unvalidated and enlarge the sample."
+            )
+        out.append("")
 
     out.append("## The trade-off")
     out.append("")

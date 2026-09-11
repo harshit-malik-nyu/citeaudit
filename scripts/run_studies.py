@@ -29,10 +29,10 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--study", choices=["baserate", "calibration", "both"],
                     default="both")
-    ap.add_argument("--per-year", type=int, default=12)
+    ap.add_argument("--per-year", type=int, default=30)
     ap.add_argument("--max-refs", type=int, default=6)
-    ap.add_argument("--max-checks", type=int, default=2400)
-    ap.add_argument("--calibration-works", type=int, default=90)
+    ap.add_argument("--max-checks", type=int, default=3000)
+    ap.add_argument("--calibration-works", type=int, default=260)
     ap.add_argument("--seed", type=int, default=20260909)
     ap.add_argument("--mailto", default="citeaudit-ci@users.noreply.github.com")
     ap.add_argument("--workers", type=int, default=6)

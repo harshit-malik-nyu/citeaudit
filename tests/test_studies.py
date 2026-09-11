@@ -61,14 +61,23 @@ class TestLabelledSet:
 
     @pytest.fixture
     def works(self) -> list[Work]:
+        """
+        A topically clustered sample, as a real random draw from a field would
+        be. Unrelated titles make the calibration look perfect without testing
+        anything, so the fixture deliberately contains confusable neighbours.
+        """
         return [
             _work("10.1/a", "Deep learning methods for image recognition tasks",
                   ["Smith", "Jones"]),
-            _work("10.1/b", "Crystal structure of ribosomal protein L7 in yeast",
-                  ["Kowalski"]),
+            _work("10.1/b", "Deep learning methods for speech recognition tasks",
+                  ["Alvarez"]),
             _work("10.1/c", "Monetary policy transmission in emerging markets: evidence from Asia",
                   ["Patel", "Chen"]),
-            _work("10.1/d", "A longitudinal study of urban air quality and asthma",
+            _work("10.1/d", "Monetary policy transmission in developed markets: evidence from Europe",
+                  ["Novak"]),
+            _work("10.1/e", "Crystal structure of ribosomal protein L7 in yeast",
+                  ["Kowalski"]),
+            _work("10.1/f", "A longitudinal study of urban air quality and childhood asthma",
                   ["Okafor"]),
         ]
 
@@ -87,28 +96,70 @@ class TestLabelledSet:
             assert p.claimed_title != p.resolved_title
             assert p.is_truly_different
 
-    def test_near_duplicate_titles_excluded_from_positives(self):
+    def test_same_work_deposited_twice_excluded_from_positives(self):
         """
-        If the sample contained two near-identical titles, pairing them would
-        create a 'different work' label that is actually almost the same work,
-        poisoning precision.
+        Identical title AND the same authors: plausibly one work deposited
+        twice. Labelling that 'different' would corrupt precision.
         """
         works = [
-            _work("10.1/a", "Deep learning for image recognition", ["A"]),
-            _work("10.1/b", "Deep learning for image recognition", ["B"]),
+            _work("10.1/a", "Deep learning for image recognition", ["Smith", "Jones"]),
+            _work("10.1/b", "Deep learning for image recognition", ["Smith", "Jones"]),
         ]
         pairs = build_pairs(works, seed=1)
         assert [p for p in pairs if p.label == "different_work"] == []
+
+    def test_similar_title_different_authors_kept_as_hard_positive(self):
+        """
+        Near-identical titles from different research groups are two papers,
+        and they are the hardest and most valuable positives in the set.
+        """
+        works = [
+            _work("10.1/a", "Deep learning for image recognition", ["Smith", "Jones"]),
+            _work("10.1/b", "Deep learning for image recognition", ["Kowalski", "Petrov"]),
+        ]
+        pairs = build_pairs(works, seed=1)
+        assert [p for p in pairs if p.label == "different_work"]
 
     def test_similarity_computed_for_every_pair(self, works):
         for p in build_pairs(works, seed=1):
             assert p.similarity is not None
 
-    def test_same_work_perturbations_score_higher_than_swaps(self, works):
+    def test_labelled_classes_are_not_trivially_separable(self, works):
+        """
+        REGRESSION. The first version of this test asserted the classes were
+        perfectly separable, which is precisely the defect it should have
+        caught: pairing random titles from unrelated fields produced precision
+        and recall of 1.000 at every threshold from 54 to 90. A threshold that
+        makes no difference anywhere has not been calibrated — the labelled set
+        just never posed a hard case.
+
+        A useful set must contain contested pairs. This asserts the ranges
+        overlap, so the sweep has something to discriminate.
+        """
         pairs = build_pairs(works, seed=1)
         same = [p.similarity for p in pairs if p.label == "same_work"]
         diff = [p.similarity for p in pairs if p.label == "different_work"]
-        assert min(same) > max(diff), "labelled classes must be separable"
+        assert same and diff
+        # The hardest same-work case must score no higher than the hardest
+        # different-work case, or the two classes never meet.
+        assert min(same) <= max(diff), (
+            "labelled set is trivially separable; the threshold sweep would "
+            "report a perfect score without measuring anything"
+        )
+
+    def test_hard_positives_use_the_nearest_available_title(self):
+        """Positives should be the most confusable pairing, not a random one."""
+        works = [
+            _work("10.1/a", "Monetary policy transmission in emerging markets", ["Patel"]),
+            _work("10.1/b", "Monetary policy transmission in developed markets", ["Novak"]),
+            _work("10.1/c", "Crystal structure of ribosomal protein L7 in yeast", ["Kowalski"]),
+        ]
+        pairs = build_pairs(works, seed=1)
+        hard = [p for p in pairs
+                if p.label == "different_work" and p.doi == "10.1/a"]
+        assert hard
+        best = max(hard, key=lambda p: p.similarity or 0)
+        assert "developed markets" in best.claimed_title
 
 
 class TestPerturbations:

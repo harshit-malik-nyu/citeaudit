@@ -74,6 +74,10 @@ how a confident reference to a paper nobody ever wrote gets found.
 
 ## What the measurements say
 
+> Full write-up: **[docs/findings.md](docs/findings.md)** — the analysis, the
+> reasoning, and the errors found along the way.
+
+
 Three studies against live Crossref, OpenAlex and arXiv. Results committed to
 [`evidence/`](evidence/), refreshed on a schedule.
 

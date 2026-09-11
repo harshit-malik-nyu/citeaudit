@@ -50,19 +50,19 @@ Could not check (4)
        document says: 'BERT: Pre-training of Deep Bidirectional Transformers for Language'
        check could not be completed:
        https://export.arxiv.org/api/query?id_list=1810.04805&max_results=1:
-       HTTP Error 429: Unknown Error
+       The read operation timed out
 
   ??   line 57    1906.02530
        document says: "Can you trust your model's uncertainty? Evaluating predictive unce"
        check could not be completed:
        https://export.arxiv.org/api/query?id_list=1906.02530&max_results=1:
-       HTTP Error 429: Unknown Error
+       The read operation timed out
 
   ??   line 61    1703.01365
        document says: 'Axiomatic attribution for deep networks'
        check could not be completed:
        https://export.arxiv.org/api/query?id_list=1703.01365&max_results=1:
-       HTTP Error 429: Unknown Error
+       The read operation timed out
 
   ??   line 66    https://this-domain-does-not-resolve-citeaudit.invalid/report.pdf
        check could not be completed:

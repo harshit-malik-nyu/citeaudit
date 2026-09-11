@@ -26,7 +26,7 @@ Integrity: 50% of 10 conclusive checks passed
 
 <details><summary>4 inconclusive (not counted as failures)</summary>
 
-- line 47: `1810.04805` — check could not be completed: https://export.arxiv.org/api/query?id_list=1810.04805&max_results=1: HTTP Error 429: Unknown Error
+- line 47: `1810.04805` — check could not be completed: https://export.arxiv.org/api/query?id_list=1810.04805&max_results=1: The read operation timed out
 - line 57: `1906.02530` — check could not be completed: https://export.arxiv.org/api/query?id_list=1906.02530&max_results=1: HTTP Error 429: Unknown Error
 - line 61: `1703.01365` — check could not be completed: https://export.arxiv.org/api/query?id_list=1703.01365&max_results=1: The read operation timed out
 - line 66: `https://this-domain-does-not-resolve-citeaudit.invalid/report.pdf` — check could not be completed: https://this-domain-does-not-resolve-citeaudit.invalid/report.pdf

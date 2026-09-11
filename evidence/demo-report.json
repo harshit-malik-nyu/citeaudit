@@ -1,17 +1,17 @@
 {
   "summary": {
     "document": "examples/demo.md",
-    "generated_at": "2026-09-11T02:32:49+00:00",
+    "generated_at": "2026-09-11T02:46:39+00:00",
     "tool_version": "0.1.0",
     "total_citations": 14,
-    "verified": 5,
+    "verified": 4,
     "mismatch": 1,
     "not_found": 4,
     "malformed": 0,
-    "unreachable": 4,
+    "unreachable": 5,
     "unverifiable": 0,
-    "conclusive_checks": 10,
-    "integrity_score": 0.5
+    "conclusive_checks": 9,
+    "integrity_score": 0.4444444444444444
   },
   "findings": [
     {
@@ -42,7 +42,7 @@
       "title_similarity": 100.0,
       "author_overlap": 1.0,
       "evidence_url": "https://doi.org/10.1038/nature14539",
-      "checked_at": "2026-09-11T02:31:47+00:00"
+      "checked_at": "2026-09-11T02:45:36+00:00"
     },
     {
       "citation": {
@@ -59,25 +59,16 @@
         "claimed_year": 2017,
         "context": "Vaswani, A., Shazeer, N., Parmar, N., et al. (2017). \"Attention Is All You Need\". arXiv:1706.03762"
       },
-      "verdict": "verified",
-      "authority": "arxiv",
-      "detail": "title matches record (100% similarity)",
-      "resolved_title": "Attention Is All You Need",
-      "resolved_authors": [
-        "Vaswani",
-        "Shazeer",
-        "Parmar",
-        "Uszkoreit",
-        "Jones",
-        "Gomez",
-        "Kaiser",
-        "Polosukhin"
-      ],
-      "resolved_year": 2017,
-      "title_similarity": 100.0,
-      "author_overlap": 1.0,
-      "evidence_url": "https://arxiv.org/abs/1706.03762",
-      "checked_at": "2026-09-11T02:31:46+00:00"
+      "verdict": "unreachable",
+      "authority": "-",
+      "detail": "check could not be completed: https://export.arxiv.org/api/query?id_list=1706.03762&max_results=1: HTTP Error 429: Unknown Error",
+      "resolved_title": null,
+      "resolved_authors": [],
+      "resolved_year": null,
+      "title_similarity": null,
+      "author_overlap": null,
+      "evidence_url": null,
+      "checked_at": "2026-09-11T02:45:40+00:00"
     },
     {
       "citation": {
@@ -104,7 +95,7 @@
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": null,
-      "checked_at": "2026-09-11T02:32:35+00:00"
+      "checked_at": "2026-09-11T02:46:39+00:00"
     },
     {
       "citation": {
@@ -129,7 +120,7 @@
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": "https://api.crossref.org/works/10.1016/j.jpuba.2021.02.014",
-      "checked_at": "2026-09-11T02:31:47+00:00"
+      "checked_at": "2026-09-11T02:45:36+00:00"
     },
     {
       "citation": {
@@ -153,7 +144,7 @@
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": "https://api.crossref.org/works/10.9911/erla.2020.13.4.055",
-      "checked_at": "2026-09-11T02:31:47+00:00"
+      "checked_at": "2026-09-11T02:45:36+00:00"
     },
     {
       "citation": {
@@ -177,7 +168,7 @@
       "title_similarity": 58.208955223880594,
       "author_overlap": null,
       "evidence_url": "https://doi.org/10.31390/gradschool_disstheses.1478",
-      "checked_at": "2026-09-11T02:31:52+00:00"
+      "checked_at": "2026-09-11T02:45:38+00:00"
     },
     {
       "citation": {
@@ -212,7 +203,7 @@
       "title_similarity": 100.0,
       "author_overlap": 0.8,
       "evidence_url": "https://doi.org/10.1109/cvpr.2009.5206848",
-      "checked_at": "2026-09-11T02:31:47+00:00"
+      "checked_at": "2026-09-11T02:45:36+00:00"
     },
     {
       "citation": {
@@ -238,7 +229,7 @@
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": null,
-      "checked_at": "2026-09-11T02:32:49+00:00"
+      "checked_at": "2026-09-11T02:46:38+00:00"
     },
     {
       "citation": {
@@ -262,7 +253,7 @@
       "title_similarity": 55.33980582524272,
       "author_overlap": null,
       "evidence_url": "https://doi.org/10.3109/01658109309038141",
-      "checked_at": "2026-09-11T02:31:49+00:00"
+      "checked_at": "2026-09-11T02:45:39+00:00"
     },
     {
       "citation": {
@@ -286,7 +277,7 @@
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": null,
-      "checked_at": "2026-09-11T02:32:33+00:00"
+      "checked_at": "2026-09-11T02:46:17+00:00"
     },
     {
       "citation": {
@@ -314,7 +305,7 @@
       "title_similarity": 22.22222222222223,
       "author_overlap": 0.0,
       "evidence_url": "https://doi.org/10.1038/nature14539",
-      "checked_at": "2026-09-11T02:31:52+00:00"
+      "checked_at": "2026-09-11T02:45:40+00:00"
     },
     {
       "citation": {
@@ -336,7 +327,7 @@
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": "https://www.crossref.org/documentation/",
-      "checked_at": "2026-09-11T02:31:52+00:00"
+      "checked_at": "2026-09-11T02:45:40+00:00"
     },
     {
       "citation": {
@@ -358,7 +349,7 @@
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": "https://arxiv.org/help/api/",
-      "checked_at": "2026-09-11T02:31:53+00:00"
+      "checked_at": "2026-09-11T02:45:40+00:00"
     },
     {
       "citation": {
@@ -380,7 +371,7 @@
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": null,
-      "checked_at": "2026-09-11T02:32:00+00:00"
+      "checked_at": "2026-09-11T02:45:47+00:00"
     }
   ]
 }

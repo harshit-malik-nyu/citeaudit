@@ -81,24 +81,66 @@ or ordinary until you know what ordinary looks like.
 
 ### How often does it flag a reference that is genuinely real?
 
-[Full report](evidence/baserate/report.md)
+[Full report](evidence/baserate/report.md) · 614 checks across 72 randomly
+sampled published papers, stratified by year
 
-Ground truth here comes free, from the construction. Take real published
-papers, take their deposited reference lists — every entry carries a DOI, so
-every cited work provably exists. Hide the DOI, check by description alone, and
+Ground truth comes free, from the construction. Take real published papers,
+take their deposited reference lists — every entry carries a DOI, so every
+cited work provably exists. Hide the DOI, check by description alone, and
 **every NOT_FOUND is a definite false positive.** No labelling, no annotator
 judgment, nothing to disagree about.
 
-| Mode | False-positive rate |
-|---|---:|
-| Reference gives a DOI | **0.5%** |
-| Reference gives only title, authors, year | **2.4%** |
+| Mode | False-positive rate | 95% CI |
+|---|---:|---|
+| Reference gives a DOI | **0.00%** | 0.00–1.24% |
+| Reference gives only title, authors, year | **1.30%** | 0.51–3.30% |
 
-So a document citing without identifiers should be expected to show roughly a
-2% failure rate *before anything is wrong with it*. A rate at or below that says
-nothing. A rate materially above it is the signal worth investigating.
+Two things follow.
 
-That sentence is the reason the study exists.
+**Supply identifiers and verification is essentially error-free.** Not one of
+307 DOI-bearing references was wrongly flagged. The entire false-positive
+burden comes from references that omit an identifier.
+
+**A document citing without DOIs should be expected to show roughly a 1%
+failure rate before anything is wrong with it.** A rate at or below that says
+nothing. A rate materially above it is the signal worth investigating. That
+sentence is the reason the study exists — without it, a score is a number
+without a scale.
+
+The OpenAlex fallback rescued 37 references Crossref alone would have reported
+as non-existent. Coverage breadth is not a feature here; it is what keeps the
+false-positive rate low enough for anyone to leave the tool switched on.
+
+### Where it still fails, and why
+
+The report names every false positive rather than reporting a bare rate,
+because the pattern is more useful than the number. In the latest run all four
+were coverage or deposit-quality problems, not detection failures:
+
+- Two geology papers whose titles exist in Crossref only under variant forms
+- An AAPM task-group report — grey literature, thinly indexed
+- `10.1109/cvpr.2016.90`, which is ResNet, but whose publisher deposited
+  *"2016 IEEE Conference on Computer Vision and Pattern Recognition (CVPR), Las
+  Vegas"* in the article-title field. The recorded title is the conference, not
+  the paper, so a title search cannot find it.
+
+None of these is a fabricated citation. All four are reasons a real reference
+can look unverifiable, which is exactly what a user needs to understand before
+acting on a flag.
+
+### What this says about where the problem actually is
+
+**Zero of 307 deposited reference DOIs failed to resolve.** In peer-reviewed
+literature with publisher-deposited metadata, reference integrity is close to
+perfect.
+
+That is a more precise claim than "citations are unreliable", and a more useful
+one. The fabrication problem documented at Deloitte, EY and KPMG does not live
+in indexed journals. It lives in grey literature — consulting deliverables,
+government reports, internal memoranda — where nothing is deposited, nothing is
+indexed, and no publisher ever checks. Which is precisely the corpus this tool
+is pointed at, and precisely the corpus for which no base rate existed before
+this study.
 
 ### Why the mismatch threshold is 66
 

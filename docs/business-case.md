@@ -103,18 +103,20 @@ to count. It is flagged rather than defended.
 ### The triage load is the real operating cost
 
 The base-rate study is what makes this line calculable rather than guessed.
-Measured false-positive rate on genuine references is **0.5%** when a DOI is
-supplied and **2.4%** when it is not
-([evidence](../evidence/baserate/report.md)).
+Measured false-positive rate on genuine references is **0.00%** when a DOI is
+supplied and **1.30%** when it is not
+([evidence](../evidence/baserate/report.md), n=307 each, 614 checks total).
 
-For a 300-reference report citing without DOIs, that is roughly **7 false
-flags** to triage — about 15 minutes. Tolerable.
+For a 300-reference report citing without DOIs, that is roughly **4 false
+flags** to triage — under ten minutes. For a report that cites with DOIs, the
+measured rate is zero.
 
-Without the OpenAlex fallback the rate would be materially higher; that
-fallback rescued 26 of 418 references in the first run that Crossref alone
-would have reported as non-existent. Coverage breadth is not a feature here, it
-is what keeps the operating cost low enough for anyone to keep the tool
-switched on.
+That gap is itself actionable: requiring DOIs in deliverable bibliographies
+removes essentially the entire triage burden, at no cost to the author.
+
+The OpenAlex fallback rescued 37 of 614 checks that Crossref alone would have
+reported as non-existent. Coverage breadth is not a feature here, it is what
+keeps the operating cost low enough for anyone to leave the tool switched on.
 
 ---
 

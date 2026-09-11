@@ -1,7 +1,7 @@
 {
-  "generated_utc": "2026-09-09T20:42:20+00:00",
-  "commit": "f41ef1bd00ad020f701301d03b048b31d0722692",
-  "run_url": "https://github.com/harshit-malik-nyu/citeaudit/actions/runs/34402534776",
+  "generated_utc": "2026-09-11T02:35:28+00:00",
+  "commit": "e3e1f2ca97c31d911743a6dc95fa42f841e4b3d6",
+  "run_url": "https://github.com/harshit-malik-nyu/citeaudit/actions/runs/34554773138",
   "python": "3.12.14",
   "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
   "authorities": [
@@ -23,23 +23,23 @@
   ],
   "demo_summary": {
     "document": "examples/demo.md",
-    "generated_at": "2026-09-09T20:41:56+00:00",
+    "generated_at": "2026-09-11T02:32:49+00:00",
     "tool_version": "0.1.0",
     "total_citations": 14,
-    "verified": 8,
+    "verified": 5,
     "mismatch": 1,
     "not_found": 4,
     "malformed": 0,
-    "unreachable": 1,
+    "unreachable": 4,
     "unverifiable": 0,
-    "conclusive_checks": 13,
-    "integrity_score": 0.6153846153846154
+    "conclusive_checks": 10,
+    "integrity_score": 0.5
   },
   "artifact_hashes": {
-    "evidence/demo-report.json": "9c3a1e1fc4e8fbd32af44fc54a27a01e4a768faa4076090ceb0121ce1f1e3f46",
-    "evidence/demo-report.md": "a8843f68df4a91b638330b03d16f9a08d62b7e8290c52b548dffe955a766962c",
+    "evidence/demo-report.json": "7b784e7700dc126884bef8b7b98665edd79ea0ca3cfe17ca88aeff4bdc0022fa",
+    "evidence/demo-report.md": "fbb87ea63fbdbc2a016888595fcc0407e25b13c912953907f0279e067151d550",
     "examples/demo.md": "38113d6b50ca2734002ac2004bab609abd5f84fc382568b5e8fb125adb531517",
-    "docs/index.html": "21d4b5bd22db4ae0e146ccb0e71677242f5bde2b0079669a8da990e78c70c908"
+    "docs/index.html": "06661993cff3b22015515453df0a82d3330f561de3fd677cd153bbd6a0070238"
   },
   "note": "Every verdict here came from a live call to the named authority at the timestamp above. Each finding in demo-report.json carries an evidence_url that reproduces the check independently of this tool."
 }

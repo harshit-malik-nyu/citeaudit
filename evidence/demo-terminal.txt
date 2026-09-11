@@ -1,5 +1,5 @@
 
-note: 2 request(s) could not be completed; those citations are reported as inconclusive rather than as failures.
+note: 5 request(s) could not be completed; those citations are reported as inconclusive rather than as failures.
 citeaudit 0.1.0  —  examples/demo.md
 ==============================================================================
 
@@ -7,26 +7,26 @@ No such record (4)
 ------------------------------------------------------------------------------
   FAIL line 49    10.1016/j.jpuba.2021.02.014
        document says: 'Automated compliance frameworks in Australian social security admi'
-       Crossref holds no record for this DOI. No registrant has ever
-       deposited it.
+       Neither Crossref nor OpenAlex holds a record for this DOI. Two
+       independent indexes have no registration for it.
        check it: https://api.crossref.org/works/10.1016/j.jpuba.2021.02.014
 
   FAIL line 51    10.9911/erla.2020.13.4.055
        document says: 'Comparative analysis of algorithmic welfare assessment across Euro'
-       Crossref holds no record for this DOI. No registrant has ever
-       deposited it.
+       Neither Crossref nor OpenAlex holds a record for this DOI. Two
+       independent indexes have no registration for it.
        check it: https://api.crossref.org/works/10.9911/erla.2020.13.4.055
 
   FAIL line 53    The reasoned decision requirement and automated administrative action
        document says: 'The reasoned decision requirement and automated administrative act'
-       no Crossref record matches this description. Closest was 'Choline
+       no indexed record matches this description. Closest was 'Choline
        Requirement, Distribution and Concentration in Laying Hens.' at 58%
        similarity, below the threshold for a match.
        check it: https://doi.org/10.31390/gradschool_disstheses.1478
 
   FAIL line 59    Procedural fairness in machine-assisted eligibility determination: a l
        document says: 'Procedural fairness in machine-assisted eligibility determination:'
-       no Crossref record matches this description. Closest was 'A
+       no indexed record matches this description. Closest was 'A
        longitudinal study of visual function in multiple sclerosis: With a
        note on the Cambridge Grating Test' at 55% similarity, below the
        threshold for a match.
@@ -44,14 +44,32 @@ Resolves to a different work (1)
        check it: https://doi.org/10.1038/nature14539
 
 
-Could not check (1)
+Could not check (4)
 ------------------------------------------------------------------------------
+  ??   line 47    1810.04805
+       document says: 'BERT: Pre-training of Deep Bidirectional Transformers for Language'
+       check could not be completed:
+       https://export.arxiv.org/api/query?id_list=1810.04805&max_results=1:
+       HTTP Error 429: Unknown Error
+
+  ??   line 57    1906.02530
+       document says: "Can you trust your model's uncertainty? Evaluating predictive unce"
+       check could not be completed:
+       https://export.arxiv.org/api/query?id_list=1906.02530&max_results=1:
+       HTTP Error 429: Unknown Error
+
+  ??   line 61    1703.01365
+       document says: 'Axiomatic attribution for deep networks'
+       check could not be completed:
+       https://export.arxiv.org/api/query?id_list=1703.01365&max_results=1:
+       HTTP Error 429: Unknown Error
+
   ??   line 66    https://this-domain-does-not-resolve-citeaudit.invalid/report.pdf
        check could not be completed:
        https://this-domain-does-not-resolve-citeaudit.invalid/report.pdf
 
 
-Verified (8)
+Verified (5)
 ------------------------------------------------------------------------------
   OK   line 43    10.1038/nature14539
        title matches record (100% similarity)
@@ -61,21 +79,9 @@ Verified (8)
        title matches record (100% similarity)
        check it: https://arxiv.org/abs/1706.03762
 
-  OK   line 47    1810.04805
-       title matches record (100% similarity)
-       check it: https://arxiv.org/abs/1810.04805
-
   OK   line 55    10.1109/cvpr.2009.5206848
        title matches record (100% similarity)
        check it: https://doi.org/10.1109/cvpr.2009.5206848
-
-  OK   line 57    1906.02530
-       title matches record (100% similarity)
-       check it: https://arxiv.org/abs/1906.02530
-
-  OK   line 61    1703.01365
-       title matches record (100% similarity)
-       check it: https://arxiv.org/abs/1703.01365
 
   OK   line 65    https://www.crossref.org/documentation/
        link responded HTTP 200
@@ -86,6 +92,6 @@ Verified (8)
        check it: https://arxiv.org/help/api/
 
 ==============================================================================
-14 citations  |  8 verified  |  4 not found  |  1 mismatched  |  0 malformed
-inconclusive: 1 unreachable, 0 not machine-checkable (excluded from the score, not counted as failures)
-integrity: 62% of 13 conclusive checks passed
+14 citations  |  5 verified  |  4 not found  |  1 mismatched  |  0 malformed
+inconclusive: 4 unreachable, 0 not machine-checkable (excluded from the score, not counted as failures)
+integrity: 50% of 10 conclusive checks passed

@@ -36,9 +36,15 @@ from rapidfuzz import fuzz
 # Chosen on a precision floor rather than by maximising F1. F1 treats the two
 # errors as equally costly; here a false accusation is what makes a user
 # switch the tool off, after which missed detections stop mattering because
-# nobody is looking. Among thresholds tied at maximum recall, the lowest is
-# taken: it flags least aggressively and so carries least risk on data harder
-# than the labelled set.
+# nobody is looking.
+#
+# Across independent sample draws the minimum threshold reaching full recall
+# landed at 62 and at 66. The upper end is taken so the setting achieves full
+# recall on BOTH draws rather than only on the one that produced it. The cost
+# of that choice is bounded: precision holds at 1.000 across the entire swept
+# range in every run, because the author-overlap corroboration rule in
+# `assess` — not this threshold — is what protects genuine citations from
+# being accused.
 TITLE_MISMATCH_THRESHOLD = 66.0
 
 # Above this, treat as the same work regardless of author noise.

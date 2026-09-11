@@ -74,73 +74,76 @@ how a confident reference to a paper nobody ever wrote gets found.
 
 ## What the measurements say
 
-Two studies run against live Crossref and OpenAlex, results committed to
-[`evidence/`](evidence/). They exist because a verdict is uninterpretable
-without them: if a document scores 62%, you cannot tell whether that is alarming
-or ordinary until you know what ordinary looks like.
+Three studies against live Crossref, OpenAlex and arXiv. Results committed to
+[`evidence/`](evidence/), refreshed on a schedule.
 
-### How often does it flag a reference that is genuinely real?
+They exist because a verdict is uninterpretable without them. If a document
+scores 91%, you cannot tell whether that is alarming or ordinary until you know
+what ordinary is — and before this, nobody had measured it.
 
-[Full report](evidence/baserate/report.md) · 614 checks across 72 randomly
-sampled published papers, stratified by year
+### The headline: where citation integrity actually breaks down
 
-Ground truth comes free, from the construction. Take real published papers,
-take their deposited reference lists — every entry carries a DOI, so every
-cited work provably exists. Hide the DOI, check by description alone, and
-**every NOT_FOUND is a definite false positive.** No labelling, no annotator
-judgment, nothing to disagree about.
-
-| Mode | False-positive rate | 95% CI |
+| Corpus | Unverified rate | 95% CI |
 |---|---:|---|
-| Reference gives a DOI | **0.00%** | 0.00–1.24% |
-| Reference gives only title, authors, year | **1.30%** | 0.51–3.30% |
+| Publisher-deposited, DOI supplied | **0.00%** | 0.00–1.24% |
+| Publisher-deposited, no identifier | **1.30%** | 0.51–3.30% |
+| **Author-written bibliographies** | **8.87%** | 6.25–12.45% |
 
-Two things follow.
+A **sevenfold gap**, and it is the most useful number in this repository.
 
-**Supply identifiers and verification is essentially error-free.** Not one of
-307 DOI-bearing references was wrongly flagged. The entire false-positive
-burden comes from references that omit an identifier.
+References that publishers deposit are near-perfect: not one of 307 DOI-bearing
+entries failed to resolve. References as *authors actually write them* — the
+same scholarly works, cited by hand — verify at 8.87%.
 
-**A document citing without DOIs should be expected to show roughly a 1%
-failure rate before anything is wrong with it.** A rate at or below that says
-nothing. A rate materially above it is the signal worth investigating. That
-sentence is the reason the study exists — without it, a score is a number
-without a scale.
+The difference is not the literature. It is the pipeline. Deposited metadata is
+machine-validated at source; a typed bibliography is not validated by anyone.
 
-The OpenAlex fallback rescued 37 references Crossref alone would have reported
-as non-existent. Coverage breadth is not a feature here; it is what keeps the
-false-positive rate low enough for anyone to leave the tool switched on.
+That matters because **the corpus where fabrication has been found has no
+pipeline at all.** Consulting deliverables, government reports and internal
+memoranda are written like the third row and checked like nothing. If
+peer-reviewed literature with a validation pipeline still drifts to 8.87% once
+a human types the reference, the expectation for a document with no pipeline
+should be set accordingly.
 
-### Where it still fails, and why
+### Two base rates, and why both are needed
 
-The report names every false positive rather than reporting a bare rate,
-because the pattern is more useful than the number. In the latest run all four
-were coverage or deposit-quality problems, not detection failures:
+**[Deposited references](evidence/baserate/report.md)** — 614 checks across 72
+randomly sampled published papers, stratified by year.
 
-- Two geology papers whose titles exist in Crossref only under variant forms
-- An AAPM task-group report — grey literature, thinly indexed
-- `10.1109/cvpr.2016.90`, which is ResNet, but whose publisher deposited
-  *"2016 IEEE Conference on Computer Vision and Pattern Recognition (CVPR), Las
-  Vegas"* in the article-title field. The recorded title is the conference, not
-  the paper, so a title search cannot find it.
+Ground truth comes free from the construction. Take real papers, take their
+deposited reference lists; every entry carries a DOI, so every cited work
+provably exists. Hide the DOI, check by description alone, and **every
+NOT_FOUND is a definite false positive.** No labelling, no annotator judgment.
 
-None of these is a fabricated citation. All four are reasons a real reference
-can look unverifiable, which is exactly what a user needs to understand before
-acting on a flag.
+This measures the tool's error rate. At 0.00% with identifiers and 1.30%
+without, citeaudit does not meaningfully manufacture false alarms.
 
-### What this says about where the problem actually is
+**[Author-written references](evidence/preprints/report.md)** — 329 references
+from 34 arXiv preprints, parsed from the authors' own `.bbl` and `.bib` source
+before any publisher touched them.
 
-**Zero of 307 deposited reference DOIs failed to resolve.** In peer-reviewed
-literature with publisher-deposited metadata, reference integrity is close to
-perfect.
+This measures the world's error rate, on the corpus type that matters. Because
+the first study bounds the tool's contribution at ~1%, the remaining ~8% is
+attributable to the bibliographies, not the checker. Neither study means much
+alone; together they separate instrument from signal.
 
-That is a more precise claim than "citations are unreliable", and a more useful
-one. The fabrication problem documented at Deloitte, EY and KPMG does not live
-in indexed journals. It lives in grey literature — consulting deliverables,
-government reports, internal memoranda — where nothing is deposited, nothing is
-indexed, and no publisher ever checks. Which is precisely the corpus this tool
-is pointed at, and precisely the corpus for which no base rate existed before
-this study.
+| How the reference was written | Conclusive | Unverified |
+|---|---:|---:|
+| Carries a DOI | 90 | 4.4% |
+| Description only | 219 | 9.6% |
+| arXiv identifier | 18 | 22.2% |
+
+Supplying a DOI halves the unverified rate. That is a concrete, free
+intervention any organisation can mandate tomorrow.
+
+**What 8.87% is not.** It is not a fabrication rate. Non-indexed venues,
+workshop papers, technical reports and transcription errors all land in the
+same bucket, and the tool says so. The claim is narrow and deliberate: this is
+how often a reference *as written* can be verified against public authorities.
+Results are aggregate; no paper is named and no claim is made about any author.
+
+The run did surface **8 genuine mismatches** — identifiers that resolve to a
+different work than the citing text claims — in bibliographies nobody planted.
 
 ### Why the mismatch threshold is 66
 
@@ -159,10 +162,17 @@ is what a fabrication looks like. Labels follow from construction, not judgment.
 | 60 | 1.000 | 0.992 |
 | **66** | **1.000** | **1.000** |
 
-Zero false accusations across 1,721 genuine pairs. The operating point is chosen
-on a precision floor rather than by maximising F1, because the two errors are
-not equally costly: a false accusation is what makes someone switch the tool
-off, and a tool that is off catches nothing.
+Zero false accusations across 1,720 genuine pairs. The operating point is
+chosen on a precision floor rather than by maximising F1, because the two
+errors are not equally costly: a false accusation is what makes someone switch
+the tool off, and a tool that is off catches nothing.
+
+Across independent draws the minimum threshold reaching full recall landed at
+62 and at 66. The upper end is set, so the configured value achieves full
+recall on both draws rather than only on the one that produced it. Reporting
+the band rather than a single run's answer is the honest form — a calibration
+that moves with the sample and is quoted as a point estimate is a calibration
+being oversold.
 
 **A note on how this was reached.** The first calibration run returned perfect
 precision *and* recall at every threshold from 54 to 90 — which looked like

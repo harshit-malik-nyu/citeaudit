@@ -114,6 +114,15 @@ measured rate is zero.
 That gap is itself actionable: requiring DOIs in deliverable bibliographies
 removes essentially the entire triage burden, at no cost to the author.
 
+The [preprint corpus study](../evidence/preprints/report.md) sharpens the
+point. On bibliographies as authors actually write them, the unverified rate is
+**8.87%** — sevenfold the deposited-metadata rate. Within that corpus,
+references carrying a DOI came in at 4.4% against 9.6% for description-only
+entries.
+
+So the mandate pays twice: it halves what reaches triage, and it halves what
+goes out the door unverifiable in the first place.
+
 The OpenAlex fallback rescued 37 of 614 checks that Crossref alone would have
 reported as non-existent. Coverage breadth is not a feature here, it is what
 keeps the operating cost low enough for anyone to leave the tool switched on.

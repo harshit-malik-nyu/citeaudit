@@ -2,20 +2,20 @@
 BASE RATE STUDY
 ======================================================================
 
-source works      : 42
-total checks      : 418
-identified FP rate: 0.48%
-described FP rate : 2.39% (95% CI 1.03%-5.48%)
-fallback rescues  : 26
-http requests     : 459
+source works      : 33
+total checks      : 334
+identified FP rate: 0.60%
+described FP rate : 0.60% (95% CI 0.11%-3.31%)
+fallback rescues  : 14
+http requests     : 362
 
 ======================================================================
 CALIBRATION STUDY
 ======================================================================
 
-reference works   : 88
-labelled pairs    : 684 (422 same / 262 different)
-chosen threshold  : 90
+reference works   : 260
+labelled pairs    : 2,501 (1,721 same / 780 different)
+chosen threshold  : 66
   precision       : 1.000
   recall          : 1.000
   false accusations: 0

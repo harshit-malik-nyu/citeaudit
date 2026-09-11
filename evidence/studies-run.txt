@@ -1,21 +1,27 @@
+INFO citeaudit.corpus: stratum 2014: 12 usable works
+INFO citeaudit.corpus: stratum 2017: 12 usable works
+INFO citeaudit.corpus: stratum 2020: 12 usable works
+INFO citeaudit.corpus: stratum 2022: 12 usable works
+INFO citeaudit.corpus: stratum 2023: 12 usable works
+INFO citeaudit.corpus: stratum 2024: 12 usable works
 ======================================================================
 BASE RATE STUDY
 ======================================================================
 
-source works      : 33
-total checks      : 334
-identified FP rate: 0.60%
-described FP rate : 0.60% (95% CI 0.11%-3.31%)
-fallback rescues  : 14
-http requests     : 362
+source works      : 72
+total checks      : 640
+identified FP rate: 0.94%
+described FP rate : 0.94% (95% CI 0.32%-2.72%)
+fallback rescues  : 15
+http requests     : 675
 
 ======================================================================
 CALIBRATION STUDY
 ======================================================================
 
 reference works   : 260
-labelled pairs    : 2,501 (1,721 same / 780 different)
-chosen threshold  : 66
+labelled pairs    : 2,493 (1,713 same / 780 different)
+chosen threshold  : 64
   precision       : 1.000
   recall          : 1.000
   false accusations: 0

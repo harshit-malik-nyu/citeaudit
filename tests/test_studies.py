@@ -415,3 +415,80 @@ class TestLatexBibliography:
         joined = " ".join(entries)
         assert "rendered bbl title" in joined
         assert "bibtex only entry" not in joined
+
+
+# ===========================================================================
+# Wikipedia corpus
+# ===========================================================================
+
+from citeaudit.wikipedia import clean_wikitext, parse_citations
+
+
+class TestWikipediaParsing:
+
+    WIKITEXT = """
+Some article prose with a claim.<ref>{{cite journal |last=Smith |first=John
+|title=A sufficiently long journal article title |journal=Nature |year=2015
+|doi=10.1038/nature14539 }}</ref>
+
+Another claim.<ref>{{cite report |author=Department of Health
+|title=Annual statistical report on communicable disease |year=2021
+|publisher=HMSO }}</ref>
+
+A preprint.<ref>{{cite arxiv |last=Vaswani |title=Attention Is All You Need
+|eprint=1706.03762 |year=2017 }}</ref>
+
+A stub with no usable title.<ref>{{cite web |url=http://example.com |title=x }}</ref>
+"""
+
+    def test_extracts_structured_references(self):
+        refs = parse_citations(self.WIKITEXT)
+        assert len(refs) == 3          # the 'x' title is too short to use
+        titles = [r.title for r in refs]
+        assert any("journal article title" in t for t in titles)
+
+    def test_doi_is_normalised(self):
+        refs = parse_citations(self.WIKITEXT)
+        journal = next(r for r in refs if r.template == "journal")
+        assert journal.doi == "10.1038/nature14539"
+        assert journal.year == 2015
+        assert journal.authors == ["Smith"]
+
+    def test_arxiv_eprint_parameter_recognised(self):
+        refs = parse_citations(self.WIKITEXT)
+        pre = next(r for r in refs if r.template == "arxiv")
+        assert pre.arxiv == "1706.03762"
+
+    def test_non_journal_templates_are_kept(self):
+        """
+        Reports and books are precisely why this corpus is here: they are the
+        grey literature a scholarly index does not cover, and a consulting
+        bibliography is full of them.
+        """
+        refs = parse_citations(self.WIKITEXT)
+        assert any(r.template == "report" for r in refs)
+
+    def test_short_titles_are_skipped(self):
+        assert all(len(r.title or "") >= 15 for r in parse_citations(self.WIKITEXT))
+
+    def test_year_parsed_from_a_full_date(self):
+        wt = ('{{cite journal |title=A long enough title for the parser '
+              '|date=14 March 2019 }}')
+        assert parse_citations(wt)[0].year == 2019
+
+    def test_wiki_markup_stripped_from_titles(self):
+        wt = ("{{cite journal |title=A study of [[quantum mechanics|quantum]] "
+              "effects in solids }}")
+        title = parse_citations(wt)[0].title
+        assert "[[" not in title and "|" not in title
+        assert "quantum" in title
+
+    def test_clean_wikitext_handles_bold_italic_and_html(self):
+        assert clean_wikitext("'''bold''' and ''italic'' <br/>text") == \
+            "bold and italic text"
+
+    def test_no_citations_returns_empty(self):
+        assert parse_citations("Plain prose with no templates at all.") == []
+
+    def test_malformed_template_is_skipped_not_crashed(self):
+        assert parse_citations("{{cite journal |title=unterminated") == []

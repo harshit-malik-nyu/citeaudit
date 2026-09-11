@@ -28,7 +28,7 @@ ROOT = Path(__file__).resolve().parents[1]
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--study",
-                choices=["baserate", "calibration", "preprints", "all"],
+                choices=["baserate", "calibration", "preprints", "wikipedia", "all"],
                 default="all")
     ap.add_argument("--per-year", type=int, default=40)
     ap.add_argument("--max-refs", type=int, default=5)
@@ -36,8 +36,10 @@ def main() -> int:
     ap.add_argument("--calibration-works", type=int, default=260)
     ap.add_argument("--seed", type=int, default=20260909)
     ap.add_argument("--mailto", default="citeaudit-ci@users.noreply.github.com")
-    ap.add_argument("--preprints-per-category", type=int, default=10)
-    ap.add_argument("--preprint-max-checks", type=int, default=900)
+    ap.add_argument("--preprints-per-category", type=int, default=14)
+    ap.add_argument("--preprint-max-checks", type=int, default=1800)
+    ap.add_argument("--wiki-articles", type=int, default=160)
+    ap.add_argument("--wiki-max-checks", type=int, default=1200)
     ap.add_argument("--workers", type=int, default=6)
     args = ap.parse_args()
 
@@ -114,7 +116,9 @@ def main() -> int:
 
         study = preprints.run(
             client,
-            categories=["cs.LG", "econ.GN", "q-bio.QM", "stat.AP", "physics.soc-ph"],
+            categories=["cs.LG", "econ.GN", "q-bio.QM", "stat.AP", "physics.soc-ph",
+                        "math.ST", "cs.CY", "eess.SY", "astro-ph.GA",
+                        "cond-mat.stat-mech", "q-fin.GN", "cs.CR"],
             per_category=args.preprints_per_category,
             max_checks=args.preprint_max_checks,
             workers=args.workers,
@@ -130,6 +134,30 @@ def main() -> int:
         if o["unverified_rate"] is not None:
             lo, hi = o["unverified_ci95"]
             print(f"unverified rate    : {o['unverified_rate']:.2%} "
+                  f"(95% CI {lo:.2%}-{hi:.2%})")
+        print(f"http requests      : {client.stats['requests']:,}")
+
+    if args.study in ("wikipedia", "all"):
+        print()
+        print("=" * 70)
+        print("WIKIPEDIA CORPUS STUDY")
+        print("=" * 70)
+        from citeaudit import wikipedia
+
+        wstudy = wikipedia.run(
+            client, articles=args.wiki_articles,
+            max_checks=args.wiki_max_checks, workers=args.workers,
+        )
+        wsum = wikipedia.summarise(wstudy)
+        wikipedia.write_outputs(wstudy, wsum, ROOT / "evidence" / "wikipedia")
+
+        wo = wsum["overall"]
+        print(f"\narticles sampled   : {wsum['method']['articles_sampled']:,}")
+        print(f"with citations     : {wsum['method']['articles_with_citations']:,}")
+        print(f"references checked : {wo['checks']:,}")
+        if wo["unverified_rate"] is not None:
+            lo, hi = wo["unverified_ci95"]
+            print(f"unverified rate    : {wo['unverified_rate']:.2%} "
                   f"(95% CI {lo:.2%}-{hi:.2%})")
         print(f"http requests      : {client.stats['requests']:,}")
 

@@ -25,7 +25,7 @@ on:
         required: false
         default: 'all'
         type: choice
-        options: [all, baserate, calibration, preprints]
+        options: [all, baserate, calibration, preprints, wikipedia]
       max_checks:
         description: 'Cap on base-rate checks'
         required: false
@@ -45,7 +45,7 @@ concurrency:
 jobs:
   run:
     runs-on: ubuntu-latest
-    timeout-minutes: 55
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
 
@@ -80,6 +80,10 @@ jobs:
             echo "---"
             echo
             [ -f evidence/preprints/report.md ] && cat evidence/preprints/report.md
+            echo
+            echo "---"
+            echo
+            [ -f evidence/wikipedia/report.md ] && cat evidence/wikipedia/report.md
           } >> "$GITHUB_STEP_SUMMARY" || true
 
       - name: Commit results

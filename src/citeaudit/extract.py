@@ -53,7 +53,18 @@ URL_RE = re.compile(r"https?://[^\s<>\"'\)\]]+", re.IGNORECASE)
 # Trailing characters that belong to the sentence, not the identifier.
 TRAILING = ".,;:)]}>\"'"
 
-YEAR_RE = re.compile(r"\((\d{4}[a-z]?)\)|\b(19\d{2}|20\d{2})\b")
+# A parenthesised year, or a bare year NOT adjacent to other digits.
+#
+# The negative lookarounds are load-bearing. Journal volume and issue numbers
+# sit in the same range as years — "Proc. R. Soc. Lond. B, 271 (1547): 1443"
+# has a volume of 1547 — and matching that as the publication year sent title
+# extraction off into the page range, which then got compared against the real
+# title and reported as a mismatch. Seven of eight mismatches in one live run
+# were this bug.
+YEAR_RE = re.compile(
+    r"\((\d{4}[a-z]?)\)"
+    r"|(?<![\d(,:\-])\b(19\d{2}|20\d{2})\b(?![\d)\-])"
+)
 
 # A quoted or italicised title inside a reference line.
 TITLE_QUOTED_RE = re.compile(r'[""«"]([^""»"]{12,300})[""»"]|"([^"]{12,300})"')
@@ -100,16 +111,43 @@ def normalise_doi(doi: str) -> str:
 # Extraction
 # ---------------------------------------------------------------------------
 
+# Virtually every citable work post-dates 1900. Anything earlier in a modern
+# bibliography is far more likely to be a volume or issue number.
+MODERN_YEAR = (1900, 2100)
+ANY_YEAR = (1600, 2100)
+
+
 def _year_from(text: str) -> int | None:
-    m = YEAR_RE.search(text)
-    if not m:
+    """
+    Publication year, preferring a plausible modern one.
+
+    Every match is considered, not just the first. A parenthesised number is
+    the strongest year signal in most citation styles, but issue numbers are
+    parenthesised too — "Proc. R. Soc. Lond. B, 271 (1547): 1443--1450, 2004"
+    has a volume of 271 and an issue of 1547, and taking the first parenthesised
+    four-digit number returns 1547. That wrong year then sent title extraction
+    into the page range, which was reported as a mismatch against the real
+    title.
+    """
+    candidates: list[int] = []
+    for m in YEAR_RE.finditer(text):
+        raw = m.group(1) or m.group(2)
+        if not raw:
+            continue
+        try:
+            candidates.append(int(str(raw)[:4]))
+        except (TypeError, ValueError):
+            continue
+
+    if not candidates:
         return None
-    raw = m.group(1) or m.group(2)
-    try:
-        y = int(str(raw)[:4])
-    except (TypeError, ValueError):
-        return None
-    return y if 1500 <= y <= 2100 else None
+
+    modern = [y for y in candidates if MODERN_YEAR[0] <= y <= MODERN_YEAR[1]]
+    if modern:
+        return modern[0]
+
+    older = [y for y in candidates if ANY_YEAR[0] <= y <= ANY_YEAR[1]]
+    return older[0] if older else None
 
 
 def _authors_from(text: str) -> list[str]:
@@ -123,10 +161,130 @@ def _authors_from(text: str) -> list[str]:
     return [a for a in out if not (a.lower() in seen or seen.add(a.lower()))]
 
 
+# Fragments that prove a candidate "title" is really an identifier, a page
+# range, or other bibliographic debris.
+_NOT_A_TITLE = re.compile(
+    r"arxiv\s*:|doi\s*:|\b10\.\d{4,9}/|https?://|^\s*[\d\W]",
+    re.IGNORECASE,
+)
+
+
+# "A. Author", "Smith, J.", "Yuhang Wu, and ..." — initials and comma-and
+# constructions are what an author list is made of.
+_INITIAL_RE = re.compile(r"\b[A-Z]\.")
+_AUTHOR_SEP_RE = re.compile(r",\s*and\s|\sand\s|,\s*")
+
+
+def looks_like_author_list(candidate: str) -> bool:
+    """
+    Detect an author list so it is not mistaken for a title.
+
+    In LaTeX bibliographies the authors come first and are punctuated exactly
+    like a sentence, so a naive "longest sentence-like segment" rule picks them
+    every time. Comparing an author list against the record's real title scores
+    low and produces the same false mismatch the title guard exists to prevent.
+    """
+    c = candidate.strip()
+    words = c.split()
+    if len(words) < 2:
+        return False
+
+    initials = len(_INITIAL_RE.findall(c))
+    parts = [p for p in _AUTHOR_SEP_RE.split(c) if p.strip()]
+
+    # Several initials relative to length is decisive on its own.
+    if initials >= 2 and initials / len(words) > 0.20:
+        return True
+
+    def namelike(part: str) -> bool:
+        toks = part.split()
+        return (1 <= len(toks) <= 3
+                and all(w[:1].isupper() or w[:1] == "-" for w in toks if w))
+
+    hits = sum(1 for part in parts if namelike(part))
+
+    # Three or more comma- or conjunction-separated name-shaped parts.
+    if len(parts) >= 3 and hits / len(parts) >= 0.7:
+        return True
+
+    # Exactly two parts, both full personal names — "Holger Bast, Stefan Funke".
+    # Held to a stricter bar than the three-part case: two capitalised phrases
+    # can legitimately be a title, so every part must be name-shaped AND carry
+    # a forename plus surname.
+    if len(parts) == 2 and hits == 2 and all(
+        2 <= len(part.split()) <= 3 for part in parts
+    ):
+        return True
+
+    # "... and Surname" where what follows the conjunction is a bare name and
+    # initials appear earlier. Requires BOTH, because plenty of real titles
+    # contain "and" — "Random drift and culture change" was rejected by an
+    # earlier version of this rule that only checked for the conjunction.
+    if initials >= 2:
+        tail = c.rsplit(" and ", 1)[-1].strip() if " and " in c else ""
+        tail_words = tail.split()
+        if 1 <= len(tail_words) <= 3 and all(
+            w[:1].isupper() or w[:1] == "-" for w in tail_words if w
+        ):
+            return True
+
+    return False
+
+
+def looks_like_a_title(candidate: str, *, quoted: bool = False) -> bool:
+    """
+    Reject bibliographic debris masquerading as a title.
+
+    This guard exists because the alternative is the worst failure this tool
+    can produce. A garbage "claimed title" gets compared against the real
+    record, scores low, and the document is told it cited the wrong paper — an
+    accusation manufactured entirely from a parsing error. Seven of eight
+    mismatches in one live run were exactly that.
+
+    Validation is graded by how strong the signal was. A string the author put
+    in quotation marks inside a reference entry is almost certainly a title, so
+    it only has to clear the debris check. A span recovered by splitting on
+    sentence punctuation is a guess, and has to clear everything.
+
+    When a title cannot be recovered confidently the answer is None, which makes
+    `assess` decline to compare rather than guess. Missing a mismatch costs far
+    less than inventing one.
+    """
+    c = candidate.strip()
+    if not (8 <= len(c) <= 300):
+        return False
+    if _NOT_A_TITLE.search(c):
+        return False
+
+    words = c.split()
+    if len(words) < 2:
+        return False
+
+    if quoted:
+        # Explicitly delimited by the author. Debris check is enough.
+        return True
+
+    # A title is mostly words. Page ranges, volume/issue strings and
+    # identifiers are mostly not.
+    alpha_words = [w for w in words if sum(ch.isalpha() for ch in w) >= 2]
+    if len(alpha_words) / len(words) < 0.6:
+        return False
+
+    letters = sum(ch.isalpha() for ch in c)
+    if letters / len(c) < 0.55:
+        return False
+
+    if looks_like_author_list(c):
+        return False
+
+    return True
+
+
 def _title_from(text: str) -> str | None:
     m = TITLE_QUOTED_RE.search(text)
     if m:
-        return (m.group(1) or m.group(2) or "").strip() or None
+        cand = (m.group(1) or m.group(2) or "").strip()
+        return cand if cand and looks_like_a_title(cand, quoted=True) else None
 
     # Unquoted style: "Authors (Year). Title. Journal, vol(issue), pages."
     # Take the sentence-like span after the year marker.
@@ -136,8 +294,21 @@ def _title_from(text: str) -> str | None:
         parts = re.split(r"(?<=[a-z0-9])\.\s+(?=[A-Z])", tail)
         if parts:
             cand = parts[0].strip().rstrip(".")
-            if 12 <= len(cand) <= 300 and " " in cand:
+            if looks_like_a_title(cand):
                 return cand
+
+    # Author-first LaTeX style with no year marker and no quotes:
+    # "A. Author, B. Writer. The Real Title Here. Venue, 2024."
+    #
+    # The title is the first title-like segment AFTER the authors, not the
+    # longest one — venue strings and author lists are both long, and taking
+    # the maximum picks them.
+    segments = [seg.strip().rstrip(".")
+                for seg in re.split(r"(?<=[a-z0-9\)])\.\s+", text)]
+    for seg in segments:
+        if looks_like_a_title(seg):
+            return seg
+
     return None
 
 

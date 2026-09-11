@@ -661,3 +661,115 @@ class TestFallbackAuthority:
         f = v.check(c)
         assert f.verdict is Verdict.NOT_FOUND
         assert "evidence, not proof" in f.detail
+
+
+# ===========================================================================
+# False-accusation guards
+# ===========================================================================
+
+class TestTitleExtractionGuards:
+    """
+    REGRESSION SUITE. In one live run over real arXiv bibliographies the tool
+    reported 8 mismatches. Seven were its own fault: title extraction produced
+    debris, `assess` compared debris against the record's real title, scored
+    13-20%, and accused the author of citing the wrong paper.
+
+    Every string below is taken verbatim from that run. A false accusation is
+    the worst output this tool can produce, so these are the tests that matter
+    most in the file.
+    """
+
+    REAL_REFERENCES = [
+        ("Holger Bast, Stefan Funke. Fast routing in road networks with transit "
+         "nodes. Science, 316 0 (5824): 0 566, 2007. 10.1126/science.1137521",
+         "fast routing in road networks"),
+        ("Mitchell G. Newberry, Christopher A. Ahern. Detecting evolutionary "
+         "forces in language change. Nature, 551 0 (7679): 0 223--226, 2017. "
+         "10.1038/nature24455",
+         "detecting evolutionary forces"),
+        ("R. Alexander Bentley, Matthew W. Hahn, and Stephen J. Shennan. Random "
+         "drift and culture change. Proc. R. Soc. Lond. B Biol. Sci., 271 0 "
+         "(1547): 0 1443--1450, 2004. 10.1098/rspb.2004.2746",
+         "random drift and culture change"),
+        ("Ryan Dew, Nicolas Padilla, and Anya Shchetkina. Your mmm is broken: "
+         "Identification of nonlinear and time-varying effects in marketing mix "
+         "models, 2024",
+         "your mmm is broken"),
+    ]
+
+    @pytest.mark.parametrize("text,expected", REAL_REFERENCES)
+    def test_real_titles_are_recovered_not_replaced_by_debris(self, text, expected):
+        from citeaudit.extract import _title_from
+        title = _title_from(text)
+        assert title is not None, f"no title recovered from {text[:60]!r}"
+        assert expected in title.lower()
+
+    DEBRIS = [
+        ": 0 1443--1450, 2004. 10.1098/rspb.2004.2746",
+        "arXiv: 2511.20867",
+        "LC-PFN. arXiv:2310.20447",
+        "271 0 (1547): 0 1443",
+        "https://doi.org/10.1016/j.energy.2023.128204",
+        ": 0 566, 2007. 10.1126/science.1137521",
+    ]
+
+    @pytest.mark.parametrize("junk", DEBRIS)
+    def test_debris_is_never_accepted_as_a_title(self, junk):
+        from citeaudit.extract import looks_like_a_title
+        assert not looks_like_a_title(junk)
+
+    AUTHOR_LISTS = [
+        "Holger Bast, Stefan Funke",
+        "R. Alexander Bentley, Matthew W. Hahn, and Stephen J. Shennan",
+        "Puneet S. Bagga, Vivek F. Farias, Tamar Korkotashvili, and Yuhang Wu",
+        "Mitchell G. Newberry, Christopher A. Ahern",
+    ]
+
+    @pytest.mark.parametrize("names", AUTHOR_LISTS)
+    def test_author_lists_are_not_mistaken_for_titles(self, names):
+        """
+        In LaTeX bibliographies the authors come first and are punctuated like
+        a sentence, so a naive longest-segment rule picks them every time.
+        Comparing an author list against the real title produces the same false
+        mismatch.
+        """
+        from citeaudit.extract import looks_like_author_list
+        assert looks_like_author_list(names)
+
+    REAL_TITLES_THAT_LOOK_RISKY = [
+        "Random drift and culture change",
+        "Attention Is All You Need",
+        "Deep learning",
+        "Fast routing in road networks with transit nodes",
+        "Monetary policy transmission in emerging markets",
+    ]
+
+    @pytest.mark.parametrize("title", REAL_TITLES_THAT_LOOK_RISKY)
+    def test_genuine_titles_survive_the_guards(self, title):
+        """
+        Over-correcting is its own failure. An earlier version rejected
+        'Deep learning' for having under three words, and 'Random drift and
+        culture change' for containing the word 'and'.
+        """
+        from citeaudit.extract import looks_like_a_title, looks_like_author_list
+        assert looks_like_a_title(title)
+        assert not looks_like_author_list(title)
+
+    def test_volume_number_is_not_read_as_a_year(self):
+        """
+        The root cause. 'Proc. R. Soc. Lond. B, 271 (1547): 1443' has a volume
+        of 1547, which matched as a publication year and sent title extraction
+        into the page range.
+        """
+        from citeaudit.extract import _year_from
+        assert _year_from("Proc. R. Soc. Lond. B, 271 0 (1547): 0 1443--1450, 2004") == 2004
+        assert _year_from("Nature, 551 0 (7679): 0 223--226, 2017") == 2017
+
+    def test_unrecoverable_title_yields_none_not_a_guess(self):
+        """
+        The safe failure. No title means `assess` declines to compare, so the
+        citation is reported VERIFIED with no title comparison rather than
+        accused on the strength of a parsing error.
+        """
+        from citeaudit.extract import _title_from
+        assert _title_from("10.1234/x, 2019, pp. 1-10") is None

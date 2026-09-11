@@ -142,8 +142,42 @@ same bucket, and the tool says so. The claim is narrow and deliberate: this is
 how often a reference *as written* can be verified against public authorities.
 Results are aggregate; no paper is named and no claim is made about any author.
 
-The run did surface **8 genuine mismatches** — identifiers that resolve to a
-different work than the citing text claims — in bibliographies nobody planted.
+### The 8 mismatches, and what inspecting them found
+
+An earlier version of this README claimed the run surfaced "8 genuine
+mismatches in bibliographies nobody planted." **That claim was wrong, and it
+was never checked before being published.**
+
+Inspecting all eight found that **seven were the tool's own false
+accusations.** Title extraction produced debris — an identifier, a page range,
+an author list — which was then compared against the record's real title,
+scored 13–20%, and reported as citing the wrong paper:
+
+| What the tool recorded as the "claimed title" | Actually |
+|---|---|
+| `arXiv: 2511.20867` | the identifier itself |
+| `: 0 1443--1450, 2004. 10.1098/rspb.2004.2746` | a page range |
+| `LC-PFN. arXiv:2310.20447` | a fragment |
+| `Holger Bast, Stefan Funke` | the author list |
+
+Root cause: `Proc. R. Soc. Lond. B, 271 (1547): 1443` has an *issue number* of
+1547, which matched as a publication year. Title extraction then took whatever
+followed — the page range — and compared that against the real title.
+
+**One of the eight was genuine**: a reference to `10.1016/j.energy.2023.128204`
+titled *"Oklo Inc. (OKLO) Fission Impossible"*, where the DOI resolves to
+*"Uncertainties in estimating production costs of future nuclear
+technologies."*
+
+The fix added graded title validation, author-list detection, and year
+selection that prefers plausible modern years over parenthesised issue numbers
+— plus [21 regression tests](tests/test_citeaudit.py) built from the exact
+strings that caused each false accusation.
+
+**Why this section exists.** A project about unverified claims published an
+unverified claim. Leaving that out would be the same failure it was built to
+catch, one level up. The corrected count is in
+[`evidence/preprints/`](evidence/preprints/), regenerated after the fix.
 
 ### Why the mismatch threshold is 66
 

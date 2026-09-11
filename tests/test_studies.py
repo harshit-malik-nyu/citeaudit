@@ -279,3 +279,30 @@ class TestCorpus:
         assert not chk(Verdict.VERIFIED.value).is_false_positive
         assert not chk(Verdict.UNREACHABLE.value).is_false_positive
         assert not chk(Verdict.UNVERIFIABLE.value).is_false_positive
+
+
+class TestStudyNormalisation:
+
+    def test_deposited_dois_are_normalised_like_extracted_ones(self):
+        """
+        REGRESSION. Publishers deposit DOIs with trailing punctuation —
+        '10.1016/s0140-6736(18)32594-7.' appeared in a real sample. The study
+        passed those through raw while the extractor normalised them, so it was
+        measuring a bypass of citeaudit rather than citeaudit, and reporting the
+        study's own bug as the tool's false-positive rate.
+        """
+        from citeaudit.extract import normalise_doi
+
+        work = {"reference": [
+            {"DOI": "10.1016/s0140-6736(18)32594-7.",
+             "article-title": "A sufficiently long genuine title here"},
+        ]}
+        refs = references_of(work, max_refs=5, rng=random.Random(0))
+        assert len(refs) == 1
+        assert normalise_doi(refs[0]["DOI"]) == "10.1016/s0140-6736(18)32594-7"
+
+    def test_balanced_parens_survive_normalisation(self):
+        """Elsevier DOIs legitimately contain them; stripping breaks real ones."""
+        from citeaudit.extract import normalise_doi
+        assert normalise_doi("10.1016/s2542-5196(17)30162-6.") == \
+            "10.1016/s2542-5196(17)30162-6"

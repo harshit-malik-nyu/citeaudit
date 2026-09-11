@@ -52,6 +52,7 @@ from pathlib import Path
 from typing import Any, Iterator
 
 from .http import Client, NotFound, Unreachable
+from .extract import normalise_doi
 from .models import Citation, Kind, Verdict
 from .sources.crossref import BASE as CROSSREF_BASE
 from .verify import Verifier
@@ -216,7 +217,7 @@ def references_of(work: dict, *, max_refs: int, rng: random.Random) -> list[dict
     """
     usable = []
     for ref in work.get("reference") or []:
-        doi = (ref.get("DOI") or "").strip().lower()
+        doi = normalise_doi(ref.get("DOI") or "")
         title = (ref.get("article-title") or ref.get("volume-title") or "").strip()
         if not doi or len(title) < 15:
             continue
@@ -275,7 +276,13 @@ def run_study(
         result.source_works += 1
 
         for ref in refs:
-            ref_doi = (ref.get("DOI") or "").strip().lower()
+            # Normalise exactly as the extractor does. Publishers deposit DOIs
+            # with trailing punctuation — 10.1016/s0140-6736(18)32594-7. is a
+            # real example from this sample — and passing those through raw
+            # measured a bypass of citeaudit rather than citeaudit itself,
+            # inflating the reported false-positive rate with the study's own
+            # bug.
+            ref_doi = normalise_doi(ref.get("DOI") or "")
             title = (ref.get("article-title") or ref.get("volume-title") or "").strip()
             authors = _ref_authors(ref)
             year = _ref_year(ref)
@@ -370,7 +377,15 @@ def summarise(result: StudyResult) -> dict[str, Any]:
         if c.verdict == Verdict.VERIFIED.value and "openalex" in (c.authority or "")
     )
 
+    fp_examples = [
+        {"mode": c.mode, "reference_doi": c.reference_doi,
+         "claimed_title": c.claimed_title, "verdict": c.verdict,
+         "authority": c.authority}
+        for c in result.checks if c.is_false_positive
+    ]
+
     return {
+        "false_positive_examples": fp_examples,
         "method": {
             "design": (
                 "References deposited by publishers in real published papers. "
@@ -479,6 +494,23 @@ def to_markdown(summary: dict[str, Any]) -> str:
             "coverage gaps and says nothing about fabrication."
         )
     out.append("")
+    fps = summary.get("false_positive_examples") or []
+    if fps:
+        out.append("## What the false positives actually are")
+        out.append("")
+        out.append(
+            "Every entry below is a genuine work that citeaudit failed to "
+            "find. Listing them is more useful than the rate alone, because "
+            "the pattern tells you where the coverage gap lives."
+        )
+        out.append("")
+        out.append("| Mode | DOI | Claimed title |")
+        out.append("|---|---|---|")
+        for f in fps[:12]:
+            t = (f.get("claimed_title") or "")[:70].replace("|", "/")
+            out.append(f"| {f['mode']} | `{f['reference_doi']}` | {t} |")
+        out.append("")
+
     out.append("## Limits")
     out.append("")
     out.append(

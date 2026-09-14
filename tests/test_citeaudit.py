@@ -29,9 +29,8 @@ from citeaudit.match import (
 )
 from citeaudit.models import Citation, Finding, Kind, Report, Verdict
 from citeaudit.report import to_html, to_json, to_markdown, to_terminal
-from citeaudit.sources.arxiv import Arxiv, parse_feed
+from citeaudit.sources.arxiv import parse_feed
 from citeaudit.sources.crossref import Crossref, to_work
-from citeaudit.sources.openalex import OpenAlex, to_record
 from citeaudit.verify import Verifier
 
 

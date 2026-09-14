@@ -45,9 +45,10 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Iterator
 
+from .corpus import power_banner
 from .extract import extract
 from .http import Client, NotFound, Unreachable
-from .models import Citation, Kind, Verdict
+from .models import Citation, Verdict
 from .verify import Verifier
 
 log = logging.getLogger(__name__)
@@ -321,7 +322,7 @@ def run(client: Client, *, categories: list[str], per_category: int = 8,
 
 
 def summarise(study: PreprintStudy) -> dict:
-    from collections import Counter, defaultdict
+    from collections import Counter
     from .corpus import wilson_interval
 
     def block(checks: list[PreprintCheck]) -> dict:
@@ -414,6 +415,8 @@ def to_markdown(summary: dict) -> str:
     out.append("")
     out.append("## Headline")
     out.append("")
+    out.extend(power_banner(o.get("conclusive", 0), o.get("unverified_ci95"),
+                            "The unverified rate"))
     out.append("| | count |")
     out.append("|---|---:|")
     out.append(f"| References checked | {o['checks']:,} |")

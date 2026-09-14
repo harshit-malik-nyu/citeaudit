@@ -16,8 +16,8 @@ from citeaudit.extract import extract
 from citeaudit.fulltext import Coverage, SourceText, clean_latex, reconstruct_abstract
 from citeaudit.models import Citation, Kind
 from citeaudit.quotes import (
-    MIN_QUOTE_WORDS, Quote, QuoteVerdict, QuoteVerifier, body_of,
-    extract_quotes, find_passage, normalise, summarise,
+    Quote, QuoteVerdict, QuoteVerifier, body_of, extract_quotes,
+    find_passage, normalise, summarise,
 )
 
 

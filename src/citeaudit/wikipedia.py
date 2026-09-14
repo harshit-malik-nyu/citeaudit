@@ -46,6 +46,7 @@ import urllib.parse
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 
+from .corpus import power_banner
 from .extract import normalise_doi
 from .http import Client, NotFound, Unreachable
 from .models import Citation, Kind, Verdict
@@ -450,6 +451,9 @@ def to_markdown(summary: dict) -> str:
     out.append("")
     out.append("### The comparable figure")
     out.append("")
+    out.extend(power_banner(sch.get("conclusive", 0),
+                            sch.get("unverified_ci95"),
+                            "The scholarly-template rate"))
     out.append(
         f"**{pct(sch.get('unverified_rate'))} unverified** across "
         f"{sch.get('conclusive', 0):,} scholarly-template references "

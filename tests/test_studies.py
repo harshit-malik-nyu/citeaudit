@@ -679,3 +679,63 @@ class TestMismatchAudit:
             "identifier": "10.1/a", "verdict": "verified",
             "reference_text": "x", "detail": "ok"}])
         assert "no mismatches stored" in self._run(p).stdout
+
+
+class TestStatisticalPowerGuard:
+    """
+    An estimate whose interval spans 3% to 51% is not a measurement, however
+    carefully computed. Presenting it alongside well-supported figures is the
+    same error as reporting a network timeout as a fabricated citation: a
+    confident claim the evidence does not support.
+    """
+
+    def test_tiny_sample_is_rejected(self):
+        from citeaudit.corpus import estimate_is_usable
+        usable, reason = estimate_is_usable(7, [0.026, 0.513])
+        assert not usable
+        assert "7 conclusive checks" in reason
+
+    def test_wide_interval_is_rejected_even_with_adequate_n(self):
+        """n alone is not enough — the interval is what makes a figure usable."""
+        from citeaudit.corpus import estimate_is_usable
+        usable, reason = estimate_is_usable(40, [0.05, 0.40])
+        assert not usable
+        assert "spans" in reason
+
+    def test_well_supported_estimate_passes(self):
+        from citeaudit.corpus import estimate_is_usable
+        assert estimate_is_usable(1201, [0.1136, 0.1519])[0]
+        assert estimate_is_usable(307, [0.0051, 0.0330])[0]
+
+    def test_zero_and_missing_interval_rejected(self):
+        from citeaudit.corpus import estimate_is_usable
+        assert not estimate_is_usable(0, [None, None])[0]
+        assert not estimate_is_usable(100, [None, None])[0]
+
+    def test_banner_is_empty_for_a_usable_estimate(self):
+        from citeaudit.corpus import power_banner
+        assert power_banner(1201, [0.1136, 0.1519]) == []
+
+    def test_banner_warns_without_suppressing_the_number(self):
+        """
+        Hiding an underpowered result would conceal that the measurement was
+        attempted. It is shown, and marked unusable.
+        """
+        from citeaudit.corpus import power_banner
+        lines = "\n".join(power_banner(7, [0.026, 0.513]))
+        assert "not usable" in lines
+        assert "must not be quoted" in lines
+        assert "suppressing it would hide" in lines
+
+    def test_wikipedia_report_carries_the_banner_when_underpowered(self):
+        from citeaudit.wikipedia import WikiCheck, WikiStudy, summarise, to_markdown
+
+        study = WikiStudy(articles_sampled=13, articles_with_citations=13, checks=[
+            WikiCheck(article="A", template="journal", kind="doi",
+                      identifier=f"10.1/{i}", claimed_title="t",
+                      verdict="verified" if i else "not_found",
+                      authority="crossref")
+            for i in range(7)
+        ])
+        md = to_markdown(summarise(study))
+        assert "not usable" in md

@@ -19,7 +19,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 from . import __version__, match
-from .extract import extract, extract_from_file
+from .extract import extract
 from .http import Client, NotFound, Unreachable
 from .models import Citation, Finding, Kind, Report, Verdict
 from .sources.arxiv import Arxiv

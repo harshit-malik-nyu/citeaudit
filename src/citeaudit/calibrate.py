@@ -52,7 +52,7 @@ from typing import Any
 
 from . import match
 from .http import Client, NotFound, Unreachable
-from .sources.crossref import Crossref, Work
+from .sources.crossref import Work
 
 
 # ---------------------------------------------------------------------------
@@ -273,7 +273,6 @@ def build_pairs(works: list[Work], *, seed: int = 20260909) -> list[Pair]:
     # NEAR_DUPLICATE_CEILING guards the label: above it, two records may be the
     # same work deposited twice, and calling that pair "different" would poison
     # precision.
-    n = len(works)
     for i, w in enumerate(works):
         scored: list[tuple[float, Work]] = []
         for j, other in enumerate(works):

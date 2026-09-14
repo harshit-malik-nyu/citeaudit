@@ -45,7 +45,7 @@ import json
 import logging
 import math
 import random
-from collections import Counter, defaultdict
+from collections import Counter
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
@@ -80,6 +80,55 @@ def wilson_interval(successes: int, n: int, z: float = 1.96) -> tuple[float, flo
     centre = (p + z**2 / (2 * n)) / denom
     margin = z * math.sqrt(p * (1 - p) / n + z**2 / (4 * n**2)) / denom
     return (max(0.0, centre - margin), min(1.0, centre + margin))
+
+
+# An estimate whose confidence interval is wider than this is not actionable,
+# however carefully it was computed. Reporting "14.3%" from seven observations,
+# with a true value anywhere between 3% and 51%, is a precision the data does
+# not support — the same error as reporting a network timeout as a fabricated
+# citation, one level up.
+MAX_USABLE_CI_WIDTH = 0.15
+MIN_USABLE_N = 30
+
+
+def estimate_is_usable(conclusive: int, ci: tuple[float | None, float | None] | list
+                       ) -> tuple[bool, str]:
+    """
+    Whether a rate is precise enough to quote.
+
+    Returns (usable, reason). The reason is rendered in the report when a
+    figure fails, so that an underpowered result is visibly underpowered rather
+    than quietly presented alongside well-supported ones.
+    """
+    if not conclusive:
+        return False, "no conclusive checks"
+    if conclusive < MIN_USABLE_N:
+        return False, (f"only {conclusive} conclusive checks "
+                       f"(minimum {MIN_USABLE_N} to quote a rate)")
+    lo, hi = (ci or [None, None])[:2]
+    if lo is None or hi is None:
+        return False, "no confidence interval available"
+    width = hi - lo
+    if width > MAX_USABLE_CI_WIDTH:
+        return False, (f"95% interval spans {width:.0%}, wider than the "
+                       f"{MAX_USABLE_CI_WIDTH:.0%} needed for the figure to "
+                       "mean anything")
+    return True, ""
+
+
+def power_banner(conclusive: int, ci, label: str = "This figure") -> list[str]:
+    """Markdown banner shown above an underpowered estimate."""
+    usable, reason = estimate_is_usable(conclusive, ci)
+    if usable:
+        return []
+    return [
+        f"> **{label} is not usable: {reason}.**",
+        ">",
+        "> It is shown because suppressing it would hide that the measurement "
+        "was attempted, but it must not be quoted, compared, or carried into "
+        "any downstream claim until the sample is larger.",
+        "",
+    ]
 
 
 # ---------------------------------------------------------------------------

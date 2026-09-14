@@ -1,6 +1,6 @@
 # Base rate: how often does citeaudit flag a genuine reference?
 
-**628 checks** across **72 published papers**, sampled at random from Crossref and stratified by publication year (2014–2024). Seed 20260909.
+**598 checks** across **72 published papers**, sampled at random from Crossref and stratified by publication year (2014–2024). Seed 20260909.
 
 ## Why these references are known to be genuine
 
@@ -10,27 +10,27 @@ References deposited by publishers in real published papers. Ground truth is gua
 
 | Mode | Checks | Verified | False positives | FP rate |
 |---|---:|---:|---:|---:|
-| Identified (DOI given) | 314 | 313 | 0 | 0.0% (95% CI 0.0%–1.2%) |
-| Described (DOI withheld) | 314 | 304 | 10 | 3.2% (95% CI 1.7%–5.8%) |
+| Identified (DOI given) | 299 | 298 | 0 | 0.0% (95% CI 0.0%–1.3%) |
+| Described (DOI withheld) | 299 | 296 | 3 | 1.0% (95% CI 0.3%–2.9%) |
 
-The OpenAlex fallback rescued **25** references that Crossref alone would have reported as non-existent.
+The OpenAlex fallback rescued **10** references that Crossref alone would have reported as non-existent.
 
 ## By publication year of the citing paper
 
 | Year | Checks | FP rate | 95% CI |
 |---:|---:|---:|---|
-| 2014 | 52 | 3.8% | 1.1%–13.0% |
-| 2017 | 49 | 6.1% | 2.1%–16.5% |
-| 2020 | 56 | 1.8% | 0.3%–9.4% |
-| 2022 | 48 | 2.1% | 0.4%–10.9% |
-| 2023 | 52 | 0.0% | 0.0%–6.9% |
-| 2024 | 57 | 5.3% | 1.8%–14.4% |
+| 2014 | 45 | 0.0% | 0.0%–7.9% |
+| 2017 | 52 | 3.8% | 1.1%–13.0% |
+| 2020 | 47 | 2.1% | 0.4%–11.1% |
+| 2022 | 57 | 0.0% | 0.0%–6.3% |
+| 2023 | 46 | 0.0% | 0.0%–7.7% |
+| 2024 | 52 | 0.0% | 0.0%–6.9% |
 
 ## How to read a document score against this
 
-On references that are genuine, citeaudit reports NOT_FOUND about **3.2%** of the time when no identifier is supplied. A document whose references carry no DOIs should therefore be expected to show roughly that failure rate before any real problem is present.
+On references that are genuine, citeaudit reports NOT_FOUND about **1.0%** of the time when no identifier is supplied. A document whose references carry no DOIs should therefore be expected to show roughly that failure rate before any real problem is present.
 
-A NOT_FOUND rate materially above 3.2% is the signal worth investigating. A rate at or below it is consistent with normal coverage gaps and says nothing about fabrication.
+A NOT_FOUND rate materially above 1.0% is the signal worth investigating. A rate at or below it is consistent with normal coverage gaps and says nothing about fabrication.
 
 ## What the false positives actually are
 
@@ -38,16 +38,9 @@ Every entry below is a genuine work that citeaudit failed to find. Listing them 
 
 | Mode | DOI | Claimed title |
 |---|---|---|
-| described | `10.1046/j.1464-410x.2002.02656.x` | The urethral plate-does it grow into the genital tubercle or within it |
-| described | `10.1016/j.amepre.2011.10.021` | Public Health Department Accreditation: setting the research agenda. |
-| described | `10.1111/sji.12061` | Atrial fibrillation: inflammation in disguise? |
-| described | `10.1177/000331970505600206` | Clinical echocardiographic and homodynamic characteristics of rheumati |
-| described | `10.1016/j.jacc.2011.07.035` | Valvular heart disease: The value of 3-dimensional echocardiography |
-| described | `10.1161/circheartfailure.116.003255` | Survival benefits of invasive versus conservative strategies in heart  |
-| described | `10.4159/harvard.9780674330702` | Sexual selection and animal genitalia |
-| described | `10.22600/1518-8795.ienci2016v21n2p153` | Evasão e retenção escolar no curso de licenciatura em química do Insti |
-| described | `10.1016/j.econedurev.2003.10.006` | Come and stay a while: does financial aid effect retention conditioned |
-| described | `10.1016/j.seta.2021.101474` | Study and analysis of SARIMA and LSTM in forecasting time series data |
+| described | `10.29309/tpmj/2015.22.04.1313` | Child birth; comparison of complications between lithotomy position an |
+| described | `10.3109/01443618609079206` | The birthing chair: an obstetric hazard? |
+| described | `10.1115/dmd2018-6906` | 2018 Design of Medical Devices Conf |
 
 ## Limits
 

@@ -1,6 +1,6 @@
 # Non-expert bibliographies: bounding the extrapolation
 
-**680 references** from **120 randomly sampled Wikipedia articles** (120 drawn).
+**705 references** from **119 randomly sampled Wikipedia articles** (120 drawn).
 
 ## Why this corpus
 
@@ -16,13 +16,13 @@ Not an audit of Wikipedia and not a judgment about its reliability. The unit is 
 
 ### The comparable figure
 
-**13.9% unverified** across 237 scholarly-template references (95% CI 10.1%-18.9%).
+**12.6% unverified** across 261 scholarly-template references (95% CI 9.1%-17.2%).
 
 This is the number to compare with the arXiv corpus, and the only one that measures citation integrity rather than index coverage. `{{cite journal}}`, `{{cite arxiv}}`, `{{cite conference}}` and `{{cite thesis}}` point at material Crossref and OpenAlex are the right authorities for.
 
 ### Grey-literature templates, reported separately
 
-58.0% unverified across 441 references (`cite web`, `cite news`, `cite book`, `cite report`).
+60.6% unverified across 444 references (`cite web`, `cite news`, `cite book`, `cite report`).
 
 **This is not an integrity finding and must not be read as one.** Checking journalism and government web pages against a scholarly index measures whether that index covers journalism. It does not. A high rate here is the expected result for perfectly real references, and folding it into a headline would be a category error.
 
@@ -30,33 +30,31 @@ It is still worth reporting, because it quantifies how much of a mixed bibliogra
 
 ### All templates combined
 
-42.6% across 678 checks (95% CI 39.0%-46.4%). Shown for completeness only; the split above is the meaningful cut.
+42.8% across 705 checks (95% CI 39.2%-46.5%). Shown for completeness only; the split above is the meaningful cut.
 
 | | count |
 |---|---:|
-| Verified | 389 |
-| Not found | 286 |
+| Verified | 403 |
+| Not found | 299 |
 | Resolves to a different work | 3 |
 
 ### By how the reference was given
 
 | Form | Conclusive | Unverified |
 |---|---:|---:|
-| arxiv | 0 | n/a |
-| bibliographic | 479 | 58.9% |
-| doi | 199 | 3.5% |
+| bibliographic | 485 | 61.0% |
+| doi | 220 | 2.7% |
 
 ### By source type
 
 | Template | Conclusive | Unverified |
 |---|---:|---:|
-| cite book | 160 | 43.1% |
-| cite conference | 2 | 0.0% |
-| cite journal | 233 | 13.7% |
-| cite news | 48 | 79.2% |
-| cite report | 8 | 50.0% |
+| cite book | 143 | 39.9% |
+| cite journal | 259 | 12.4% |
+| cite news | 35 | 85.7% |
+| cite report | 1 | 0.0% |
 | cite thesis | 2 | 50.0% |
-| cite web | 225 | 64.4% |
+| cite web | 265 | 68.7% |
 
 The split by source type is the useful part. `cite journal` sits inside scholarly indexing; `cite report`, `cite book` and `cite news` largely do not, and a consulting bibliography is full of the latter. Their rate is the better guide to what a grey-literature document would score.
 

@@ -195,6 +195,9 @@ def sample_preprints(client: Client, *, categories: list[str],
     """
     import xml.etree.ElementTree as ET
 
+    failed_categories: list[str] = []
+    yielded = 0
+
     for cat in categories:
         params = {
             "search_query": f"cat:{cat}",
@@ -208,17 +211,37 @@ def sample_preprints(client: Client, *, categories: list[str],
             body = client.get(url, accept="application/atom+xml").text()
             root = ET.fromstring(body)
         except (NotFound, Unreachable, ET.ParseError) as exc:
-            log.warning("arXiv sampling failed for %s: %s", cat, exc)
+            # Loud, not silent. A run that sampled nothing previously logged a
+            # warning nobody read and reported "0 papers" as though that were a
+            # result, then overwrote 1,247 good checks with it.
+            log.error("arXiv sampling FAILED for %s: %s", cat, exc)
+            failed_categories.append(cat)
             continue
 
-        for entry in root.findall(f"{ATOM}entry"):
+        entries = root.findall(f"{ATOM}entry")
+        if not entries:
+            log.error("arXiv returned an EMPTY feed for %s — this is usually "
+                      "throttling. Check request pacing.", cat)
+            failed_categories.append(cat)
+            continue
+
+        for entry in entries:
             id_el = entry.find(f"{ATOM}id")
             title_el = entry.find(f"{ATOM}title")
             if id_el is None or not id_el.text:
                 continue
             aid = id_el.text.rstrip("/").split("/abs/")[-1]
             title = " ".join((title_el.text or "").split()) if title_el is not None else ""
+            yielded += 1
             yield aid, cat, title
+
+    if failed_categories:
+        log.error("arXiv sampling failed for %s of %s categories: %s",
+                  len(failed_categories), len(categories),
+                  ", ".join(failed_categories))
+    if yielded == 0:
+        log.error("arXiv yielded NO papers across every category. The study "
+                  "cannot proceed and must not report zero as a result.")
 
 
 def fetch_source(client: Client, arxiv_id: str) -> bytes | None:

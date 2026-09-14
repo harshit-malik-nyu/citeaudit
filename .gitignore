@@ -12,6 +12,7 @@ htmlcov/
 .idea/
 .vscode/
 .citeaudit-cache/
+.study-cache/
 citeaudit.json
 citeaudit-report.html
 .env

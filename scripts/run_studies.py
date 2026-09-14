@@ -130,8 +130,8 @@ def main() -> int:
         psum = preprints.summarise(study)
         try:
             preprints.write_outputs(study, psum, ROOT / "evidence" / "preprints")
-        except preprints.EmptyStudy as exc:
-            print(f"\n!! PREPRINT STUDY PRODUCED NOTHING: {exc}", file=sys.stderr)
+        except (preprints.EmptyStudy, preprints.DegradedStudy) as exc:
+            print(f"\n!! PREPRINT STUDY NOT WRITTEN: {exc}", file=sys.stderr)
             print("!! existing evidence left untouched", file=sys.stderr)
             failures.append("preprints")
 
@@ -160,8 +160,8 @@ def main() -> int:
         wsum = wikipedia.summarise(wstudy)
         try:
             wikipedia.write_outputs(wstudy, wsum, ROOT / "evidence" / "wikipedia")
-        except wikipedia.EmptyStudy as exc:
-            print(f"\n!! WIKIPEDIA STUDY PRODUCED NOTHING: {exc}", file=sys.stderr)
+        except (wikipedia.EmptyStudy, wikipedia.DegradedStudy) as exc:
+            print(f"\n!! WIKIPEDIA STUDY NOT WRITTEN: {exc}", file=sys.stderr)
             print("!! existing evidence left untouched", file=sys.stderr)
             failures.append("wikipedia")
 

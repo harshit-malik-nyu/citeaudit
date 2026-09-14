@@ -57,6 +57,29 @@ log = logging.getLogger(__name__)
 class EmptyStudy(RuntimeError):
     """A run produced no checks. Never overwrite good evidence with it."""
 
+
+class DegradedStudy(RuntimeError):
+    """
+    A run produced far fewer checks than the evidence it would replace.
+
+    Emptiness was not the only way to destroy a measurement. A throttled run
+    returning 87 checks overwrote one with 1,247 — the guard let it through
+    because 87 is not zero. Fewer observations is a worse measurement, and
+    replacing a good one with it needs to be a decision, not an accident.
+    """
+
+
+def _existing_check_count(directory) -> int:
+    from pathlib import Path
+    import json as _json
+    f = Path(directory) / "summary.json"
+    if not f.exists():
+        return 0
+    try:
+        return int(_json.loads(f.read_text())["method"]["total_checks"])
+    except (ValueError, KeyError, TypeError, OSError):
+        return 0
+
 ARXIV_QUERY = "https://export.arxiv.org/api/query"
 ARXIV_SOURCE = "https://export.arxiv.org/e-print/"
 ATOM = "{http://www.w3.org/2005/Atom}"
@@ -485,7 +508,13 @@ def to_markdown(summary: dict) -> str:
     return "\n".join(out)
 
 
-def write_outputs(study: PreprintStudy, summary: dict, directory) -> None:
+# A run holding less than this share of the existing sample is a degradation,
+# not an update.
+DEGRADATION_RATIO = 0.5
+
+
+def write_outputs(study: PreprintStudy, summary: dict, directory,
+                  *, allow_smaller: bool = False) -> None:
     import csv, json
     from dataclasses import asdict
     from pathlib import Path
@@ -498,6 +527,15 @@ def write_outputs(study: PreprintStudy, summary: dict, directory) -> None:
         raise EmptyStudy(
             "study produced zero checks; refusing to overwrite existing "
             "evidence. Investigate the upstream API before re-running."
+        )
+
+    existing = _existing_check_count(directory)
+    new_count = len(study.checks)
+    if not allow_smaller and existing and new_count < existing * DEGRADATION_RATIO:
+        raise DegradedStudy(
+            f"run produced {new_count:,} checks against {existing:,} already "
+            f"on record. Refusing to replace a larger sample with a smaller "
+            f"one. Pass allow_smaller=True to override deliberately."
         )
 
     d = Path(directory)

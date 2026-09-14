@@ -100,11 +100,32 @@ So it is **bounded** rather than asserted. Study 3 measures a third corpus
 chosen to be as different from arXiv as the public web allows: Wikipedia
 citations, written by non-specialists in inconsistent styles, mixing journals
 with news, reports, books and bare URLs, with no reference manager anywhere.
-See [`evidence/wikipedia/`](../evidence/wikipedia/).
 
-If the rate holds between expert and non-expert author-written bibliographies,
-the extrapolation is defensible. If it moves, the spread is the honest error
-bar on any claim about a corpus nobody can sample.
+**The rate holds.**
+
+| Author population | Unverified | 95% CI | n |
+|---|---:|---|---:|
+| Expert (arXiv `.bbl` / `.bib`) | 13.16% | 11.36–15.19% | 1,201 |
+| Non-expert (Wikipedia `cite journal`) | 13.92% | 10.09–18.91% | 237 |
+
+Two populations with almost nothing in common land within a point of each
+other, with heavily overlapping intervals. The rate does not appear to depend
+on who writes the bibliography — only on whether anything validated it on the
+way in.
+
+That is a stronger warrant for the extrapolation than any disclaimer, and it
+was not the expected result. It also sharpens the mechanism claim: the tenfold
+gap against deposited metadata is about *pipeline*, not *expertise*.
+
+**Where it stops short.** Wikipedia is community-audited, with a culture of
+challenging unsourced claims. It plausibly sits cleaner than an unreviewed
+consulting report, so the pair is a floor rather than a bracket.
+
+One further cut supports the mechanism reading. Within Wikipedia, references to
+material scholarly indexes actually cover (`cite journal`, 13.7%) behave like
+arXiv, while `cite web` (64.4%) and `cite news` (79.2%) do not — because those
+measure index coverage, not integrity. Keeping them separate is the difference
+between a finding and a category error.
 
 One thing that already sharpens the picture: within the author-written corpus,
 references carrying a DOI came in at **3.44%** against **18.07%** for

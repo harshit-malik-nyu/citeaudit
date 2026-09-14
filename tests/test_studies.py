@@ -739,3 +739,67 @@ class TestStatisticalPowerGuard:
         ])
         md = to_markdown(summarise(study))
         assert "not usable" in md
+
+
+class TestDegradationGuard:
+    """
+    REGRESSION. Emptiness was not the only way to destroy a measurement. A
+    throttled run returning 87 checks overwrote one holding 1,247, because 87
+    is not zero and the empty-guard let it through.
+    """
+
+    def _write_existing(self, tmp_path, checks: int):
+        import json
+        (tmp_path / "summary.json").write_text(
+            json.dumps({"method": {"total_checks": checks}}))
+
+    def _study(self, n: int):
+        from citeaudit.preprints import PreprintCheck, PreprintStudy
+        return PreprintStudy(checks=[
+            PreprintCheck(arxiv_id=str(i), category="cs.LG", reference_text="t",
+                          kind="doi", identifier=f"10.1/{i}",
+                          verdict="verified", authority="crossref")
+            for i in range(n)
+        ])
+
+    def test_much_smaller_run_is_refused(self, tmp_path):
+        from citeaudit.preprints import DegradedStudy, summarise, write_outputs
+        self._write_existing(tmp_path, 1247)
+        study = self._study(87)
+        with pytest.raises(DegradedStudy) as exc:
+            write_outputs(study, summarise(study), tmp_path)
+        assert "1,247" in str(exc.value)
+
+    def test_comparable_run_is_allowed(self, tmp_path):
+        from citeaudit.preprints import summarise, write_outputs
+        self._write_existing(tmp_path, 100)
+        study = self._study(90)
+        write_outputs(study, summarise(study), tmp_path)
+        import json
+        assert json.loads((tmp_path / "summary.json").read_text())[
+            "method"]["total_checks"] == 90
+
+    def test_larger_run_is_allowed(self, tmp_path):
+        from citeaudit.preprints import summarise, write_outputs
+        self._write_existing(tmp_path, 100)
+        study = self._study(500)
+        write_outputs(study, summarise(study), tmp_path)
+
+    def test_override_is_explicit(self, tmp_path):
+        """Replacing a better measurement must be a decision, not an accident."""
+        from citeaudit.preprints import summarise, write_outputs
+        self._write_existing(tmp_path, 1247)
+        study = self._study(87)
+        write_outputs(study, summarise(study), tmp_path, allow_smaller=True)
+
+    def test_first_ever_run_is_not_blocked(self, tmp_path):
+        from citeaudit.preprints import summarise, write_outputs
+        study = self._study(50)
+        write_outputs(study, summarise(study), tmp_path)
+
+    def test_unreadable_existing_summary_does_not_block(self, tmp_path):
+        """A corrupt prior result must not wedge every future run."""
+        from citeaudit.preprints import summarise, write_outputs
+        (tmp_path / "summary.json").write_text("not json")
+        study = self._study(50)
+        write_outputs(study, summarise(study), tmp_path)

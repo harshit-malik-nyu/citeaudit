@@ -1,6 +1,6 @@
 # Author-written bibliographies: what happens outside the pipeline
 
-**87 references** from **8 arXiv preprints** (8 sampled), parsed from the authors' own `.bbl` and `.bib` source files.
+**1,247 references** from **122 arXiv preprints** (168 sampled), parsed from the authors' own `.bbl` and `.bib` source files.
 
 ## Why a second corpus
 
@@ -14,28 +14,24 @@ Measures whether a reference as written can be verified. An unverified reference
 
 ## Headline
 
-> **The unverified rate is not usable: 95% interval spans 16%, wider than the 15% needed for the figure to mean anything.**
->
-> It is shown because suppressing it would hide that the measurement was attempted, but it must not be quoted, compared, or carried into any downstream claim until the sample is larger.
-
 | | count |
 |---|---:|
-| References checked | 87 |
-| Verified | 65 |
-| Not found | 11 |
-| Resolves to a different work | 0 |
-| Not machine-checkable | 1 |
-| Could not check | 10 |
+| References checked | 1,247 |
+| Verified | 1,043 |
+| Not found | 147 |
+| Resolves to a different work | 11 |
+| Not machine-checkable | 46 |
+| Could not check | 0 |
 
-**Unverified rate: 14.5%** of 76 conclusive checks (95% CI 8.3%–24.1%).
+**Unverified rate: 13.2%** of 1,201 conclusive checks (95% CI 11.4%–15.2%).
 
 ## By how the reference was written
 
 | Form | Conclusive | Unverified | 95% CI |
 |---|---:|---:|---|
-| arxiv | 0 | n/a | — |
-| bibliographic | 59 | 18.6% | 10.7%–30.4% |
-| doi | 17 | 0.0% | 0.0%–18.4% |
+| arxiv | 66 | 6.1% | 2.4%–14.6% |
+| bibliographic | 786 | 18.1% | 15.5%–20.9% |
+| doi | 349 | 3.4% | 2.0%–5.9% |
 | url | 0 | n/a | — |
 
 The gap between identifier-bearing and description-only references is the cost of omitting a DOI, measured rather than asserted.
@@ -44,7 +40,18 @@ The gap between identifier-bearing and description-only references is the cost o
 
 | Category | Conclusive | Unverified |
 |---|---:|---:|
-| cs.LG | 76 | 14.5% |
+| astro-ph.GA | 39 | 12.8% |
+| cond-mat.stat-mech | 77 | 6.5% |
+| cs.CR | 112 | 12.5% |
+| cs.CY | 98 | 25.5% |
+| cs.LG | 147 | 16.3% |
+| econ.GN | 82 | 11.0% |
+| eess.SY | 138 | 7.2% |
+| math.ST | 127 | 5.5% |
+| physics.soc-ph | 81 | 12.3% |
+| q-bio.QM | 96 | 11.5% |
+| q-fin.GN | 98 | 18.4% |
+| stat.AP | 106 | 18.9% |
 
 ## Limits
 

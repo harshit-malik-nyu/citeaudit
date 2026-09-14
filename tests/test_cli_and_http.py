@@ -373,3 +373,62 @@ class TestCliStepSummary:
         p = tmp_path / "doc.md"
         p.write_text(DOC_WITH_BAD_DOI)
         assert main([str(p), "--no-cache", "--no-urls"]) == EXIT_OK
+
+
+class TestConcurrentPacing:
+    """
+    REGRESSION. Rate limiting read and wrote a shared timestamp with no lock.
+    Six verifier threads each checked it, each concluded enough time had
+    elapsed, and all six fired together — an effective rate six times the
+    configured one.
+
+    arXiv answered with HTTP 429 for 11 of 12 categories. The study collected 8
+    papers instead of 96, and the resulting 87-check result then overwrote a
+    1,247-check measurement.
+    """
+
+    def test_pacing_holds_across_threads(self, monkeypatch):
+        import threading
+        import time
+        from concurrent.futures import ThreadPoolExecutor
+
+        timestamps: list[float] = []
+        guard = threading.Lock()
+
+        def fake(req, timeout=None):
+            with guard:
+                timestamps.append(time.monotonic())
+            return _FakeResponse((200, b"{}"))
+
+        monkeypatch.setattr("urllib.request.urlopen", fake)
+
+        interval = 0.05
+        c = Client(cache_dir=None, use_cache=False,
+                   min_interval=interval, backoff=0.0)
+
+        with ThreadPoolExecutor(max_workers=6) as pool:
+            list(pool.map(lambda i: c.get(f"https://one-host.example/{i}"),
+                          range(6)))
+
+        ordered = sorted(timestamps)
+        gaps = [b - a for a, b in zip(ordered, ordered[1:])]
+        assert len(gaps) == 5
+        # Allow a little scheduler slack, but nothing near the ~0 of the bug.
+        assert min(gaps) >= interval * 0.8, f"requests bunched: {gaps}"
+
+    def test_per_host_pacing_does_not_serialise_unrelated_hosts(self, monkeypatch):
+        """Politeness to one authority must not throttle calls to another."""
+        from citeaudit.http import HOST_MIN_INTERVAL
+        assert HOST_MIN_INTERVAL["export.arxiv.org"] > HOST_MIN_INTERVAL.get(
+            "en.wikipedia.org", 1.0)
+
+    def test_stats_are_updated_under_a_lock(self, monkeypatch):
+        """Counters shared by six threads need the same protection."""
+        from concurrent.futures import ThreadPoolExecutor
+
+        monkeypatch.setattr("urllib.request.urlopen",
+                            lambda req, timeout=None: _FakeResponse((200, b"{}")))
+        c = Client(cache_dir=None, use_cache=False, min_interval=0.0, backoff=0.0)
+        with ThreadPoolExecutor(max_workers=8) as pool:
+            list(pool.map(lambda i: c.get(f"https://h.example/{i}"), range(64)))
+        assert c.stats["requests"] == 64

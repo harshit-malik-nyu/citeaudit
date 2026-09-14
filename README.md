@@ -87,13 +87,38 @@ what ordinary is — and before this, nobody had measured it.
 
 ### The headline: where citation integrity actually breaks down
 
-| Corpus | Unverified rate | 95% CI | n |
-|---|---:|---|---:|
-| Publisher-deposited, DOI supplied | **0.00%** | 0.00–1.24% | 307 |
-| Publisher-deposited, no identifier | **1.30%** | 0.51–3.30% | 307 |
-| **Author-written bibliographies** | **13.16%** | 11.36–15.19% | 1,201 |
+| Corpus | Who wrote the reference | Unverified | 95% CI | n |
+|---|---|---:|---|---:|
+| Publisher-deposited, DOI supplied | a machine | **0.00%** | 0.00–1.24% | 307 |
+| Publisher-deposited, no identifier | a machine | **1.30%** | 0.51–3.30% | 307 |
+| arXiv bibliographies | expert authors | **13.16%** | 11.36–15.19% | 1,201 |
+| Wikipedia, scholarly citations | non-expert authors | **13.92%** | 10.09–18.91% | 237 |
 
 **A tenfold gap**, and it is the most useful number in this repository.
+
+### The extrapolation is bounded, not assumed
+
+The business case rests on carrying a rate measured on public corpora over to
+consulting deliverables. That was the load-bearing assumption, and it could not
+be validated directly — those documents are not publicly samplable, which is
+exactly why no base rate for them existed.
+
+So it was **bounded** instead, by measuring two author populations chosen to be
+as different as the public web allows. Physicists using reference managers, and
+Wikipedia editors working by hand across news, books, reports and journals.
+
+**They agree: 13.16% and 13.92%, with heavily overlapping intervals.**
+
+That is the strongest result in this repository, and it was not the expected
+one. The rate does not appear to depend on who is writing, only on whether
+anything validated the reference on its way in. Two populations with almost
+nothing else in common land within a point of each other, which makes carrying
+the figure to a third unvalidated corpus far more defensible than any
+disclaimer could have.
+
+It does not make it certain. Wikipedia is community-audited with a culture of
+challenging unsourced claims, so it plausibly sits *cleaner* than an unreviewed
+consulting report — the pair should be read as a floor, not a bracket.
 
 References that publishers deposit are near-perfect: not one of 307 DOI-bearing
 entries failed to resolve. The same kind of works, cited by hand in author-written

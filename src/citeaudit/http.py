@@ -28,6 +28,7 @@ import json
 import logging
 import os
 import random
+import threading
 import time
 import urllib.error
 import urllib.parse
@@ -48,8 +49,8 @@ DEFAULT_MIN_INTERVAL = 0.12  # seconds between calls to the same host
 # empty. Crossref and OpenAlex operate polite pools and tolerate faster rates
 # when a contact address is supplied.
 HOST_MIN_INTERVAL = {
-    "export.arxiv.org": 3.0,
-    "arxiv.org": 3.0,
+    "export.arxiv.org": 3.5,
+    "arxiv.org": 3.5,
     "en.wikipedia.org": 0.25,
 }
 
@@ -152,16 +153,37 @@ class Client:
             version=version, repo=repo, mailto=self.mailto
         )
         self._last_call: dict[str, float] = {}
+        # Rate limiting must hold across threads or it does not hold at all.
+        # Without this lock, six verifier workers each read the same "last
+        # call" timestamp, each concluded enough time had passed, and all six
+        # fired at once — an effective rate six times the configured one. arXiv
+        # answered with HTTP 429 for 11 of 12 categories and the study
+        # collected 8 papers instead of 96.
+        self._pace_lock = threading.Lock()
+        self._stats_lock = threading.Lock()
         self.stats = {"requests": 0, "cache_hits": 0, "retries": 0, "failures": 0}
 
+    def _bump(self, key: str) -> None:
+        with self._stats_lock:
+            self.stats[key] += 1
+
     def _pace(self, host: str) -> None:
+        """
+        Block until this host may be called again.
+
+        The sleep happens INSIDE the lock deliberately. Releasing it first
+        would let every waiting thread wake simultaneously and fire together,
+        which is the behaviour this exists to prevent. Serialising requests to
+        one host is the point, not a side effect.
+        """
         interval = HOST_MIN_INTERVAL.get(host, self.min_interval)
-        last = self._last_call.get(host)
-        if last is not None:
-            wait = interval - (time.monotonic() - last)
-            if wait > 0:
-                time.sleep(wait)
-        self._last_call[host] = time.monotonic()
+        with self._pace_lock:
+            last = self._last_call.get(host)
+            if last is not None:
+                wait = interval - (time.monotonic() - last)
+                if wait > 0:
+                    time.sleep(wait)
+            self._last_call[host] = time.monotonic()
 
     def get(self, url: str, *, accept: str = "application/json",
             allow_404: bool = True, method: str = "GET") -> Response:
@@ -173,7 +195,7 @@ class Client:
         """
         cached = self.cache.get(url)
         if cached is not None:
-            self.stats["cache_hits"] += 1
+            self._bump("cache_hits")
             if cached.status == 404 and allow_404:
                 raise NotFound(url)
             return cached
@@ -188,7 +210,7 @@ class Client:
                 delay = ((2 ** attempt) * 0.5 + random.uniform(0, 0.3)) * self.backoff
                 if delay > 0:
                     time.sleep(delay)
-                self.stats["retries"] += 1
+                self._bump("retries")
 
             self._pace(host)
             req = urllib.request.Request(
@@ -196,7 +218,7 @@ class Client:
                 headers={"Accept": accept, "User-Agent": self.user_agent},
             )
             try:
-                self.stats["requests"] += 1
+                self._bump("requests")
                 with urllib.request.urlopen(req, timeout=self.timeout) as r:
                     resp = Response(url=url, status=r.status, body=r.read())
                 self.cache.put(resp)
@@ -220,7 +242,7 @@ class Client:
                 last_error = exc
                 continue
 
-        self.stats["failures"] += 1
+        self._bump("failures")
         raise Unreachable(f"{url}: {last_error}") from last_error
 
     def head_ok(self, url: str) -> tuple[bool, int]:

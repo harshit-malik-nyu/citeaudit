@@ -36,15 +36,19 @@ def main() -> int:
     ap.add_argument("--calibration-works", type=int, default=260)
     ap.add_argument("--seed", type=int, default=20260909)
     ap.add_argument("--mailto", default="citeaudit-ci@users.noreply.github.com")
-    ap.add_argument("--preprints-per-category", type=int, default=14)
-    ap.add_argument("--preprint-max-checks", type=int, default=1800)
-    ap.add_argument("--wiki-articles", type=int, default=300)
-    ap.add_argument("--wiki-max-checks", type=int, default=1200)
+    ap.add_argument("--preprints-per-category", type=int, default=8)
+    ap.add_argument("--preprint-max-checks", type=int, default=1400)
+    ap.add_argument("--wiki-articles", type=int, default=120)
+    ap.add_argument("--wiki-max-checks", type=int, default=900)
     ap.add_argument("--workers", type=int, default=6)
     args = ap.parse_args()
 
     logging.basicConfig(level=logging.INFO,
                         format="%(levelname)s %(name)s: %(message)s")
+
+    # Studies are independent. One upstream API failing must not take down the
+    # others, and must not be mistaken for a clean run.
+    failures: list[str] = []
 
     client = Client(version=__version__, mailto=args.mailto,
                     cache_dir=str(ROOT / ".study-cache"), timeout=30)
@@ -124,7 +128,12 @@ def main() -> int:
             workers=args.workers,
         )
         psum = preprints.summarise(study)
-        preprints.write_outputs(study, psum, ROOT / "evidence" / "preprints")
+        try:
+            preprints.write_outputs(study, psum, ROOT / "evidence" / "preprints")
+        except preprints.EmptyStudy as exc:
+            print(f"\n!! PREPRINT STUDY PRODUCED NOTHING: {exc}", file=sys.stderr)
+            print("!! existing evidence left untouched", file=sys.stderr)
+            failures.append("preprints")
 
         o = psum["overall"]
         print(f"\npapers sampled     : {psum['method']['papers_sampled']:,}")
@@ -149,7 +158,12 @@ def main() -> int:
             max_checks=args.wiki_max_checks, workers=args.workers,
         )
         wsum = wikipedia.summarise(wstudy)
-        wikipedia.write_outputs(wstudy, wsum, ROOT / "evidence" / "wikipedia")
+        try:
+            wikipedia.write_outputs(wstudy, wsum, ROOT / "evidence" / "wikipedia")
+        except wikipedia.EmptyStudy as exc:
+            print(f"\n!! WIKIPEDIA STUDY PRODUCED NOTHING: {exc}", file=sys.stderr)
+            print("!! existing evidence left untouched", file=sys.stderr)
+            failures.append("wikipedia")
 
         wo = wsum["overall"]
         sch = wsum["scholarly_templates"]
@@ -165,6 +179,13 @@ def main() -> int:
             print(f"grey templates     : {grey['unverified_rate']:.2%} "
                   f" n={grey['conclusive']}  (index coverage, not integrity)")
         print(f"http requests      : {client.stats['requests']:,}")
+
+    if failures:
+        print(f"\nSTUDIES THAT PRODUCED NO DATA: {', '.join(failures)}",
+              file=sys.stderr)
+        print("Existing evidence for those was preserved. Exit code 1.",
+              file=sys.stderr)
+        return 1
 
     return 0
 

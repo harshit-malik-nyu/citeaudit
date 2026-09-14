@@ -42,6 +42,17 @@ DEFAULT_TIMEOUT = 20
 DEFAULT_RETRIES = 3
 DEFAULT_MIN_INTERVAL = 0.12  # seconds between calls to the same host
 
+# Per-host overrides. arXiv's API guidelines ask for roughly three seconds
+# between requests, and ignoring that gets a client throttled to nothing: a
+# 12-category preprint run returned ZERO papers because every query came back
+# empty. Crossref and OpenAlex operate polite pools and tolerate faster rates
+# when a contact address is supplied.
+HOST_MIN_INTERVAL = {
+    "export.arxiv.org": 3.0,
+    "arxiv.org": 3.0,
+    "en.wikipedia.org": 0.25,
+}
+
 USER_AGENT_TEMPLATE = (
     "citeaudit/{version} (+https://github.com/{repo}; mailto:{mailto})"
 )
@@ -140,9 +151,10 @@ class Client:
         self.stats = {"requests": 0, "cache_hits": 0, "retries": 0, "failures": 0}
 
     def _pace(self, host: str) -> None:
+        interval = HOST_MIN_INTERVAL.get(host, self.min_interval)
         last = self._last_call.get(host)
         if last is not None:
-            wait = self.min_interval - (time.monotonic() - last)
+            wait = interval - (time.monotonic() - last)
             if wait > 0:
                 time.sleep(wait)
         self._last_call[host] = time.monotonic()

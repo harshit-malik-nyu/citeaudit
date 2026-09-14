@@ -45,7 +45,7 @@ concurrency:
 jobs:
   run:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 170
     steps:
       - uses: actions/checkout@v4
 
@@ -57,7 +57,10 @@ jobs:
         run: pip install -e ".[dev]"
 
       - name: Run studies
+        # Studies are independent; a failing upstream API must not be read as a
+        # clean run, so the exit code is preserved and surfaced at the end.
         run: |
+          set -o pipefail
           python scripts/run_studies.py \
             --study "${{ inputs.study || 'all' }}" \
             --max-checks "${{ inputs.max_checks || '2400' }}" \

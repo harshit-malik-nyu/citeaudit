@@ -53,6 +53,10 @@ from .verify import Verifier
 
 log = logging.getLogger(__name__)
 
+
+class EmptyStudy(RuntimeError):
+    """A run produced no checks. Never overwrite good evidence with it."""
+
 API = "https://en.wikipedia.org/w/api.php"
 
 # {{cite journal |title=... |doi=... }} and friends. Nested templates are
@@ -155,19 +159,30 @@ def parse_citations(wikitext: str) -> list[WikiReference]:
 
 
 def sample_articles(client: Client, *, count: int, min_bytes: int = 8_000,
-                    max_draws: int = 40) -> list[str]:
+                    max_draws: int = 40, scholarly_only: bool = True
+                    ) -> list[str]:
     """
-    Random article titles, biased toward pages that carry references.
+    Article titles to sample references from.
 
-    Wikipedia's `random` generator is uniform over all articles and most
-    articles are stubs, so an unfiltered draw yields almost nothing citable.
-    An earlier version filtered at 30 kB and returned 2 usable articles from
-    500 draws — the filter was doing almost all the rejecting.
+    Two modes, and the choice materially changes what the result means.
 
-    The threshold is now 8 kB, which still excludes stubs, and the loop draws
-    until it has `count` titles or exhausts `max_draws` rather than a fixed
-    small number of rounds.
+    `scholarly_only` (default) searches for articles that actually contain a
+    `{{cite journal}}` template. A uniform random draw does not work for this
+    measurement: most Wikipedia articles cite news and web pages, so a random
+    sample of 13 articles yielded SEVEN scholarly references — a confidence
+    interval spanning 2.6% to 51%, which is no measurement at all.
+
+    The cost is that the sample is no longer representative of Wikipedia. It is
+    representative of *Wikipedia articles that cite scholarly literature*, and
+    the report says so. That is the right population anyway: the comparison
+    being drawn is against arXiv bibliographies, which are entirely scholarly.
+
+    Setting `scholarly_only=False` restores the uniform random draw, which
+    answers a different and less useful question.
     """
+    if scholarly_only:
+        return _search_articles(client, count=count)
+
     titles: list[str] = []
     seen: set[str] = set()
 
@@ -199,6 +214,44 @@ def sample_articles(client: Client, *, count: int, min_bytes: int = 8_000,
             titles.append(t)
             if len(titles) >= count:
                 return titles
+    return titles
+
+
+def _search_articles(client: Client, *, count: int) -> list[str]:
+    """Articles containing a {{cite journal}} template, via insource search."""
+    titles: list[str] = []
+    seen: set[str] = set()
+    offset = 0
+
+    while len(titles) < count and offset < 2000:
+        params = {
+            "action": "query", "format": "json", "formatversion": "2",
+            "list": "search",
+            "srsearch": 'insource:"cite journal" insource:"doi"',
+            "srnamespace": "0",
+            "srlimit": "50",
+            "sroffset": str(offset),
+            "srsort": "random",
+        }
+        url = f"{API}?{urllib.parse.urlencode(params)}"
+        try:
+            data = client.get(url).json()
+        except (NotFound, Unreachable) as exc:
+            log.warning("wikipedia search failed: %s", exc)
+            break
+
+        hits = (data.get("query") or {}).get("search") or []
+        if not hits:
+            break
+        for h in hits:
+            t = h.get("title")
+            if t and t not in seen:
+                seen.add(t)
+                titles.append(t)
+                if len(titles) >= count:
+                    break
+        offset += len(hits)
+
     return titles
 
 
@@ -498,6 +551,16 @@ def write_outputs(study: WikiStudy, summary: dict, directory) -> None:
     import csv
     from dataclasses import asdict
     from pathlib import Path
+
+    if not study.checks:
+        # A study that produced nothing must not overwrite a good previous
+        # result. An empty run once replaced 1,247 committed checks with zeros,
+        # silently destroying the better measurement. Failure should leave the
+        # evidence untouched and say so.
+        raise EmptyStudy(
+            "study produced zero checks; refusing to overwrite existing "
+            "evidence. Investigate the upstream API before re-running."
+        )
 
     d = Path(directory)
     d.mkdir(parents=True, exist_ok=True)

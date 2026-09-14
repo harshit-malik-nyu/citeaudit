@@ -538,3 +538,55 @@ class TestWikipediaTemplateSplit:
         # Pooling would report 75% and call it an integrity finding.
         assert s["overall"]["unverified_rate"] == pytest.approx(0.75)
         assert s["headline"]["comparable_rate"] == pytest.approx(0.5)
+
+
+class TestEmptyStudyGuard:
+    """
+    REGRESSION. An arXiv run returned zero papers — the client was pacing
+    requests at 0.12s against an API that asks for three seconds, so every
+    query came back empty. The empty result was then written over 1,247
+    committed checks, destroying the better measurement silently.
+
+    A failed run must leave good evidence alone and fail loudly.
+    """
+
+    def test_empty_preprint_study_refuses_to_write(self, tmp_path):
+        from citeaudit.preprints import EmptyStudy, PreprintStudy, summarise, write_outputs
+
+        study = PreprintStudy()
+        with pytest.raises(EmptyStudy):
+            write_outputs(study, summarise(study), tmp_path)
+        assert not (tmp_path / "summary.json").exists()
+
+    def test_empty_wikipedia_study_refuses_to_write(self, tmp_path):
+        from citeaudit.wikipedia import EmptyStudy, WikiStudy, summarise, write_outputs
+
+        study = WikiStudy()
+        with pytest.raises(EmptyStudy):
+            write_outputs(study, summarise(study), tmp_path)
+        assert not (tmp_path / "summary.json").exists()
+
+    def test_existing_evidence_survives_a_failed_run(self, tmp_path):
+        from citeaudit.preprints import EmptyStudy, PreprintStudy, summarise, write_outputs
+
+        good = tmp_path / "summary.json"
+        good.write_text('{"real": "data"}')
+        study = PreprintStudy()
+        with pytest.raises(EmptyStudy):
+            write_outputs(study, summarise(study), tmp_path)
+        assert good.read_text() == '{"real": "data"}'
+
+
+class TestHostPacing:
+
+    def test_arxiv_is_paced_far_slower_than_the_default(self):
+        """arXiv's API guidelines ask for roughly three seconds between calls."""
+        from citeaudit.http import DEFAULT_MIN_INTERVAL, HOST_MIN_INTERVAL
+        assert HOST_MIN_INTERVAL["export.arxiv.org"] >= 3.0
+        assert HOST_MIN_INTERVAL["export.arxiv.org"] > DEFAULT_MIN_INTERVAL * 10
+
+    def test_unknown_hosts_fall_back_to_the_default(self):
+        from citeaudit.http import Client, DEFAULT_MIN_INTERVAL, HOST_MIN_INTERVAL
+        assert "api.crossref.org" not in HOST_MIN_INTERVAL
+        c = Client(cache_dir=None, use_cache=False)
+        assert c.min_interval == DEFAULT_MIN_INTERVAL

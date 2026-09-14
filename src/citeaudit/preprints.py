@@ -52,6 +52,10 @@ from .verify import Verifier
 
 log = logging.getLogger(__name__)
 
+
+class EmptyStudy(RuntimeError):
+    """A run produced no checks. Never overwrite good evidence with it."""
+
 ARXIV_QUERY = "https://export.arxiv.org/api/query"
 ARXIV_SOURCE = "https://export.arxiv.org/e-print/"
 ATOM = "{http://www.w3.org/2005/Atom}"
@@ -459,6 +463,16 @@ def write_outputs(study: PreprintStudy, summary: dict, directory) -> None:
     import csv, json
     from dataclasses import asdict
     from pathlib import Path
+
+    if not study.checks:
+        # A study that produced nothing must not overwrite a good previous
+        # result. An empty run once replaced 1,247 committed checks with zeros,
+        # silently destroying the better measurement. Failure should leave the
+        # evidence untouched and say so.
+        raise EmptyStudy(
+            "study produced zero checks; refusing to overwrite existing "
+            "evidence. Investigate the upstream API before re-running."
+        )
 
     d = Path(directory)
     d.mkdir(parents=True, exist_ok=True)

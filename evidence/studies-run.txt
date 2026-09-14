@@ -4,57 +4,58 @@ INFO citeaudit.corpus: stratum 2020: 12 usable works
 INFO citeaudit.corpus: stratum 2022: 12 usable works
 INFO citeaudit.corpus: stratum 2023: 12 usable works
 INFO citeaudit.corpus: stratum 2024: 12 usable works
-WARNING citeaudit.preprints: arXiv sampling failed for cs.LG: https://export.arxiv.org/api/query?search_query=cat%3Acs.LG&start=0&max_results=14&sortBy=submittedDate&sortOrder=descending: The read operation timed out
-WARNING citeaudit.preprints: arXiv sampling failed for econ.GN: https://export.arxiv.org/api/query?search_query=cat%3Aecon.GN&start=0&max_results=14&sortBy=submittedDate&sortOrder=descending: The read operation timed out
-WARNING citeaudit.preprints: arXiv sampling failed for q-bio.QM: https://export.arxiv.org/api/query?search_query=cat%3Aq-bio.QM&start=0&max_results=14&sortBy=submittedDate&sortOrder=descending: HTTP Error 429: Unknown Error
-WARNING citeaudit.preprints: arXiv sampling failed for stat.AP: https://export.arxiv.org/api/query?search_query=cat%3Astat.AP&start=0&max_results=14&sortBy=submittedDate&sortOrder=descending: HTTP Error 429: Unknown Error
-WARNING citeaudit.preprints: arXiv sampling failed for physics.soc-ph: https://export.arxiv.org/api/query?search_query=cat%3Aphysics.soc-ph&start=0&max_results=14&sortBy=submittedDate&sortOrder=descending: HTTP Error 429: Unknown Error
-WARNING citeaudit.preprints: arXiv sampling failed for math.ST: https://export.arxiv.org/api/query?search_query=cat%3Amath.ST&start=0&max_results=14&sortBy=submittedDate&sortOrder=descending: The read operation timed out
-WARNING citeaudit.preprints: arXiv sampling failed for cs.CY: https://export.arxiv.org/api/query?search_query=cat%3Acs.CY&start=0&max_results=14&sortBy=submittedDate&sortOrder=descending: HTTP Error 429: Unknown Error
-WARNING citeaudit.preprints: arXiv sampling failed for eess.SY: https://export.arxiv.org/api/query?search_query=cat%3Aeess.SY&start=0&max_results=14&sortBy=submittedDate&sortOrder=descending: HTTP Error 429: Unknown Error
-WARNING citeaudit.preprints: arXiv sampling failed for astro-ph.GA: https://export.arxiv.org/api/query?search_query=cat%3Aastro-ph.GA&start=0&max_results=14&sortBy=submittedDate&sortOrder=descending: The read operation timed out
-WARNING citeaudit.preprints: arXiv sampling failed for cond-mat.stat-mech: https://export.arxiv.org/api/query?search_query=cat%3Acond-mat.stat-mech&start=0&max_results=14&sortBy=submittedDate&sortOrder=descending: HTTP Error 429: Unknown Error
-WARNING citeaudit.preprints: arXiv sampling failed for q-fin.GN: https://export.arxiv.org/api/query?search_query=cat%3Aq-fin.GN&start=0&max_results=14&sortBy=submittedDate&sortOrder=descending: HTTP Error 429: Unknown Error
-WARNING citeaudit.preprints: arXiv sampling failed for cs.CR: https://export.arxiv.org/api/query?search_query=cat%3Acs.CR&start=0&max_results=14&sortBy=submittedDate&sortOrder=descending: HTTP Error 429: Unknown Error
+ERROR citeaudit.preprints: arXiv sampling FAILED for econ.GN: https://export.arxiv.org/api/query?search_query=cat%3Aecon.GN&start=0&max_results=8&sortBy=submittedDate&sortOrder=descending: HTTP Error 429: Too Many Requests
+ERROR citeaudit.preprints: arXiv sampling FAILED for q-bio.QM: https://export.arxiv.org/api/query?search_query=cat%3Aq-bio.QM&start=0&max_results=8&sortBy=submittedDate&sortOrder=descending: HTTP Error 429: Unknown Error
+ERROR citeaudit.preprints: arXiv sampling FAILED for stat.AP: https://export.arxiv.org/api/query?search_query=cat%3Astat.AP&start=0&max_results=8&sortBy=submittedDate&sortOrder=descending: HTTP Error 429: Unknown Error
+ERROR citeaudit.preprints: arXiv sampling FAILED for physics.soc-ph: https://export.arxiv.org/api/query?search_query=cat%3Aphysics.soc-ph&start=0&max_results=8&sortBy=submittedDate&sortOrder=descending: HTTP Error 429: Too Many Requests
+ERROR citeaudit.preprints: arXiv sampling FAILED for math.ST: https://export.arxiv.org/api/query?search_query=cat%3Amath.ST&start=0&max_results=8&sortBy=submittedDate&sortOrder=descending: HTTP Error 429: Unknown Error
+ERROR citeaudit.preprints: arXiv sampling FAILED for cs.CY: https://export.arxiv.org/api/query?search_query=cat%3Acs.CY&start=0&max_results=8&sortBy=submittedDate&sortOrder=descending: The read operation timed out
+ERROR citeaudit.preprints: arXiv sampling FAILED for eess.SY: https://export.arxiv.org/api/query?search_query=cat%3Aeess.SY&start=0&max_results=8&sortBy=submittedDate&sortOrder=descending: HTTP Error 429: Unknown Error
+ERROR citeaudit.preprints: arXiv sampling FAILED for astro-ph.GA: https://export.arxiv.org/api/query?search_query=cat%3Aastro-ph.GA&start=0&max_results=8&sortBy=submittedDate&sortOrder=descending: HTTP Error 429: Unknown Error
+ERROR citeaudit.preprints: arXiv sampling FAILED for cond-mat.stat-mech: https://export.arxiv.org/api/query?search_query=cat%3Acond-mat.stat-mech&start=0&max_results=8&sortBy=submittedDate&sortOrder=descending: The read operation timed out
+ERROR citeaudit.preprints: arXiv sampling FAILED for q-fin.GN: https://export.arxiv.org/api/query?search_query=cat%3Aq-fin.GN&start=0&max_results=8&sortBy=submittedDate&sortOrder=descending: HTTP Error 429: Unknown Error
+ERROR citeaudit.preprints: arXiv sampling FAILED for cs.CR: https://export.arxiv.org/api/query?search_query=cat%3Acs.CR&start=0&max_results=8&sortBy=submittedDate&sortOrder=descending: HTTP Error 429: Unknown Error
+ERROR citeaudit.preprints: arXiv sampling failed for 11 of 12 categories: econ.GN, q-bio.QM, stat.AP, physics.soc-ph, math.ST, cs.CY, eess.SY, astro-ph.GA, cond-mat.stat-mech, q-fin.GN, cs.CR
 ======================================================================
 BASE RATE STUDY
 ======================================================================
 
 source works      : 72
-total checks      : 668
+total checks      : 628
 identified FP rate: 0.00%
-described FP rate : 2.10% (95% CI 1.02%-4.26%)
-fallback rescues  : 27
-http requests     : 706
+described FP rate : 3.18% (95% CI 1.74%-5.76%)
+fallback rescues  : 25
+http requests     : 685
 
 ======================================================================
 CALIBRATION STUDY
 ======================================================================
 
 reference works   : 260
-labelled pairs    : 2,489 (1,709 same / 780 different)
-chosen threshold  : 66
+labelled pairs    : 2,488 (1,708 same / 780 different)
+chosen threshold  : 76
   precision       : 1.000
-  recall          : 1.000
+  recall          : 0.999
   false accusations: 0
 
 ======================================================================
 PREPRINT CORPUS STUDY
 ======================================================================
 
-papers sampled     : 0
-with bibliography  : 0
-references checked : 0
-conclusive         : 0
-http requests      : 745
+papers sampled     : 8
+with bibliography  : 8
+references checked : 87
+conclusive         : 76
+unverified rate    : 14.47% (95% CI 8.28%-24.09%)
+http requests      : 884
 
 ======================================================================
 WIKIPEDIA CORPUS STUDY
 ======================================================================
 
-articles sampled   : 13
-with citations     : 13
-references checked : 80
-SCHOLARLY templates: 14.29% (95% CI 2.57%-51.31%)  n=7  <- comparable
-grey templates     : 75.34%  n=73  (index coverage, not integrity)
-http requests      : 911
+articles sampled   : 120
+with citations     : 120
+references checked : 680
+SCHOLARLY templates: 13.92% (95% CI 10.09%-18.91%)  n=237  <- comparable
+grey templates     : 58.05%  n=441  (index coverage, not integrity)
+http requests      : 2,513

@@ -2,50 +2,71 @@
   "false_positive_examples": [
     {
       "mode": "described",
-      "reference_doi": "10.1590/1516-4446-2012-3501",
-      "claimed_title": "The quest for better diagnosis: DSM-5 or RDoC?",
+      "reference_doi": "10.1046/j.1464-410x.2002.02656.x",
+      "claimed_title": "The urethral plate-does it grow into the genital tubercle or within it?",
       "verdict": "not_found",
       "authority": "crossref+openalex"
     },
     {
       "mode": "described",
-      "reference_doi": "10.1201/9781420036091",
-      "claimed_title": "Design and analysis of cross-over trials (Second ed.)",
+      "reference_doi": "10.1016/j.amepre.2011.10.021",
+      "claimed_title": "Public Health Department Accreditation: setting the research agenda.",
       "verdict": "not_found",
       "authority": "crossref+openalex"
     },
     {
       "mode": "described",
-      "reference_doi": "10.1016/j.materresbull.2011.05.022",
-      "claimed_title": "Synthesis and properties of A6B2(OH)16Cl2.4H2O (A=Mg, Ni, Zn, Co, Mn and B=Al, Fe) materials for environmental applications",
+      "reference_doi": "10.1111/sji.12061",
+      "claimed_title": "Atrial fibrillation: inflammation in disguise?",
       "verdict": "not_found",
       "authority": "crossref+openalex"
     },
     {
       "mode": "described",
-      "reference_doi": "10.2135/cropsci2009.11.0666",
-      "claimed_title": "Tolerance to postharvest physiological deterioration in cassava roots<i>",
+      "reference_doi": "10.1177/000331970505600206",
+      "claimed_title": "Clinical echocardiographic and homodynamic characteristics of rheumatic mitral valve stenosis and atrial fibrillation",
       "verdict": "not_found",
       "authority": "crossref+openalex"
     },
     {
       "mode": "described",
-      "reference_doi": "10.1016/j.ecolmodel.2018.12.013",
-      "claimed_title": "Grazing and aridity reduce perennial grass abundance in semi-arid rangelands - Insights from a trait-based dynamic vegetation model<i>",
+      "reference_doi": "10.1016/j.jacc.2011.07.035",
+      "claimed_title": "Valvular heart disease: The value of 3-dimensional echocardiography",
       "verdict": "not_found",
       "authority": "crossref+openalex"
     },
     {
       "mode": "described",
-      "reference_doi": "10.4321/s1135-57272014000100007",
-      "claimed_title": "Meta-analysis of group comparison and meta-analysis of reliability generalization of the State-Trait Anxiety Inventory questionnaire (STAI) [in Spanish]",
+      "reference_doi": "10.1161/circheartfailure.116.003255",
+      "claimed_title": "Survival benefits of invasive versus conservative strategies in heart failure in patients with reduced ejection fraction and coronary artery disease a meta-analysis",
       "verdict": "not_found",
       "authority": "crossref+openalex"
     },
     {
       "mode": "described",
-      "reference_doi": "10.1126/science.1103094",
-      "claimed_title": "Pie-rolapithecus catalaunicus, a new Middle Miocene great ape from Spain",
+      "reference_doi": "10.4159/harvard.9780674330702",
+      "claimed_title": "Sexual selection and animal genitalia",
+      "verdict": "not_found",
+      "authority": "crossref+openalex"
+    },
+    {
+      "mode": "described",
+      "reference_doi": "10.22600/1518-8795.ienci2016v21n2p153",
+      "claimed_title": "Evas\u00e3o e reten\u00e7\u00e3o escolar no curso de licenciatura em qu\u00edmica do Instituto de Qu\u00edmica da UFRGS",
+      "verdict": "not_found",
+      "authority": "crossref+openalex"
+    },
+    {
+      "mode": "described",
+      "reference_doi": "10.1016/j.econedurev.2003.10.006",
+      "claimed_title": "Come and stay a while: does financial aid effect retention conditioned on enrollment at a large public university?",
+      "verdict": "not_found",
+      "authority": "crossref+openalex"
+    },
+    {
+      "mode": "described",
+      "reference_doi": "10.1016/j.seta.2021.101474",
+      "claimed_title": "Study and analysis of SARIMA and LSTM in forecasting time series data",
       "verdict": "not_found",
       "authority": "crossref+openalex"
     }
@@ -53,10 +74,10 @@
   "method": {
     "design": "References deposited by publishers in real published papers. Ground truth is guaranteed by construction: every reference carries a DOI, so the cited work exists. Any NOT_FOUND is therefore a definite false positive.",
     "source_works": 72,
-    "total_checks": 668,
+    "total_checks": 628,
     "seed": 20260909,
-    "started_utc": "2026-09-14T00:47:40+00:00",
-    "finished_utc": "2026-09-14T00:52:42+00:00",
+    "started_utc": "2026-09-14T01:57:40+00:00",
+    "finished_utc": "2026-09-14T02:03:56+00:00",
     "strata": [
       2014,
       2017,
@@ -68,106 +89,106 @@
     "notes": []
   },
   "identified_mode": {
-    "checks": 334,
-    "conclusive": 334,
-    "verified": 330,
+    "checks": 314,
+    "conclusive": 314,
+    "verified": 313,
     "not_found": 0,
-    "mismatch": 4,
+    "mismatch": 1,
     "malformed": 0,
     "unreachable": 0,
     "unverifiable": 0,
     "false_positive_rate": 0.0,
     "false_positive_ci95": [
       0.0,
-      0.011371009372439627
+      0.01208652360169342
     ],
-    "verified_rate_of_conclusive": 0.9880239520958084
+    "verified_rate_of_conclusive": 0.9968152866242038
   },
   "described_mode": {
-    "checks": 334,
-    "conclusive": 334,
-    "verified": 327,
-    "not_found": 7,
+    "checks": 314,
+    "conclusive": 314,
+    "verified": 304,
+    "not_found": 10,
     "mismatch": 0,
     "malformed": 0,
     "unreachable": 0,
     "unverifiable": 0,
-    "false_positive_rate": 0.020958083832335328,
+    "false_positive_rate": 0.03184713375796178,
     "false_positive_ci95": [
-      0.010188251067945072,
-      0.0426222968337935
+      0.01738883161161099,
+      0.05762211723838222
     ],
-    "verified_rate_of_conclusive": 0.9790419161676647
+    "verified_rate_of_conclusive": 0.9681528662420382
   },
   "described_by_year": {
     "2014": {
-      "checks": 48,
-      "conclusive": 48,
-      "verified": 45,
+      "checks": 52,
+      "conclusive": 52,
+      "verified": 50,
+      "not_found": 2,
+      "mismatch": 0,
+      "malformed": 0,
+      "unreachable": 0,
+      "unverifiable": 0,
+      "false_positive_rate": 0.038461538461538464,
+      "false_positive_ci95": [
+        0.010611488322077554,
+        0.12981428744365978
+      ],
+      "verified_rate_of_conclusive": 0.9615384615384616
+    },
+    "2017": {
+      "checks": 49,
+      "conclusive": 49,
+      "verified": 46,
       "not_found": 3,
       "mismatch": 0,
       "malformed": 0,
       "unreachable": 0,
       "unverifiable": 0,
-      "false_positive_rate": 0.0625,
+      "false_positive_rate": 0.061224489795918366,
       "false_positive_ci95": [
-        0.021482843131227225,
-        0.1683569766274222
+        0.021039764955529186,
+        0.16520743422087725
       ],
-      "verified_rate_of_conclusive": 0.9375
-    },
-    "2017": {
-      "checks": 60,
-      "conclusive": 60,
-      "verified": 60,
-      "not_found": 0,
-      "mismatch": 0,
-      "malformed": 0,
-      "unreachable": 0,
-      "unverifiable": 0,
-      "false_positive_rate": 0.0,
-      "false_positive_ci95": [
-        0.0,
-        0.06017393047793289
-      ],
-      "verified_rate_of_conclusive": 1.0
+      "verified_rate_of_conclusive": 0.9387755102040817
     },
     "2020": {
-      "checks": 51,
-      "conclusive": 51,
-      "verified": 47,
-      "not_found": 4,
+      "checks": 56,
+      "conclusive": 56,
+      "verified": 55,
+      "not_found": 1,
       "mismatch": 0,
       "malformed": 0,
       "unreachable": 0,
       "unverifiable": 0,
-      "false_positive_rate": 0.0784313725490196,
+      "false_positive_rate": 0.017857142857142856,
       "false_positive_ci95": [
-        0.030921696126931505,
-        0.1850019822486082
+        0.003159128964463985,
+        0.0944585817919329
       ],
-      "verified_rate_of_conclusive": 0.9215686274509803
+      "verified_rate_of_conclusive": 0.9821428571428571
     },
     "2022": {
-      "checks": 60,
-      "conclusive": 60,
-      "verified": 60,
-      "not_found": 0,
+      "checks": 48,
+      "conclusive": 48,
+      "verified": 47,
+      "not_found": 1,
       "mismatch": 0,
       "malformed": 0,
       "unreachable": 0,
       "unverifiable": 0,
-      "false_positive_rate": 0.0,
+      "false_positive_rate": 0.020833333333333332,
       "false_positive_ci95": [
-        0.0,
-        0.06017393047793289
+        0.003687015979399688,
+        0.10899469137531158
       ],
-      "verified_rate_of_conclusive": 1.0
+      "verified_rate_of_conclusive": 0.9791666666666666
     },
     "2023": {
-      "checks": 58,
-      "conclusive": 58,
-      "verified": 58,
+      "checks": 52,
+      "conclusive": 52,
+      "verified": 52,
       "not_found": 0,
       "mismatch": 0,
       "malformed": 0,
@@ -176,26 +197,26 @@
       "false_positive_rate": 0.0,
       "false_positive_ci95": [
         0.0,
-        0.062119996895293766
+        0.06879459041288215
       ],
       "verified_rate_of_conclusive": 1.0
     },
     "2024": {
       "checks": 57,
       "conclusive": 57,
-      "verified": 57,
-      "not_found": 0,
+      "verified": 54,
+      "not_found": 3,
       "mismatch": 0,
       "malformed": 0,
       "unreachable": 0,
       "unverifiable": 0,
-      "false_positive_rate": 0.0,
+      "false_positive_rate": 0.05263157894736842,
       "false_positive_ci95": [
-        0.0,
-        0.06314100878346394
+        0.01805996809628102,
+        0.14369777660471303
       ],
-      "verified_rate_of_conclusive": 1.0
+      "verified_rate_of_conclusive": 0.9473684210526315
     }
   },
-  "fallback_rescues": 27
+  "fallback_rescues": 25
 }

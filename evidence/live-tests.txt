@@ -2,4 +2,4 @@
 =========================== short test summary info ============================
 SKIPPED [1] tests/test_live.py:91: arXiv unreachable
 SKIPPED [1] tests/test_live.py:105: arXiv unreachable
-7 passed, 2 skipped, 188 deselected in 306.05s (0:05:06)
+7 passed, 2 skipped, 193 deselected in 302.59s (0:05:02)

@@ -242,14 +242,16 @@ def build_pairs(works: list[Work], *, seed: int = 20260909) -> list[Pair]:
 
     # --- negatives: same work, degraded description ----------------------
     for w in works:
-        assert w.title
+        title = w.title
+        if not title:
+            continue
         for name, fn in PERTURBATIONS.items():
-            out = fn(w.title, rng)
-            if not out or len(out) < 12:
+            degraded = fn(title, rng)
+            if not degraded or len(degraded) < 12:
                 continue
             pairs.append(Pair(
                 label="same_work", perturbation=name, doi=w.doi,
-                claimed_title=out, resolved_title=w.title,
+                claimed_title=degraded, resolved_title=title,
                 claimed_authors=w.authors[:3], resolved_authors=w.authors,
                 claimed_year=w.year, resolved_year=w.year,
             ))
@@ -293,10 +295,13 @@ def build_pairs(works: list[Work], *, seed: int = 20260909) -> list[Pair]:
             chosen = chosen + [rng.choice(scored[HARD_POSITIVES_PER_WORK:])]
 
         for sim, other in chosen:
+            other_title, own_title = other.title, w.title
+            if not other_title or not own_title:
+                continue
             pairs.append(Pair(
                 label="different_work",
                 perturbation=("nearest_title" if sim >= 40 else "random_title"),
-                doi=w.doi, claimed_title=other.title, resolved_title=w.title,
+                doi=w.doi, claimed_title=other_title, resolved_title=own_title,
                 claimed_authors=other.authors[:3], resolved_authors=w.authors,
                 claimed_year=other.year, resolved_year=w.year,
             ))
@@ -480,11 +485,11 @@ def to_markdown(pairs: list[Pair], curve: list[dict],
         if int(r["threshold"]) % 6 and r is not chosen:
             continue
         mark = " ←" if chosen and r["threshold"] == chosen["threshold"] else ""
-        p = "—" if r["precision"] is None else f"{r['precision']:.3f}"
-        rc = "—" if r["recall"] is None else f"{r['recall']:.3f}"
+        prec = "—" if r["precision"] is None else f"{r['precision']:.3f}"
+        rec = "—" if r["recall"] is None else f"{r['recall']:.3f}"
         f1 = "—" if r["f1"] is None else f"{r['f1']:.3f}"
         out.append(
-            f"| {r['threshold']:.0f}{mark} | {p} | {rc} | {f1} | "
+            f"| {r['threshold']:.0f}{mark} | {prec} | {rec} | {f1} | "
             f"{r['false_positive']} |"
         )
     out.append("")
@@ -533,9 +538,10 @@ def to_markdown(pairs: list[Pair], curve: list[dict],
                 "titles in the same field share enough vocabulary to look alike."
             )
             out.append("")
-            for p in sorted(fails, key=lambda x: -(x.similarity or 0))[:4]:
-                out.append(f"- `{p.similarity:.0f}%` — {p.claimed_title[:72]!r}")
-                out.append(f"  vs {p.resolved_title[:72]!r}")
+            for pair in sorted(fails, key=lambda x: -(x.similarity or 0))[:4]:
+                sim = pair.similarity or 0.0
+                out.append(f"- `{sim:.0f}%` — {pair.claimed_title[:72]!r}")
+                out.append(f"  vs {pair.resolved_title[:72]!r}")
         else:
             out.append("No different-work pair evaded detection at this threshold.")
     out.append("")

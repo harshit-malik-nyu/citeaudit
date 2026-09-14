@@ -25,3 +25,30 @@ jobs:
         run: |
           citeaudit --version
           citeaudit --help
+
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[dev]" mypy pyflakes pytest-cov
+
+      - name: Dead code and unused imports
+        run: python -m pyflakes src/citeaudit scripts tests
+
+      - name: Static types
+        run: python -m mypy src/citeaudit --ignore-missing-imports
+
+      - name: Coverage floor
+        # The floor exists to stop coverage sliding, not to chase a number.
+        # cli.py and http.py sat at 0% and 39% while carrying the exit-code
+        # contract and the NOT_FOUND/UNREACHABLE distinction respectively.
+        run: pytest -q --cov=citeaudit --cov-report=term --cov-fail-under=65
+
+      - name: Self-audit — run citeaudit on its own documentation
+        run: |
+          python -m citeaudit.cli README.md docs/*.md \
+            --no-urls --no-search --format markdown \
+            >> "$GITHUB_STEP_SUMMARY"

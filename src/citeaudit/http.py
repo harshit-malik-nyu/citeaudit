@@ -138,10 +138,14 @@ class Client:
         timeout: int = DEFAULT_TIMEOUT,
         retries: int = DEFAULT_RETRIES,
         min_interval: float = DEFAULT_MIN_INTERVAL,
+        backoff: float = 1.0,
     ):
         self.timeout = timeout
         self.retries = retries
         self.min_interval = min_interval
+        # Scales retry backoff. Tests set it to 0 so the suite does not spend
+        # a minute asleep; a slow suite is a suite people stop running.
+        self.backoff = backoff
         self.cache = Cache(cache_dir, use_cache)
         self.mailto = mailto or os.environ.get("CITEAUDIT_MAILTO", "anonymous@example.com")
         self.user_agent = USER_AGENT_TEMPLATE.format(
@@ -181,8 +185,9 @@ class Client:
             if attempt:
                 # Exponential backoff with jitter, so parallel runs do not
                 # synchronise into a thundering herd against a free API.
-                delay = (2 ** attempt) * 0.5 + random.uniform(0, 0.3)
-                time.sleep(delay)
+                delay = ((2 ** attempt) * 0.5 + random.uniform(0, 0.3)) * self.backoff
+                if delay > 0:
+                    time.sleep(delay)
                 self.stats["retries"] += 1
 
             self._pace(host)

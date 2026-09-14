@@ -156,9 +156,17 @@ def _authors_from(text: str) -> list[str]:
         name = m.group(1) or m.group(2)
         if name and name.lower() not in {"the", "and", "in", "on", "of", "for"}:
             out.append(name)
-    # preserve order, drop duplicates
+    # Preserve order, drop duplicates. Written as an explicit loop rather than
+    # the `not (x in seen or seen.add(x))` comprehension idiom: that relies on
+    # set.add returning None to work, which is true but reads as a bug.
     seen: set[str] = set()
-    return [a for a in out if not (a.lower() in seen or seen.add(a.lower()))]
+    unique: list[str] = []
+    for name in out:
+        key = name.lower()
+        if key not in seen:
+            seen.add(key)
+            unique.append(name)
+    return unique
 
 
 # Fragments that prove a candidate "title" is really an identifier, a page

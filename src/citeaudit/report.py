@@ -341,6 +341,51 @@ def _finding_html(f: Finding) -> str:
     return f'<div class="f {f.verdict.value}">{"".join(rows)}</div>'
 
 
+_QUOTE_CLASS = {
+    "found": "verified",
+    "not_found": "not_found",
+    "absent_from_abstract": "unreachable",
+    "source_unavailable": "unreachable",
+    "not_attributed": "unverifiable",
+}
+
+_QUOTE_LABEL = {
+    "found": "Located in source",
+    "not_found": "Absent from the complete source text",
+    "absent_from_abstract": "Not in the abstract (inconclusive)",
+    "source_unavailable": "No open text available",
+    "not_attributed": "No citation attached",
+}
+
+
+def _quote_html(f) -> str:
+    cls = _QUOTE_CLASS.get(f.verdict.value, "unverifiable")
+    rows = [f'<div class="ref">&ldquo;{html.escape(f.quote.text[:300])}&rdquo;</div>',
+            f'<div class="meta"><span class="k">verdict</span>'
+            f'<span class="v">{html.escape(_QUOTE_LABEL.get(f.verdict.value, ""))}'
+            f'</span></div>']
+    if f.coverage:
+        rows.append(f'<div class="meta"><span class="k">source text</span>'
+                    f'<span class="v">{html.escape(f.coverage)}</span></div>')
+    if f.similarity is not None:
+        rows.append(f'<div class="meta"><span class="k">best match</span>'
+                    f'<span class="v">{f.similarity:.0f}%</span></div>')
+    if f.best_passage:
+        rows.append(f'<div class="meta"><span class="k">closest passage</span>'
+                    f'<span class="v">{html.escape(f.best_passage[:220])}</span></div>')
+    if f.detail:
+        rows.append(f'<div class="meta"><span class="k">detail</span>'
+                    f'<span class="v">{html.escape(f.detail[:400])}</span></div>')
+    if f.evidence_url:
+        u = html.escape(f.evidence_url)
+        rows.append(f'<div class="meta"><span class="k">source</span>'
+                    f'<span class="v"><a href="{u}" rel="nofollow noopener">'
+                    f'{u[:110]}</a></span></div>')
+    rows.append(f'<div class="meta"><span class="k">line</span>'
+                f'<span class="v">{f.quote.line}</span></div>')
+    return f'<div class="f {cls}">{"".join(rows)}</div>'
+
+
 def to_html(report: Report, *, title: str = "citeaudit report",
             show_verified: bool = True) -> str:
     s = report.summary()
@@ -383,6 +428,33 @@ def to_html(report: Report, *, title: str = "citeaudit report",
             continue
         parts.append(f"<h2>{html.escape(LABEL[verdict])} ({len(group)})</h2>")
         parts.extend(_finding_html(f) for f in group)
+
+    qs = report.quote_summary()
+    if qs:
+        parts.append("<h2>Quotations</h2>")
+        parts.append('<div class="cards">')
+        parts.append(_card(qs["total_quotes"], "quotations"))
+        parts.append(_card(qs["found"], "located", "ok"))
+        parts.append(_card(qs["not_found"], "absent from source", "bad"))
+        parts.append(_card(
+            qs["absent_from_abstract"] + qs["source_unavailable"]
+            + qs["not_attributed"], "not checkable", "unk"))
+        parts.append("</div>")
+
+        if qs["coverage_rate"] is not None:
+            parts.append(
+                f'<div class="score"><b>Quote coverage '
+                f'{qs["coverage_rate"]:.0%}</b><br><span class="meta">'
+                "Most scholarly text is paywalled. Only complete retrieved text "
+                "can establish that a passage is absent, so everything else is "
+                "inconclusive rather than a failure — a licensing limit, not a "
+                "finding about the document.</span></div>"
+            )
+
+        for f in report.quote_findings:
+            if f.verdict.value == "found" and not show_verified:
+                continue
+            parts.append(_quote_html(f))
 
     parts.append(
         "<footer>Every finding links to the authority record it came from, so "

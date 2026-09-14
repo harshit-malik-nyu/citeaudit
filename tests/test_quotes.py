@@ -256,3 +256,58 @@ class TestSummary:
         assert s["total_quotes"] == 4
         assert s["conclusive_checks"] == 2
         assert s["coverage_rate"] == pytest.approx(0.5)
+
+
+class TestQuoteReporting:
+
+    @pytest.fixture
+    def report_with_quotes(self):
+        from citeaudit.models import Report
+        from citeaudit.quotes import QuoteFinding
+
+        r = Report(document="d.md", tool_version="0.1.0")
+        r.quote_findings = [
+            QuoteFinding(quote=_quote("a passage that was located in the source text"),
+                         verdict=QuoteVerdict.FOUND, coverage="full",
+                         similarity=98.0, evidence_url="https://arxiv.org/abs/1706.03762"),
+            QuoteFinding(quote=_quote("a passage that the source does not contain at all"),
+                         verdict=QuoteVerdict.NOT_FOUND, coverage="full",
+                         similarity=41.0, best_passage="nearest text in the paper",
+                         detail="complete text retrieved and this passage is absent"),
+            QuoteFinding(quote=_quote("a passage whose source could not be retrieved"),
+                         verdict=QuoteVerdict.SOURCE_UNAVAILABLE, coverage="none"),
+        ]
+        return r
+
+    def test_html_includes_a_quotations_section(self, report_with_quotes):
+        from citeaudit.report import to_html
+        h = to_html(report_with_quotes)
+        assert "Quotations" in h
+        assert "Absent from the complete source text" in h
+
+    def test_html_shows_the_closest_passage_for_a_refutation(self, report_with_quotes):
+        """A bare accusation is not evidence; show what was compared."""
+        from citeaudit.report import to_html
+        assert "nearest text in the paper" in to_html(report_with_quotes)
+
+    def test_html_states_that_coverage_is_a_licensing_limit(self, report_with_quotes):
+        from citeaudit.report import to_html
+        h = to_html(report_with_quotes)
+        assert "paywalled" in h
+        assert "not a finding about the document" in h
+
+    def test_html_escapes_quote_text(self):
+        from citeaudit.models import Report
+        from citeaudit.quotes import QuoteFinding
+        from citeaudit.report import to_html
+
+        r = Report(document="d")
+        r.quote_findings = [QuoteFinding(
+            quote=_quote("<script>alert(1)</script> a long enough passage here"),
+            verdict=QuoteVerdict.NOT_FOUND, coverage="full")]
+        h = to_html(r)
+        assert "<script>alert(1)</script>" not in h
+
+    def test_quote_failures_are_exposed_on_the_report(self, report_with_quotes):
+        assert len(report_with_quotes.quote_failures) == 1
+        assert report_with_quotes.quote_failures[0].verdict is QuoteVerdict.NOT_FOUND

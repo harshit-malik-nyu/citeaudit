@@ -45,7 +45,7 @@ jobs:
         # The floor exists to stop coverage sliding, not to chase a number.
         # cli.py and http.py sat at 0% and 39% while carrying the exit-code
         # contract and the NOT_FOUND/UNREACHABLE distinction respectively.
-        run: pytest -q --cov=citeaudit --cov-report=term --cov-fail-under=65
+        run: pytest -q --cov=citeaudit --cov-report=term --cov-fail-under=75
 
       - name: Self-audit — run citeaudit on its own documentation
         run: |

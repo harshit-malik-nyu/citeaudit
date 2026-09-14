@@ -1,5 +1,5 @@
 
-note: 5 request(s) could not be completed; those citations are reported as inconclusive rather than as failures.
+note: 6 request(s) could not be completed; those citations are reported as inconclusive rather than as failures.
 citeaudit 0.1.0  —  examples/demo.md
 ==============================================================================
 
@@ -44,13 +44,19 @@ Resolves to a different work (1)
        check it: https://doi.org/10.1038/nature14539
 
 
-Could not check (4)
+Could not check (5)
 ------------------------------------------------------------------------------
+  ??   line 55    1706.03762
+       document says: 'Attention Is All You Need'
+       check could not be completed:
+       https://export.arxiv.org/api/query?id_list=1706.03762&max_results=1:
+       The read operation timed out
+
   ??   line 57    1810.04805
        document says: 'BERT: Pre-training of Deep Bidirectional Transformers for Language'
        check could not be completed:
        https://export.arxiv.org/api/query?id_list=1810.04805&max_results=1:
-       HTTP Error 429: Unknown Error
+       The read operation timed out
 
   ??   line 67    1906.02530
        document says: "Can you trust your model's uncertainty? Evaluating predictive unce"
@@ -69,15 +75,11 @@ Could not check (4)
        https://this-domain-does-not-resolve-citeaudit.invalid/report.pdf
 
 
-Verified (5)
+Verified (4)
 ------------------------------------------------------------------------------
   OK   line 53    10.1038/nature14539
        title matches record (100% similarity)
        check it: https://doi.org/10.1038/nature14539
-
-  OK   line 55    1706.03762
-       title matches record (100% similarity)
-       check it: https://arxiv.org/abs/1706.03762
 
   OK   line 65    10.1109/cvpr.2009.5206848
        title matches record (100% similarity)
@@ -102,6 +104,6 @@ QUOTATIONS
   2 quotations | 1 located | 1 absent from full text | 0 not checkable
   quote coverage: 100% (limited by open-access availability, not by the tool)
 ==============================================================================
-14 citations  |  5 verified  |  4 not found  |  1 mismatched  |  0 malformed
-inconclusive: 4 unreachable, 0 not machine-checkable (excluded from the score, not counted as failures)
-integrity: 50% of 10 conclusive checks passed
+14 citations  |  4 verified  |  4 not found  |  1 mismatched  |  0 malformed
+inconclusive: 5 unreachable, 0 not machine-checkable (excluded from the score, not counted as failures)
+integrity: 44% of 9 conclusive checks passed

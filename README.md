@@ -87,34 +87,58 @@ what ordinary is — and before this, nobody had measured it.
 
 ### The headline: where citation integrity actually breaks down
 
-| Corpus | Unverified rate | 95% CI |
-|---|---:|---|
-| Publisher-deposited, DOI supplied | **0.00%** | 0.00–1.24% |
-| Publisher-deposited, no identifier | **1.30%** | 0.51–3.30% |
-| **Author-written bibliographies** | **8.87%** | 6.25–12.45% |
+| Corpus | Unverified rate | 95% CI | n |
+|---|---:|---|---:|
+| Publisher-deposited, DOI supplied | **0.00%** | 0.00–1.24% | 307 |
+| Publisher-deposited, no identifier | **1.30%** | 0.51–3.30% | 307 |
+| **Author-written bibliographies** | **13.16%** | 11.36–15.19% | 1,201 |
 
-A **sevenfold gap**, and it is the most useful number in this repository.
+**A tenfold gap**, and it is the most useful number in this repository.
 
 References that publishers deposit are near-perfect: not one of 307 DOI-bearing
-entries failed to resolve. References as *authors actually write them* — the
-same scholarly works, cited by hand — verify at 8.87%.
+entries failed to resolve. The same kind of works, cited by hand in author-written
+bibliographies, verify at 13.16%.
 
-The difference is not the literature. It is the pipeline. Deposited metadata is
-machine-validated at source; a typed bibliography is not validated by anyone.
+The difference is not the literature. It is whether anything validated the
+reference on its way in. Deposited metadata is machine-checked at source; a typed
+bibliography is checked by nobody.
 
 That matters because **the corpus where fabrication has been found has no
 pipeline at all.** Consulting deliverables, government reports and internal
-memoranda are written like the third row and checked like nothing. If
-peer-reviewed literature with a validation pipeline still drifts to 8.87% once
-a human types the reference, the expectation for a document with no pipeline
-should be set accordingly.
+memoranda are written like the third row and checked like nothing.
+
+### Within author-written bibliographies
+
+| How the reference was written | n | Unverified |
+|---|---:|---:|
+| Carries a DOI | 349 | **3.44%** |
+| arXiv identifier | 66 | **6.06%** |
+| Description only | 786 | **18.07%** |
+
+Supplying a DOI cuts the unverified rate by a factor of five. That is a free
+intervention any organisation can mandate tomorrow, and it does not depend on
+any extrapolation being right.
+
+Field variation is wide — 5.5% to 25.5% across twelve arXiv categories — which
+is itself the honest error bar on generalising from any single discipline.
+
+### A correction worth stating
+
+An earlier version of this README reported **8.87%** for this row, from 327
+checks across five fields. Widening to twelve fields and 1,201 checks gave
+**13.16%**. The point estimate moved 48% and the confidence intervals barely
+overlap.
+
+The first figure was published on too little data. It is recorded here rather
+than quietly replaced, because a number that moves that much under resampling
+is a fact about the measurement that a reader deserves.
 
 ### Two base rates, and why both are needed
 
 **[Deposited references](evidence/baserate/report.md)** — 614 checks across 72
 randomly sampled published papers, stratified by year.
 
-Ground truth comes free from the construction. Take real papers, take their
+Ground truth comes free from the construction. Take real papers and their
 deposited reference lists; every entry carries a DOI, so every cited work
 provably exists. Hide the DOI, check by description alone, and **every
 NOT_FOUND is a definite false positive.** No labelling, no annotator judgment.
@@ -122,29 +146,20 @@ NOT_FOUND is a definite false positive.** No labelling, no annotator judgment.
 This measures the tool's error rate. At 0.00% with identifiers and 1.30%
 without, citeaudit does not meaningfully manufacture false alarms.
 
-**[Author-written references](evidence/preprints/report.md)** — 329 references
-from 34 arXiv preprints, parsed from the authors' own `.bbl` and `.bib` source
+**[Author-written references](evidence/preprints/report.md)** — 1,247 references
+from 122 arXiv preprints, parsed from the authors' own `.bbl` and `.bib` source
 before any publisher touched them.
 
-This measures the world's error rate, on the corpus type that matters. Because
-the first study bounds the tool's contribution at ~1%, the remaining ~8% is
-attributable to the bibliographies, not the checker. Neither study means much
-alone; together they separate instrument from signal.
+This measures the world's error rate. Because the first study bounds the tool's
+contribution at ~1%, the remaining ~12 points are attributable to the
+bibliographies rather than the checker. Neither study means much alone; together
+they separate instrument from signal.
 
-| How the reference was written | Conclusive | Unverified |
-|---|---:|---:|
-| Carries a DOI | 90 | 4.4% |
-| Description only | 219 | 9.6% |
-| arXiv identifier | 18 | 22.2% |
-
-Supplying a DOI halves the unverified rate. That is a concrete, free
-intervention any organisation can mandate tomorrow.
-
-**What 8.87% is not.** It is not a fabrication rate. Non-indexed venues,
-workshop papers, technical reports and transcription errors all land in the
-same bucket, and the tool says so. The claim is narrow and deliberate: this is
-how often a reference *as written* can be verified against public authorities.
-Results are aggregate; no paper is named and no claim is made about any author.
+**What 13.16% is not.** It is not a fabrication rate. Non-indexed venues,
+workshop papers, technical reports and transcription errors all land in the same
+bucket. The claim is narrow: this is how often a reference *as written* can be
+verified against public authorities. Results are aggregate; no paper is named
+and no claim is made about any author.
 
 ### Inspecting the mismatches — twice
 

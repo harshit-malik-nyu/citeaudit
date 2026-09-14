@@ -116,12 +116,19 @@ removes essentially the entire triage burden, at no cost to the author.
 
 The [preprint corpus study](../evidence/preprints/report.md) sharpens the
 point. On bibliographies as authors actually write them, the unverified rate is
-**8.87%** — sevenfold the deposited-metadata rate. Within that corpus,
-references carrying a DOI came in at 4.4% against 9.6% for description-only
-entries.
+**13.16%** (95% CI 11.36–15.19%, n=1,201) — tenfold the deposited-metadata
+rate. Within that corpus, references carrying a DOI came in at **3.44%** against
+**18.07%** for description-only entries.
 
-So the mandate pays twice: it halves what reaches triage, and it halves what
-goes out the door unverifiable in the first place.
+So the mandate pays twice, and more than twice over: it cuts what reaches triage,
+and it cuts what goes out the door unverifiable in the first place by a factor
+of five.
+
+**Triage load, recomputed.** For a 300-reference deliverable written the way
+those bibliographies are written, expect roughly 40 flags without identifiers
+and 10 with them. At two minutes each that is 80 minutes versus 20 — which
+makes the DOI mandate the single highest-return line in this document, ahead of
+deploying the tool at all.
 
 The OpenAlex fallback rescued 37 of 614 checks that Crossref alone would have
 reported as non-existent. Coverage breadth is not a feature here, it is what

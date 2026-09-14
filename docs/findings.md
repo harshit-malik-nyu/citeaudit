@@ -57,13 +57,20 @@ sources, before any publisher touched them
 
 | | |
 |---|---:|
-| Unverified rate | **8.87%** |
-| 95% CI | 6.25–12.45% |
-| Conclusive checks | 327 |
+| Unverified rate | **13.16%** |
+| 95% CI | 11.36–15.19% |
+| Conclusive checks | 1,201 |
+| Papers | 122 |
+| arXiv categories | 12 |
 
-**Reading:** because Study 1 bounds the instrument at ~1%, the remaining ~8% is
-attributable to the bibliographies rather than to the checker. That attribution
-is the entire reason Study 1 had to come first.
+**Reading:** because Study 1 bounds the instrument at ~1%, the remaining ~12
+points are attributable to the bibliographies rather than to the checker. That
+attribution is the entire reason Study 1 had to come first.
+
+An earlier version of this study reported 8.87% from 327 checks across five
+fields. Widening to twelve fields and 1,201 checks moved it to 13.16%, a 48%
+shift with barely-overlapping intervals. The first figure was published on too
+little data, and that is recorded rather than replaced.
 
 ### The gap
 
@@ -71,9 +78,9 @@ is the entire reason Study 1 had to come first.
 |---|---:|---|
 | Deposited, DOI supplied | 0.00% | Publisher pipeline, validated at source |
 | Deposited, description only | 1.30% | Publisher pipeline |
-| Author-written | 8.87% | A human, by hand |
+| Author-written | 13.16% | A human, by hand |
 
-**Sevenfold.** The same scholarly works, cited into the same indexes. The
+**Tenfold.** The same scholarly works, cited into the same indexes. The
 difference is not the literature — it is whether anything validated the
 reference on its way in.
 
@@ -100,8 +107,9 @@ the extrapolation is defensible. If it moves, the spread is the honest error
 bar on any claim about a corpus nobody can sample.
 
 One thing that already sharpens the picture: within the author-written corpus,
-references carrying a DOI came in at **4.4%** against **9.6%** for
-description-only entries. Supplying identifiers halves the rate. That is a free
+references carrying a DOI came in at **3.44%** against **18.07%** for
+description-only entries. Supplying identifiers cuts the rate by a factor of
+five. That is a free
 intervention any organisation can mandate tomorrow, and it does not depend on
 the extrapolation being right.
 
@@ -183,9 +191,9 @@ metadata rather than checking HTTP status.
 
 ## 7. What would change these conclusions
 
-- **A larger preprint sample.** 327 conclusive checks leaves a 6.25–12.45%
-  interval. The sevenfold multiple is directionally safe because the intervals
-  do not overlap, but the point estimate could move.
+- **Field coverage.** Twelve arXiv categories span 5.5% to 25.5%. The pooled
+  figure hides that, and a corpus drawn from a different disciplinary mix would
+  land elsewhere in that range.
 - **A genuinely grey-literature corpus.** Wikipedia is a proxy for a proxy.
   Sampled consulting or policy reports would replace the extrapolation with a
   measurement.

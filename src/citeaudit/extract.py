@@ -198,7 +198,7 @@ def looks_like_author_list(candidate: str) -> bool:
 
     def namelike(part: str) -> bool:
         toks = part.split()
-        return (1 <= len(toks) <= 3
+        return (1 <= len(toks) <= 4
                 and all(w[:1].isupper() or w[:1] == "-" for w in toks if w))
 
     hits = sum(1 for part in parts if namelike(part))
@@ -207,12 +207,14 @@ def looks_like_author_list(candidate: str) -> bool:
     if len(parts) >= 3 and hits / len(parts) >= 0.7:
         return True
 
-    # Exactly two parts, both full personal names — "Holger Bast, Stefan Funke".
-    # Held to a stricter bar than the three-part case: two capitalised phrases
-    # can legitimately be a title, so every part must be name-shaped AND carry
-    # a forename plus surname.
+    # Exactly two parts, both full personal names — "Holger Bast, Stefan Funke"
+    # or "Julian Jorge Andrade Guerreiro, Naoto Inoue". Held to a stricter bar
+    # than the three-part case: two capitalised phrases can legitimately be a
+    # title, so every part must be name-shaped AND carry at least a forename
+    # plus surname. The upper bound is four tokens because multi-part given
+    # names and compound surnames are common.
     if len(parts) == 2 and hits == 2 and all(
-        2 <= len(part.split()) <= 3 for part in parts
+        2 <= len(part.split()) <= 4 for part in parts
     ):
         return True
 
@@ -229,6 +231,55 @@ def looks_like_author_list(candidate: str) -> bool:
             return True
 
     return False
+
+
+# Volume, page and series strings. These are locators, not titles, and they
+# survive every generic "looks like prose" test because they are mostly words.
+_LOCATOR_RE = re.compile(
+    r"\bpp?\.\s*\d|\bpages?\s+\d|\b\d+\s*-{2,}\s*\d"
+    r"|^\s*(?:volume|vol\.|issue|no\.|in:|proceedings\b)"
+    r"|\blecture notes in\b|\bproceedings\s*,",
+    re.IGNORECASE,
+)
+
+# Function words a personal name will not contain but a title often will.
+_TITLE_FUNCTION_WORDS = {
+    "a", "an", "the", "of", "in", "on", "for", "and", "or", "to", "with",
+    "from", "by", "at", "as", "is", "are", "be", "using", "via", "into",
+    "all", "you", "we", "it", "its", "how", "why", "what", "when", "not",
+    "no", "can", "do", "does", "toward", "towards", "under", "over",
+}
+
+
+def looks_like_personal_name(candidate: str) -> bool:
+    """
+    Detect a single personal name — "Elham Tabassi", "Edsger W. Dijkstra".
+
+    Distinguishing a two-word name from a two-word Title Case title is not
+    reliably possible from the string alone: "Deep Learning" and "Qwen Team"
+    have identical shape. So this is used positionally, on the leading segment
+    of a reference where the prior that it is the author is overwhelming, and
+    never on later segments where a title actually lives.
+
+    Function words are the one usable signal — "Attention Is All You Need" is
+    all-capitalised but contains three of them, and no name does.
+    """
+    toks = [t for t in candidate.strip().split() if t]
+    if not (1 <= len(toks) <= 4):
+        return False
+
+    for t in toks:
+        bare = t.strip(".,;:").casefold()
+        if bare in _TITLE_FUNCTION_WORDS:
+            return False
+        # Every token must be capitalised or an initial.
+        if not (t[:1].isupper() or t[:1] == "-"):
+            return False
+        if not (t[:1].isalpha()):
+            return False
+
+    # At least one token of real length, so "A. B." alone does not qualify.
+    return any(len(t.strip(".,;:")) >= 3 for t in toks)
 
 
 def looks_like_a_title(candidate: str, *, quoted: bool = False) -> bool:
@@ -258,6 +309,9 @@ def looks_like_a_title(candidate: str, *, quoted: bool = False) -> bool:
 
     words = c.split()
     if len(words) < 2:
+        return False
+
+    if _LOCATOR_RE.search(c):
         return False
 
     if quoted:
@@ -305,7 +359,17 @@ def _title_from(text: str) -> str | None:
     # the maximum picks them.
     segments = [seg.strip().rstrip(".")
                 for seg in re.split(r"(?<=[a-z0-9\)])\.\s+", text)]
-    for seg in segments:
+
+    for idx, seg in enumerate(segments):
+        # The leading segment of a reference is the author position. A bare
+        # personal name there is the author, not the title — "Elham Tabassi",
+        # "Qwen Team", "Edsger W. Dijkstra" were all reported as mismatches
+        # against the real title because nothing rejected them.
+        #
+        # The same string later in the reference could legitimately be a title,
+        # so this test is applied by position rather than globally.
+        if idx == 0 and looks_like_personal_name(seg):
+            continue
         if looks_like_a_title(seg):
             return seg
 

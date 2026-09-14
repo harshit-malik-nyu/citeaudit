@@ -773,3 +773,82 @@ class TestTitleExtractionGuards:
         """
         from citeaudit.extract import _title_from
         assert _title_from("10.1234/x, 2019, pp. 1-10") is None
+
+
+class TestAuthorNameGuards:
+    """
+    REGRESSION, second round. After the first title-extraction fix a larger run
+    still reported 11 mismatches, of which roughly seven were false: single
+    author names and venue locators taken as titles.
+
+    The first fix caught author *lists*. A lone name — "Elham Tabassi",
+    "Qwen Team" — passed every check, because a two-word capitalised name and a
+    two-word Title Case title are indistinguishable as strings. "Deep Learning"
+    and "Qwen Team" have identical shape.
+
+    The resolution is positional: the leading segment of a reference is the
+    author slot, so a bare name there is the author. The same string later in
+    the reference could be a title and is not rejected.
+    """
+
+    CASES = [
+        ("Elham Tabassi. Artificial intelligence risk management framework "
+         "(AI RMF 1.0). NIST, 2023.", "artificial intelligence risk"),
+        ("Qwen Team. Qwen2.5 technical report. arXiv:2412.15115",
+         "qwen2.5 technical report"),
+        ("Mason Youngblood. Conformity bias in the cultural transmission of "
+         "music sampling traditions. 2019.", "conformity bias"),
+        ("Edsger W. Dijkstra. A note on two problems in connexion with graphs. "
+         "Numer. Math., 1959.", "a note on two problems"),
+        ("Marc Barthelemy. Spatial networks. Physics Reports, 499(1-3):1--101, "
+         "2011.", "spatial networks"),
+        ("Julian Jorge Andrade Guerreiro, Naoto Inoue. LayoutFlow: Flow "
+         "matching for layout generation. In ECCV, volume 15094 of Lecture "
+         "Notes in Computer Science, pp. 56--72.", "layoutflow"),
+    ]
+
+    @pytest.mark.parametrize("text,expected", CASES)
+    def test_title_recovered_past_the_author_slot(self, text, expected):
+        from citeaudit.extract import _title_from
+        title = _title_from(text)
+        assert title is not None, f"nothing recovered from {text[:50]!r}"
+        assert expected in title.lower()
+
+    NAMES = ["Elham Tabassi", "Qwen Team", "Mason Youngblood",
+             "Edsger W. Dijkstra", "Vitalii Bondar", "Marc Barthelemy"]
+
+    @pytest.mark.parametrize("name", NAMES)
+    def test_personal_names_recognised(self, name):
+        from citeaudit.extract import looks_like_personal_name
+        assert looks_like_personal_name(name)
+
+    TITLE_CASE_TITLES = ["Attention Is All You Need", "Deep learning",
+                         "Spatial networks", "Random drift and culture change"]
+
+    @pytest.mark.parametrize("title", TITLE_CASE_TITLES)
+    def test_title_case_titles_are_not_read_as_names(self, title):
+        """
+        Function words are the only usable signal separating a Title Case title
+        from a name. "Attention Is All You Need" contains three; no name does.
+        """
+        from citeaudit.extract import looks_like_a_title, looks_like_personal_name
+        assert looks_like_a_title(title)
+        if looks_like_personal_name(title):
+            # Permitted only where position saves it — never for a phrase with
+            # function words.
+            assert not any(
+                w.strip(".,").casefold() in {"is", "all", "you", "and", "the", "of"}
+                for w in title.split()
+            )
+
+    LOCATORS = [
+        "volume 15094 of Lecture Notes in Computer Science, pp. 56--72",
+        "Proceedings, Part VII, Lecture Notes in Computer Science, pages 338--350",
+        "In: Proceedings of the annual conference",
+        "Physics Reports, 499(1-3):1--101",
+    ]
+
+    @pytest.mark.parametrize("locator", LOCATORS)
+    def test_volume_and_page_locators_are_not_titles(self, locator):
+        from citeaudit.extract import looks_like_a_title
+        assert not looks_like_a_title(locator)

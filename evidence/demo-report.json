@@ -1,7 +1,7 @@
 {
   "summary": {
     "document": "examples/demo.md",
-    "generated_at": "2026-09-14T18:11:19+00:00",
+    "generated_at": "2026-09-14T18:31:34+00:00",
     "tool_version": "0.1.0",
     "total_citations": 14,
     "verified": 4,
@@ -43,7 +43,7 @@
       "title_similarity": 100.0,
       "author_overlap": 1.0,
       "evidence_url": "https://doi.org/10.1038/nature14539",
-      "checked_at": "2026-09-14T18:10:25+00:00"
+      "checked_at": "2026-09-14T18:30:20+00:00"
     },
     {
       "citation": {
@@ -70,7 +70,7 @@
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": null,
-      "checked_at": "2026-09-14T18:11:12+00:00"
+      "checked_at": "2026-09-14T18:31:27+00:00"
     },
     {
       "citation": {
@@ -91,14 +91,14 @@
       },
       "verdict": "unreachable",
       "authority": "-",
-      "detail": "check could not be completed: https://export.arxiv.org/api/query?id_list=1810.04805&max_results=1: The read operation timed out",
+      "detail": "check could not be completed: https://export.arxiv.org/api/query?id_list=1810.04805&max_results=1: HTTP Error 429: Unknown Error",
       "resolved_title": null,
       "resolved_authors": [],
       "resolved_year": null,
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": null,
-      "checked_at": "2026-09-14T18:11:16+00:00"
+      "checked_at": "2026-09-14T18:30:37+00:00"
     },
     {
       "citation": {
@@ -124,7 +124,7 @@
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": "https://api.crossref.org/works/10.1016/j.jpuba.2021.02.014",
-      "checked_at": "2026-09-14T18:10:32+00:00"
+      "checked_at": "2026-09-14T18:30:24+00:00"
     },
     {
       "citation": {
@@ -149,7 +149,7 @@
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": "https://api.crossref.org/works/10.9911/erla.2020.13.4.055",
-      "checked_at": "2026-09-14T18:10:32+00:00"
+      "checked_at": "2026-09-14T18:30:24+00:00"
     },
     {
       "citation": {
@@ -174,7 +174,7 @@
       "title_similarity": 58.208955223880594,
       "author_overlap": null,
       "evidence_url": "https://doi.org/10.31390/gradschool_disstheses.1478",
-      "checked_at": "2026-09-14T18:10:39+00:00"
+      "checked_at": "2026-09-14T18:30:30+00:00"
     },
     {
       "citation": {
@@ -210,7 +210,7 @@
       "title_similarity": 100.0,
       "author_overlap": 0.8,
       "evidence_url": "https://doi.org/10.1109/cvpr.2009.5206848",
-      "checked_at": "2026-09-14T18:10:35+00:00"
+      "checked_at": "2026-09-14T18:30:24+00:00"
     },
     {
       "citation": {
@@ -230,14 +230,14 @@
       },
       "verdict": "unreachable",
       "authority": "-",
-      "detail": "check could not be completed: https://export.arxiv.org/api/query?id_list=1906.02530&max_results=1: HTTP Error 429: Too Many Requests",
+      "detail": "check could not be completed: https://export.arxiv.org/api/query?id_list=1906.02530&max_results=1: The read operation timed out",
       "resolved_title": null,
       "resolved_authors": [],
       "resolved_year": null,
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": null,
-      "checked_at": "2026-09-14T18:11:04+00:00"
+      "checked_at": "2026-09-14T18:31:34+00:00"
     },
     {
       "citation": {
@@ -262,7 +262,7 @@
       "title_similarity": 55.33980582524272,
       "author_overlap": null,
       "evidence_url": "https://doi.org/10.3109/01658109309038141",
-      "checked_at": "2026-09-14T18:10:42+00:00"
+      "checked_at": "2026-09-14T18:30:31+00:00"
     },
     {
       "citation": {
@@ -287,7 +287,7 @@
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": null,
-      "checked_at": "2026-09-14T18:11:19+00:00"
+      "checked_at": "2026-09-14T18:30:48+00:00"
     },
     {
       "citation": {
@@ -316,7 +316,7 @@
       "title_similarity": 22.22222222222223,
       "author_overlap": 0.0,
       "evidence_url": "https://doi.org/10.1038/nature14539",
-      "checked_at": "2026-09-14T18:11:05+00:00"
+      "checked_at": "2026-09-14T18:30:41+00:00"
     },
     {
       "citation": {
@@ -339,7 +339,7 @@
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": "https://www.crossref.org/documentation/",
-      "checked_at": "2026-09-14T18:11:05+00:00"
+      "checked_at": "2026-09-14T18:30:44+00:00"
     },
     {
       "citation": {
@@ -362,7 +362,7 @@
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": "https://arxiv.org/help/api/",
-      "checked_at": "2026-09-14T18:11:05+00:00"
+      "checked_at": "2026-09-14T18:30:48+00:00"
     },
     {
       "citation": {
@@ -385,7 +385,7 @@
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": null,
-      "checked_at": "2026-09-14T18:11:12+00:00"
+      "checked_at": "2026-09-14T18:30:57+00:00"
     }
   ],
   "quote_summary": {
@@ -427,7 +427,7 @@
       "source_origin": "arxiv-source",
       "evidence_url": "https://arxiv.org/abs/1706.03762",
       "detail": "passage located in the full text (100% match)",
-      "checked_at": "2026-09-14T18:11:23+00:00"
+      "checked_at": "2026-09-14T18:31:34+00:00"
     },
     {
       "quote": {
@@ -457,7 +457,7 @@
       "source_origin": "arxiv-source",
       "evidence_url": "https://arxiv.org/abs/1706.03762",
       "detail": "complete text of the source was retrieved (4,716 words) and this passage does not appear in it. Closest match scored 49%.",
-      "checked_at": "2026-09-14T18:11:23+00:00"
+      "checked_at": "2026-09-14T18:31:34+00:00"
     }
   ]
 }

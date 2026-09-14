@@ -851,3 +851,130 @@ class TestAuthorNameGuards:
     def test_volume_and_page_locators_are_not_titles(self, locator):
         from citeaudit.extract import looks_like_a_title
         assert not looks_like_a_title(locator)
+
+
+# ===========================================================================
+# Verifier paths not exercised elsewhere
+# ===========================================================================
+
+class TestArxivVerification:
+
+    def test_matching_arxiv_id_verifies(self):
+        v = Verifier(StubClient({"export.arxiv.org": (200, ARXIV_HIT)}), workers=1)
+        c = Citation(raw="x", kind=Kind.ARXIV, identifier="1706.03762",
+                     claimed_title="Attention Is All You Need",
+                     claimed_authors=["Vaswani"], claimed_year=2017)
+        assert v.check(c).verdict is Verdict.VERIFIED
+
+    def test_empty_feed_is_not_found_not_verified(self):
+        """
+        arXiv answers unknown ids with HTTP 200 and an empty feed. Trusting the
+        status code would verify every fabricated arXiv reference in a document.
+        """
+        v = Verifier(StubClient({"export.arxiv.org": (200, ARXIV_EMPTY)}), workers=1)
+        c = Citation(raw="x", kind=Kind.ARXIV, identifier="2499.99999")
+        f = v.check(c)
+        assert f.verdict is Verdict.NOT_FOUND
+        assert f.evidence_url == "https://arxiv.org/abs/2499.99999"
+
+    def test_arxiv_wrong_paper_is_mismatch(self):
+        v = Verifier(StubClient({"export.arxiv.org": (200, ARXIV_HIT)}), workers=1)
+        c = Citation(raw="x", kind=Kind.ARXIV, identifier="1706.03762",
+                     claimed_title="Crystal structure of ribosomal protein L7",
+                     claimed_authors=["Kowalski"], claimed_year=1998)
+        assert v.check(c).verdict is Verdict.MISMATCH
+
+    def test_arxiv_outage_is_unreachable(self):
+        v = Verifier(StubClient({"export.arxiv.org": (503, "")}), workers=1)
+        c = Citation(raw="x", kind=Kind.ARXIV, identifier="1706.03762")
+        assert v.check(c).verdict is Verdict.UNREACHABLE
+
+
+class TestUrlVerification:
+
+    def test_live_link_verifies(self):
+        v = Verifier(StubClient({"example.org": (200, "")}), workers=1)
+        c = Citation(raw="https://example.org/p.pdf", kind=Kind.URL,
+                     identifier="https://example.org/p.pdf")
+        f = v.check(c)
+        assert f.verdict is Verdict.VERIFIED
+        assert "200" in f.detail
+
+    def test_dead_link_says_what_it_does_and_does_not_prove(self):
+        """
+        A dead URL proves the link is dead. It says nothing about whether the
+        content it described ever existed, and the finding must not overreach.
+        """
+        v = Verifier(StubClient({"example.org": (404, "")}), workers=1)
+        c = Citation(raw="https://example.org/gone", kind=Kind.URL,
+                     identifier="https://example.org/gone")
+        f = v.check(c)
+        assert f.verdict is Verdict.NOT_FOUND
+        assert "not that the content it described never existed" in f.detail
+
+    def test_url_checking_can_be_disabled(self):
+        stub = StubClient({})
+        v = Verifier(stub, check_urls=False, workers=1)
+        c = Citation(raw="https://example.org/x", kind=Kind.URL,
+                     identifier="https://example.org/x")
+        assert v.check(c).verdict is Verdict.UNVERIFIABLE
+        assert stub.calls == []
+
+
+class TestSearchFallbackPaths:
+
+    def test_close_but_below_threshold_reports_the_closest_match(self):
+        """
+        A near miss must show what it found. Reporting 'no match' without the
+        closest candidate hides the evidence a reader needs to overrule it.
+        """
+        payload = json.dumps({"message": {"items": [{
+            "DOI": "10.1/near",
+            "title": ["Compliance frameworks in Danish welfare administration"],
+            "author": [{"family": "Andersen"}],
+            "issued": {"date-parts": [[2021]]},
+        }]}})
+        v = Verifier(StubClient({
+            "api.crossref.org": (200, payload),
+            "api.openalex.org": (200, json.dumps({"results": []})),
+        }), workers=1)
+        c = Citation(raw="x", kind=Kind.BIBLIOGRAPHIC,
+                     claimed_title="A study of imaginary compliance systems in nowhere",
+                     claimed_authors=["Nguyen"], claimed_year=2022)
+        f = v.check(c)
+        assert f.verdict is Verdict.NOT_FOUND
+        assert f.resolved_title is not None
+        assert f.title_similarity is not None
+        assert "Closest was" in f.detail
+
+    def test_search_can_be_disabled(self):
+        stub = StubClient({})
+        v = Verifier(stub, search_unidentified=False, workers=1)
+        c = Citation(raw="x", kind=Kind.BIBLIOGRAPHIC,
+                     claimed_title="A sufficiently long title to search for")
+        assert v.check(c).verdict is Verdict.UNVERIFIABLE
+        assert stub.calls == []
+
+    def test_parallel_and_serial_paths_agree(self):
+        """Worker count must not change a verdict."""
+        cites = [
+            Citation(raw="a", kind=Kind.DOI, identifier="10.1038/nature12373",
+                     claimed_title="A real paper about real things"),
+            Citation(raw="b", kind=Kind.DOI, identifier="10.9999/nope"),
+        ]
+        table = {"api.crossref.org/works/10.1038": (200, CROSSREF_HIT),
+                 "api.crossref.org": (404, ""),
+                 "api.openalex.org": (404, "")}
+        serial = Verifier(StubClient(table), workers=1).verify_citations(list(cites))
+        parallel = Verifier(StubClient(table), workers=4).verify_citations(list(cites))
+        assert ([f.verdict for f in serial.findings]
+                == [f.verdict for f in parallel.findings])
+
+    def test_findings_are_ordered_by_line(self):
+        v = Verifier(StubClient({"api": (404, "")}), workers=1)
+        cites = [
+            Citation(raw="c", kind=Kind.DOI, identifier="10.1111/c", line=9),
+            Citation(raw="a", kind=Kind.DOI, identifier="10.1111/a", line=2),
+        ]
+        report = v.verify_citations(cites)
+        assert [f.citation.line for f in report.findings] == [2, 9]

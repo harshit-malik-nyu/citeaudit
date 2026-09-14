@@ -409,3 +409,172 @@ class TestPreprintReport:
     def test_underpowered_run_is_banner_flagged(self):
         from citeaudit.preprints import summarise, to_markdown
         assert "not usable" in to_markdown(summarise(self._study(10)))
+
+
+# ===========================================================================
+# The individual fetchers — messy real-world inputs
+# ===========================================================================
+
+def _tarball(files: dict[str, str]) -> bytes:
+    import io, tarfile
+    buf = io.BytesIO()
+    with tarfile.open(fileobj=buf, mode="w:gz") as tar:
+        for name, content in files.items():
+            data = content.encode()
+            info = tarfile.TarInfo(name=name)
+            info.size = len(data)
+            tar.addfile(info, io.BytesIO(data))
+    return buf.getvalue()
+
+
+class BodyClient:
+    """Client stub returning fixed bytes, or raising."""
+
+    def __init__(self, body=None, exc=None):
+        self.body, self.exc = body, exc
+        self.mailto = "t@example.org"
+        self.urls: list[str] = []
+
+    def get(self, url, *, accept="application/json", allow_404=True, method="GET"):
+        from citeaudit.http import Response
+        self.urls.append(url)
+        if self.exc:
+            raise self.exc
+        return Response(url=url, status=200, body=self.body or b"")
+
+
+class TestArxivFullText:
+
+    def test_tex_body_is_extracted_from_a_tarball(self):
+        from citeaudit.fulltext import Coverage, arxiv_fulltext
+        body = "This is the paper body. " * 60
+        client = BodyClient(_tarball({"main.tex": body}))
+        got = arxiv_fulltext(client, "1706.03762")
+        assert got.coverage is Coverage.FULL
+        assert "paper body" in got.text
+        assert got.url == "https://arxiv.org/abs/1706.03762"
+
+    def test_version_suffix_is_stripped_from_the_request(self):
+        from citeaudit.fulltext import arxiv_fulltext
+        client = BodyClient(_tarball({"m.tex": "word " * 300}))
+        arxiv_fulltext(client, "1706.03762v5")
+        assert client.urls[0].endswith("1706.03762")
+
+    def test_multiple_tex_files_are_concatenated(self):
+        from citeaudit.fulltext import Coverage, arxiv_fulltext
+        client = BodyClient(_tarball({
+            "intro.tex": "alpha " * 150, "method.tex": "beta " * 150}))
+        got = arxiv_fulltext(client, "1234.5678")
+        assert got.coverage is Coverage.FULL
+        assert "alpha" in got.text and "beta" in got.text
+
+    def test_a_stub_document_is_rejected_rather_than_claimed_as_full(self):
+        """
+        Claiming FULL coverage on a few hundred words would licence refuting a
+        quotation against a source we do not actually have.
+        """
+        from citeaudit.fulltext import Coverage, arxiv_fulltext
+        client = BodyClient(_tarball({"m.tex": "too short"}))
+        assert arxiv_fulltext(client, "1.1").coverage is Coverage.NONE
+
+    def test_bare_gzipped_tex_is_handled(self):
+        """Some arXiv submissions are a single gzipped .tex, not a tarball."""
+        import gzip
+        from citeaudit.fulltext import Coverage, arxiv_fulltext
+        client = BodyClient(gzip.compress(("content " * 300).encode()))
+        assert arxiv_fulltext(client, "1.1").coverage is Coverage.FULL
+
+    def test_unreadable_payload_degrades_to_no_coverage(self):
+        from citeaudit.fulltext import Coverage, arxiv_fulltext
+        assert arxiv_fulltext(BodyClient(b"\x00\x01garbage"),
+                              "1.1").coverage is Coverage.NONE
+
+    def test_empty_response_degrades_to_no_coverage(self):
+        from citeaudit.fulltext import Coverage, arxiv_fulltext
+        assert arxiv_fulltext(BodyClient(b""), "1.1").coverage is Coverage.NONE
+
+    def test_network_failure_degrades_to_no_coverage(self):
+        from citeaudit.fulltext import Coverage, arxiv_fulltext
+        from citeaudit.http import Unreachable
+        client = BodyClient(exc=Unreachable("down"))
+        assert arxiv_fulltext(client, "1.1").coverage is Coverage.NONE
+
+
+ARXIV_FEED = """<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <entry>
+    <id>http://arxiv.org/abs/1706.03762v5</id>
+    <title>Attention Is All You Need</title>
+    <summary>The dominant sequence transduction models are based on complex
+    recurrent or convolutional neural networks that include an encoder and a
+    decoder connected through an attention mechanism.</summary>
+  </entry>
+</feed>"""
+
+
+class TestAbstractSources:
+
+    def test_arxiv_abstract_extracted(self):
+        from citeaudit.fulltext import Coverage, arxiv_abstract
+        got = arxiv_abstract(BodyClient(ARXIV_FEED.encode()), "1706.03762")
+        assert got.coverage is Coverage.ABSTRACT
+        assert "sequence transduction" in got.text
+
+    def test_arxiv_abstract_rejects_an_empty_feed(self):
+        from citeaudit.fulltext import Coverage, arxiv_abstract
+        feed = b'<?xml version="1.0"?><feed xmlns="http://www.w3.org/2005/Atom"/>'
+        assert arxiv_abstract(BodyClient(feed), "1.1").coverage is Coverage.NONE
+
+    def test_arxiv_abstract_rejects_unparseable_xml(self):
+        from citeaudit.fulltext import Coverage, arxiv_abstract
+        assert arxiv_abstract(BodyClient(b"<not xml"),
+                              "1.1").coverage is Coverage.NONE
+
+    def test_openalex_abstract_reconstructed_from_inverted_index(self):
+        from citeaudit.fulltext import Coverage, openalex_abstract
+        payload = json.dumps({
+            "id": "https://openalex.org/W1",
+            "abstract_inverted_index": {
+                w: [i] for i, w in enumerate(
+                    ("a fairly long abstract needs more than twenty distinct "
+                     "words before it is accepted by the length guard in "
+                     "this module").split())
+            },
+        }).encode()
+        got = openalex_abstract(BodyClient(payload), "10.1/x")
+        assert got.coverage is Coverage.ABSTRACT
+        assert "abstract" in got.text
+
+    def test_openalex_rejects_a_too_short_abstract(self):
+        from citeaudit.fulltext import Coverage, openalex_abstract
+        payload = json.dumps({"id": "W1",
+                              "abstract_inverted_index": {"short": [0]}}).encode()
+        assert openalex_abstract(BodyClient(payload),
+                                 "10.1/x").coverage is Coverage.NONE
+
+    def test_openalex_handles_a_missing_abstract(self):
+        from citeaudit.fulltext import Coverage, openalex_abstract
+        payload = json.dumps({"id": "W1"}).encode()
+        assert openalex_abstract(BodyClient(payload),
+                                 "10.1/x").coverage is Coverage.NONE
+
+    def test_crossref_abstract_has_jats_markup_stripped(self):
+        from citeaudit.fulltext import Coverage, crossref_abstract
+        text = ("<jats:p>" + "word " * 40 + "</jats:p>")
+        payload = json.dumps({"message": {"abstract": text}}).encode()
+        got = crossref_abstract(BodyClient(payload), "10.1/x")
+        assert got.coverage is Coverage.ABSTRACT
+        assert "<jats:p>" not in got.text
+
+    def test_crossref_missing_abstract_is_no_coverage(self):
+        from citeaudit.fulltext import Coverage, crossref_abstract
+        payload = json.dumps({"message": {}}).encode()
+        assert crossref_abstract(BodyClient(payload),
+                                 "10.1/x").coverage is Coverage.NONE
+
+    def test_not_found_degrades_rather_than_propagating(self):
+        """A missing record is not an error for the caller to handle."""
+        from citeaudit.fulltext import Coverage, crossref_abstract
+        from citeaudit.http import NotFound
+        client = BodyClient(exc=NotFound("10.1/x"))
+        assert crossref_abstract(client, "10.1/x").coverage is Coverage.NONE

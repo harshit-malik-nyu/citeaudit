@@ -42,9 +42,9 @@ Quote coverage 100%. Most scholarly text is paywalled; only complete retrieved t
 
 <details><summary>4 inconclusive (not counted as failures)</summary>
 
-- line 57: `1810.04805` — check could not be completed: https://export.arxiv.org/api/query?id_list=1810.04805&max_results=1: HTTP Error 429: Too Many Requests
-- line 67: `1906.02530` — check could not be completed: https://export.arxiv.org/api/query?id_list=1906.02530&max_results=1: The read operation timed out
-- line 71: `1703.01365` — check could not be completed: https://export.arxiv.org/api/query?id_list=1703.01365&max_results=1: HTTP Error 429: Too Many Requests
+- line 57: `1810.04805` — check could not be completed: https://export.arxiv.org/api/query?id_list=1810.04805&max_results=1: HTTP Error 429: Unknown Error
+- line 67: `1906.02530` — check could not be completed: https://export.arxiv.org/api/query?id_list=1906.02530&max_results=1: HTTP Error 429: Unknown Error
+- line 71: `1703.01365` — check could not be completed: https://export.arxiv.org/api/query?id_list=1703.01365&max_results=1: HTTP Error 429: Unknown Error
 - line 76: `https://this-domain-does-not-resolve-citeaudit.invalid/report.pdf` — check could not be completed: https://this-domain-does-not-resolve-citeaudit.invalid/report.pdf
 
 </details>

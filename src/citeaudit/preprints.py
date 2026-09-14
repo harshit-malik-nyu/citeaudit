@@ -310,7 +310,7 @@ def run(client: Client, *, categories: list[str], per_category: int = 8,
                 reference_text=c.context[:300],
                 kind=c.kind.value, identifier=c.identifier,
                 verdict=f.verdict.value, authority=f.authority,
-                detail=f.detail[:200],
+                detail=f.detail[:600],
             ))
             if len(study.checks) >= max_checks:
                 study.finished_utc = datetime.now(timezone.utc).isoformat(timespec="seconds")

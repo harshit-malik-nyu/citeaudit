@@ -590,3 +590,92 @@ class TestHostPacing:
         assert "api.crossref.org" not in HOST_MIN_INTERVAL
         c = Client(cache_dir=None, use_cache=False)
         assert c.min_interval == DEFAULT_MIN_INTERVAL
+
+
+class TestMismatchAudit:
+    """
+    The audit script exists because twice a plausible-looking rate concealed
+    mostly false accusations, and both times only reading individual findings
+    caught it. These tests pin the behaviour that matters: it must never
+    conclude on evidence it cannot see.
+    """
+
+    def _write(self, tmp_path, rows):
+        import csv
+        p = tmp_path / "checks.csv"
+        with p.open("w", newline="") as fh:
+            w = csv.DictWriter(fh, fieldnames=[
+                "identifier", "verdict", "reference_text", "detail"])
+            w.writeheader()
+            for r in rows:
+                w.writerow(r)
+        return p
+
+    def _run(self, path):
+        import subprocess, sys
+        from pathlib import Path
+        script = Path(__file__).resolve().parents[1] / "scripts" / "audit_mismatches.py"
+        return subprocess.run([sys.executable, str(script), str(path)],
+                              capture_output=True, text=True)
+
+    def test_resolved_false_accusation_is_reported_as_resolved(self, tmp_path):
+        p = self._write(tmp_path, [{
+            "identifier": "10.1007/bf01386390",
+            "verdict": "mismatch",
+            "reference_text": ("Edsger W. Dijkstra. A note on two problems in "
+                               "connexion with graphs. Numer. Math., 1959."),
+            "detail": ("identifier resolves to a DIFFERENT work. Document "
+                       "claims 'Edsger W. Dijkstra'; record holds 'A note on "
+                       "two problems in connexion with graphs' (25% similarity)"),
+        }])
+        out = self._run(p).stdout
+        assert "were false accusations, now resolved" in out
+        assert "1/1 were false accusations" in out
+
+    def test_genuine_mismatch_survives(self, tmp_path):
+        p = self._write(tmp_path, [{
+            "identifier": "10.1/x",
+            "verdict": "mismatch",
+            "reference_text": ('Someone, A. (2023) "Oklo Inc. Fission '
+                               'Impossible" Energy doi:10.1/x'),
+            "detail": ("identifier resolves to a DIFFERENT work. Document "
+                       "claims 'Oklo Inc. Fission Impossible'; record holds "
+                       "'Uncertainties in estimating production costs of "
+                       "future nuclear technologies' (8% similarity)"),
+        }])
+        out = self._run(p).stdout
+        assert "survive and need manual confirmation" in out
+        assert "1/1 survive" in out
+
+    def test_truncated_detail_is_called_unauditable_not_guessed(self, tmp_path):
+        """
+        The important one. A finding whose evidence was truncated must be
+        reported as unauditable, never silently counted as genuine or as
+        resolved.
+        """
+        p = self._write(tmp_path, [{
+            "identifier": "10.1/y",
+            "verdict": "mismatch",
+            "reference_text": 'A. Author. A real title here. Journal, 2020.',
+            "detail": "identifier resolves to a DIFFERENT work. Document claims 'A real",
+        }])
+        out = self._run(p).stdout
+        assert "UNAUDITABLE" in out
+        assert "cannot be re-adjudicated offline" in out
+
+    def test_survivors_are_labelled_candidates_not_conclusions(self, tmp_path):
+        p = self._write(tmp_path, [{
+            "identifier": "10.1/x", "verdict": "mismatch",
+            "reference_text": 'X. Y. (2020) "Some title of adequate length" J.',
+            "detail": ("Document claims 'Some title of adequate length'; "
+                       "record holds 'A completely different piece of work'"),
+        }])
+        out = self._run(p).stdout
+        assert "CANDIDATES, not conclusions" in out
+        assert "read the record before repeating" in out
+
+    def test_file_with_no_mismatches_is_handled(self, tmp_path):
+        p = self._write(tmp_path, [{
+            "identifier": "10.1/a", "verdict": "verified",
+            "reference_text": "x", "detail": "ok"}])
+        assert "no mismatches stored" in self._run(p).stdout

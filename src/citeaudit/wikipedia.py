@@ -330,7 +330,7 @@ def run(client: Client, *, articles: int = 120, max_refs_per_article: int = 8,
                 article=title, template=ref.template, kind=cit.kind.value,
                 identifier=cit.identifier, claimed_title=ref.title,
                 verdict=f.verdict.value, authority=f.authority,
-                detail=f.detail[:200],
+                detail=f.detail[:600],
             ))
             if len(study.checks) >= max_checks:
                 study.finished_utc = datetime.now(timezone.utc).isoformat(timespec="seconds")

@@ -199,17 +199,42 @@ reference could legitimately be a title and is not rejected. Function words
 supply the one usable in-string signal — *"Attention Is All You Need"* is
 all-capitalised but carries three, and no name does.
 
+**The inspection is now a script, not a habit.**
+
+```bash
+python scripts/audit_mismatches.py evidence/preprints/checks.csv
+```
+
+It replays every stored mismatch through the current extraction logic and
+reports which survive. On the 11 from the second round:
+
+```
+  7/11 were false accusations, now resolved
+  1/11 survive and need manual confirmation
+  3/11 cannot be re-adjudicated offline
+```
+
+Those last three matter. Their stored `detail` had been truncated at 200
+characters, cutting off the resolved title, so the finding cannot be re-checked
+without another API call. **The script reports them as unauditable rather than
+counting them either way** — and the storage limit has been raised, because
+evidence you cannot inspect is not evidence.
+
+Surviving mismatches are labelled candidates, not conclusions. Each one is an
+accusation that a document cited the wrong paper, and that is not a claim to
+publish on a heuristic's say-so.
+
 **Why this section exists.** The rate looked entirely plausible both times.
 8.87%, then 13.16% — neither number invited suspicion. Only inspecting
-individual findings caught either bug, and the second only surfaced because the
-first correction prompted looking again.
+individual findings caught either bug, and the second surfaced only because
+correcting the first prompted looking again.
 
 A project about unverified claims had published an unverified claim. Recording
 that is not humility for its own sake: it is the only evidence that the numbers
 elsewhere in this repository were checked rather than assumed.
 
-40 regression tests now cover both rounds, built from the exact strings that
-caused each false accusation.
+45 regression tests cover both rounds, built from the exact strings that caused
+each false accusation.
 
 ### Why the mismatch threshold is 66
 

@@ -1,5 +1,5 @@
 
-note: 2 request(s) could not be completed; those citations are reported as inconclusive rather than as failures.
+note: 5 request(s) could not be completed; those citations are reported as inconclusive rather than as failures.
 citeaudit 0.1.0  —  examples/demo.md
 ==============================================================================
 
@@ -44,14 +44,32 @@ Resolves to a different work (1)
        check it: https://doi.org/10.1038/nature14539
 
 
-Could not check (1)
+Could not check (4)
 ------------------------------------------------------------------------------
+  ??   line 57    1810.04805
+       document says: 'BERT: Pre-training of Deep Bidirectional Transformers for Language'
+       check could not be completed:
+       https://export.arxiv.org/api/query?id_list=1810.04805&max_results=1:
+       HTTP Error 429: Unknown Error
+
+  ??   line 67    1906.02530
+       document says: "Can you trust your model's uncertainty? Evaluating predictive unce"
+       check could not be completed:
+       https://export.arxiv.org/api/query?id_list=1906.02530&max_results=1:
+       The read operation timed out
+
+  ??   line 71    1703.01365
+       document says: 'Axiomatic attribution for deep networks'
+       check could not be completed:
+       https://export.arxiv.org/api/query?id_list=1703.01365&max_results=1:
+       HTTP Error 429: Unknown Error
+
   ??   line 76    https://this-domain-does-not-resolve-citeaudit.invalid/report.pdf
        check could not be completed:
        https://this-domain-does-not-resolve-citeaudit.invalid/report.pdf
 
 
-Verified (8)
+Verified (5)
 ------------------------------------------------------------------------------
   OK   line 53    10.1038/nature14539
        title matches record (100% similarity)
@@ -61,21 +79,9 @@ Verified (8)
        title matches record (100% similarity)
        check it: https://arxiv.org/abs/1706.03762
 
-  OK   line 57    1810.04805
-       title matches record (100% similarity)
-       check it: https://arxiv.org/abs/1810.04805
-
   OK   line 65    10.1109/cvpr.2009.5206848
        title matches record (100% similarity)
        check it: https://doi.org/10.1109/cvpr.2009.5206848
-
-  OK   line 67    1906.02530
-       title matches record (100% similarity)
-       check it: https://arxiv.org/abs/1906.02530
-
-  OK   line 71    1703.01365
-       title matches record (100% similarity)
-       check it: https://arxiv.org/abs/1703.01365
 
   OK   line 75    https://www.crossref.org/documentation/
        link responded HTTP 200
@@ -96,6 +102,6 @@ QUOTATIONS
   2 quotations | 1 located | 1 absent from full text | 0 not checkable
   quote coverage: 100% (limited by open-access availability, not by the tool)
 ==============================================================================
-14 citations  |  8 verified  |  4 not found  |  1 mismatched  |  0 malformed
-inconclusive: 1 unreachable, 0 not machine-checkable (excluded from the score, not counted as failures)
-integrity: 62% of 13 conclusive checks passed
+14 citations  |  5 verified  |  4 not found  |  1 mismatched  |  0 malformed
+inconclusive: 4 unreachable, 0 not machine-checkable (excluded from the score, not counted as failures)
+integrity: 50% of 10 conclusive checks passed

@@ -4,15 +4,15 @@
 
 | | count |
 |---|---:|
-| Verified | 8 |
+| Verified | 5 |
 | No such record | 4 |
 | Resolves to different work | 1 |
 | Malformed | 0 |
-| Could not check | 1 |
+| Could not check | 4 |
 | Not machine-checkable | 0 |
 | **Total** | **14** |
 
-Integrity: 62% of 13 conclusive checks passed
+Integrity: 50% of 10 conclusive checks passed
 
 ### Failures
 
@@ -40,8 +40,11 @@ Quote coverage 100%. Most scholarly text is paywalled; only complete retrieved t
 > `welfare eligibility determinations should be fully delegated to automated systems without human review`
 > complete text of the source was retrieved (4,716 words) and this passage does not appear in it. Closest match scored 49%.
 
-<details><summary>1 inconclusive (not counted as failures)</summary>
+<details><summary>4 inconclusive (not counted as failures)</summary>
 
+- line 57: `1810.04805` — check could not be completed: https://export.arxiv.org/api/query?id_list=1810.04805&max_results=1: HTTP Error 429: Too Many Requests
+- line 67: `1906.02530` — check could not be completed: https://export.arxiv.org/api/query?id_list=1906.02530&max_results=1: The read operation timed out
+- line 71: `1703.01365` — check could not be completed: https://export.arxiv.org/api/query?id_list=1703.01365&max_results=1: HTTP Error 429: Too Many Requests
 - line 76: `https://this-domain-does-not-resolve-citeaudit.invalid/report.pdf` — check could not be completed: https://this-domain-does-not-resolve-citeaudit.invalid/report.pdf
 
 </details>

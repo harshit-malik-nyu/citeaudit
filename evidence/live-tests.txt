@@ -1,2 +1,5 @@
-.........                                                                [100%]
-9 passed, 159 deselected in 20.65s
+...ss....                                                                [100%]
+=========================== short test summary info ============================
+SKIPPED [1] tests/test_live.py:91: arXiv unreachable
+SKIPPED [1] tests/test_live.py:105: arXiv unreachable
+7 passed, 2 skipped, 163 deselected in 207.64s (0:03:27)

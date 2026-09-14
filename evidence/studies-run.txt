@@ -4,24 +4,36 @@ INFO citeaudit.corpus: stratum 2020: 12 usable works
 INFO citeaudit.corpus: stratum 2022: 12 usable works
 INFO citeaudit.corpus: stratum 2023: 12 usable works
 INFO citeaudit.corpus: stratum 2024: 12 usable works
+WARNING citeaudit.preprints: arXiv sampling failed for cs.LG: https://export.arxiv.org/api/query?search_query=cat%3Acs.LG&start=0&max_results=14&sortBy=submittedDate&sortOrder=descending: The read operation timed out
+WARNING citeaudit.preprints: arXiv sampling failed for econ.GN: https://export.arxiv.org/api/query?search_query=cat%3Aecon.GN&start=0&max_results=14&sortBy=submittedDate&sortOrder=descending: The read operation timed out
+WARNING citeaudit.preprints: arXiv sampling failed for q-bio.QM: https://export.arxiv.org/api/query?search_query=cat%3Aq-bio.QM&start=0&max_results=14&sortBy=submittedDate&sortOrder=descending: HTTP Error 429: Unknown Error
+WARNING citeaudit.preprints: arXiv sampling failed for stat.AP: https://export.arxiv.org/api/query?search_query=cat%3Astat.AP&start=0&max_results=14&sortBy=submittedDate&sortOrder=descending: HTTP Error 429: Unknown Error
+WARNING citeaudit.preprints: arXiv sampling failed for physics.soc-ph: https://export.arxiv.org/api/query?search_query=cat%3Aphysics.soc-ph&start=0&max_results=14&sortBy=submittedDate&sortOrder=descending: HTTP Error 429: Unknown Error
+WARNING citeaudit.preprints: arXiv sampling failed for math.ST: https://export.arxiv.org/api/query?search_query=cat%3Amath.ST&start=0&max_results=14&sortBy=submittedDate&sortOrder=descending: The read operation timed out
+WARNING citeaudit.preprints: arXiv sampling failed for cs.CY: https://export.arxiv.org/api/query?search_query=cat%3Acs.CY&start=0&max_results=14&sortBy=submittedDate&sortOrder=descending: HTTP Error 429: Unknown Error
+WARNING citeaudit.preprints: arXiv sampling failed for eess.SY: https://export.arxiv.org/api/query?search_query=cat%3Aeess.SY&start=0&max_results=14&sortBy=submittedDate&sortOrder=descending: HTTP Error 429: Unknown Error
+WARNING citeaudit.preprints: arXiv sampling failed for astro-ph.GA: https://export.arxiv.org/api/query?search_query=cat%3Aastro-ph.GA&start=0&max_results=14&sortBy=submittedDate&sortOrder=descending: The read operation timed out
+WARNING citeaudit.preprints: arXiv sampling failed for cond-mat.stat-mech: https://export.arxiv.org/api/query?search_query=cat%3Acond-mat.stat-mech&start=0&max_results=14&sortBy=submittedDate&sortOrder=descending: HTTP Error 429: Unknown Error
+WARNING citeaudit.preprints: arXiv sampling failed for q-fin.GN: https://export.arxiv.org/api/query?search_query=cat%3Aq-fin.GN&start=0&max_results=14&sortBy=submittedDate&sortOrder=descending: HTTP Error 429: Unknown Error
+WARNING citeaudit.preprints: arXiv sampling failed for cs.CR: https://export.arxiv.org/api/query?search_query=cat%3Acs.CR&start=0&max_results=14&sortBy=submittedDate&sortOrder=descending: HTTP Error 429: Unknown Error
 ======================================================================
 BASE RATE STUDY
 ======================================================================
 
 source works      : 72
-total checks      : 620
+total checks      : 668
 identified FP rate: 0.00%
-described FP rate : 0.00% (95% CI 0.00%-1.22%)
-fallback rescues  : 19
-http requests     : 653
+described FP rate : 2.10% (95% CI 1.02%-4.26%)
+fallback rescues  : 27
+http requests     : 706
 
 ======================================================================
 CALIBRATION STUDY
 ======================================================================
 
 reference works   : 260
-labelled pairs    : 2,472 (1,692 same / 780 different)
-chosen threshold  : 82
+labelled pairs    : 2,489 (1,709 same / 780 different)
+chosen threshold  : 66
   precision       : 1.000
   recall          : 1.000
   false accusations: 0
@@ -30,19 +42,19 @@ chosen threshold  : 82
 PREPRINT CORPUS STUDY
 ======================================================================
 
-papers sampled     : 168
-with bibliography  : 122
-references checked : 1,247
-conclusive         : 1,201
-unverified rate    : 13.16% (95% CI 11.36%-15.19%)
-http requests      : 2,494
+papers sampled     : 0
+with bibliography  : 0
+references checked : 0
+conclusive         : 0
+http requests      : 745
 
 ======================================================================
 WIKIPEDIA CORPUS STUDY
 ======================================================================
 
-articles sampled   : 2
-with citations     : 2
-references checked : 16
-unverified rate    : 75.00% (95% CI 50.50%-89.82%)
-http requests      : 2,547
+articles sampled   : 13
+with citations     : 13
+references checked : 80
+SCHOLARLY templates: 14.29% (95% CI 2.57%-51.31%)  n=7  <- comparable
+grey templates     : 75.34%  n=73  (index coverage, not integrity)
+http requests      : 911

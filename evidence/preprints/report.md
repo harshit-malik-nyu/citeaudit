@@ -1,6 +1,6 @@
 # Author-written bibliographies: what happens outside the pipeline
 
-**1,247 references** from **122 arXiv preprints** (168 sampled), parsed from the authors' own `.bbl` and `.bib` source files.
+**0 references** from **0 arXiv preprints** (0 sampled), parsed from the authors' own `.bbl` and `.bib` source files.
 
 ## Why a second corpus
 
@@ -16,42 +16,14 @@ Measures whether a reference as written can be verified. An unverified reference
 
 | | count |
 |---|---:|
-| References checked | 1,247 |
-| Verified | 1,043 |
-| Not found | 147 |
-| Resolves to a different work | 11 |
-| Not machine-checkable | 46 |
+| References checked | 0 |
+| Verified | 0 |
+| Not found | 0 |
+| Resolves to a different work | 0 |
+| Not machine-checkable | 0 |
 | Could not check | 0 |
 
-**Unverified rate: 13.2%** of 1,201 conclusive checks (95% CI 11.4%–15.2%).
-
-## By how the reference was written
-
-| Form | Conclusive | Unverified | 95% CI |
-|---|---:|---:|---|
-| arxiv | 66 | 6.1% | 2.4%–14.6% |
-| bibliographic | 786 | 18.1% | 15.5%–20.9% |
-| doi | 349 | 3.4% | 2.0%–5.9% |
-| url | 0 | n/a | — |
-
-The gap between identifier-bearing and description-only references is the cost of omitting a DOI, measured rather than asserted.
-
-## By field
-
-| Category | Conclusive | Unverified |
-|---|---:|---:|
-| astro-ph.GA | 39 | 12.8% |
-| cond-mat.stat-mech | 77 | 6.5% |
-| cs.CR | 112 | 12.5% |
-| cs.CY | 98 | 25.5% |
-| cs.LG | 147 | 16.3% |
-| econ.GN | 82 | 11.0% |
-| eess.SY | 138 | 7.2% |
-| math.ST | 127 | 5.5% |
-| physics.soc-ph | 81 | 12.3% |
-| q-bio.QM | 96 | 11.5% |
-| q-fin.GN | 98 | 18.4% |
-| stat.AP | 106 | 18.9% |
+**Unverified rate: n/a** of 0 conclusive checks (95% CI —).
 
 ## Limits
 

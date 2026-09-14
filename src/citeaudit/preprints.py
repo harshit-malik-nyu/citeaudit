@@ -207,6 +207,57 @@ def bibliography_from_source(blob: bytes) -> list[str]:
 # Sampling
 # ---------------------------------------------------------------------------
 
+def sample_via_openalex(client: Client, *, count: int, seed: int
+                        ) -> list[tuple[str, str, str]]:
+    """
+    Draw arXiv preprint identifiers from OpenAlex instead of from arXiv.
+
+    arXiv rate-limits by IP, and GitHub Actions runners share address space
+    with every other project on the platform. Correct pacing on our side does
+    not help when the quota is already spent by someone else: eleven of twelve
+    category queries came back HTTP 429 across consecutive runs.
+
+    OpenAlex indexes arXiv preprints and assigns them DOIs under the 10.48550
+    prefix, from which the arXiv identifier reads directly. Sampling there
+    halves the load on arXiv — only the source tarballs still need it — and
+    moves the fragile step onto an API that publishes a polite pool and honours
+    a contact address.
+
+    Returns (arxiv_id, concept_or_type, title). Falls back to the arXiv API
+    when OpenAlex yields nothing, so the study degrades rather than vanishing.
+    """
+    params = {
+        "filter": "type:preprint,has_doi:true",
+        "sample": str(min(count, 200)),
+        "seed": str(seed),
+        "per-page": str(min(count, 200)),
+        "select": "id,doi,title,primary_location,publication_year",
+    }
+    if client.mailto:
+        params["mailto"] = client.mailto
+
+    url = f"https://api.openalex.org/works?{urllib.parse.urlencode(params)}"
+    try:
+        data = client.get(url).json()
+    except (NotFound, Unreachable) as exc:
+        log.error("OpenAlex preprint sampling failed: %s", exc)
+        return []
+
+    out: list[tuple[str, str, str]] = []
+    for item in data.get("results") or []:
+        doi = (item.get("doi") or "").lower().replace("https://doi.org/", "")
+        if not doi.startswith("10.48550/arxiv."):
+            continue
+        arxiv_id = doi.split("arxiv.", 1)[1]
+        title = item.get("title") or ""
+        venue = ((item.get("primary_location") or {}).get("source") or {}
+                 ).get("display_name") or "preprint"
+        out.append((arxiv_id, venue, title))
+
+    log.info("OpenAlex yielded %s arXiv preprints", len(out))
+    return out
+
+
 def sample_preprints(client: Client, *, categories: list[str],
                      per_category: int) -> Iterator[tuple[str, str, str]]:
     """
@@ -303,15 +354,24 @@ class PreprintStudy:
 
 def run(client: Client, *, categories: list[str], per_category: int = 8,
         max_refs_per_paper: int = 12, max_checks: int = 1200,
-        workers: int = 4) -> PreprintStudy:
+        workers: int = 4, seed: int = 20260909,
+        prefer_openalex: bool = True) -> PreprintStudy:
     verifier = Verifier(client, check_urls=False, workers=workers)
     study = PreprintStudy(
         started_utc=datetime.now(timezone.utc).isoformat(timespec="seconds")
     )
 
-    for aid, cat, _title in sample_preprints(
-        client, categories=categories, per_category=per_category
-    ):
+    sampled: list[tuple[str, str, str]] = []
+    if prefer_openalex:
+        sampled = sample_via_openalex(
+            client, count=per_category * len(categories), seed=seed)
+
+    if not sampled:
+        log.warning("falling back to the arXiv API for sampling")
+        sampled = list(sample_preprints(
+            client, categories=categories, per_category=per_category))
+
+    for aid, cat, _title in sampled:
         study.papers_sampled += 1
         blob = fetch_source(client, aid)
         if not blob:

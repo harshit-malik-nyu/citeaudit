@@ -803,3 +803,84 @@ class TestDegradationGuard:
         (tmp_path / "summary.json").write_text("not json")
         study = self._study(50)
         write_outputs(study, summarise(study), tmp_path)
+
+
+class TestOpenAlexPreprintSampling:
+    """
+    arXiv rate-limits by IP and GitHub runners share address space with every
+    other project on the platform. Eleven of twelve category queries returned
+    HTTP 429 across consecutive runs, with correct pacing on our side — the
+    quota was already spent by someone else.
+
+    Sampling moved to OpenAlex, which halves the load on arXiv (only source
+    tarballs still need it) and puts the fragile step on an API with a polite
+    pool.
+    """
+
+    class _Client:
+        mailto = "t@example.org"
+
+        def __init__(self, payload=None, exc=None):
+            self.payload, self.exc = payload, exc
+            self.urls: list[str] = []
+
+        def get(self, url, **kwargs):
+            from citeaudit.http import Response
+            self.urls.append(url)
+            if self.exc:
+                raise self.exc
+            import json as _json
+            return Response(url=url, status=200,
+                            body=_json.dumps(self.payload or {}).encode())
+
+    def _work(self, doi, title="A preprint title"):
+        return {"id": "W1", "doi": doi, "title": title,
+                "primary_location": {"source": {"display_name": "arXiv"}}}
+
+    def test_arxiv_id_is_read_from_the_doi(self):
+        from citeaudit.preprints import sample_via_openalex
+        c = self._Client({"results": [
+            self._work("https://doi.org/10.48550/arXiv.2401.12345")]})
+        out = sample_via_openalex(c, count=10, seed=1)
+        assert out == [("2401.12345", "arXiv", "A preprint title")]
+
+    def test_non_arxiv_dois_are_excluded(self):
+        """A Nature DOI has no source tarball to fetch."""
+        from citeaudit.preprints import sample_via_openalex
+        c = self._Client({"results": [
+            self._work("https://doi.org/10.1038/nature14539", "Deep learning")]})
+        assert sample_via_openalex(c, count=10, seed=1) == []
+
+    def test_sampling_is_seeded_for_reproducibility(self):
+        from citeaudit.preprints import sample_via_openalex
+        c = self._Client({"results": []})
+        sample_via_openalex(c, count=10, seed=4242)
+        assert "seed=4242" in c.urls[0]
+
+    def test_contact_address_is_sent(self):
+        from citeaudit.preprints import sample_via_openalex
+        c = self._Client({"results": []})
+        sample_via_openalex(c, count=5, seed=1)
+        assert "mailto=" in c.urls[0]
+
+    def test_openalex_failure_returns_empty_rather_than_raising(self):
+        """The caller falls back to arXiv; an exception would kill the study."""
+        from citeaudit.http import Unreachable
+        from citeaudit.preprints import sample_via_openalex
+        c = self._Client(exc=Unreachable("down"))
+        assert sample_via_openalex(c, count=5, seed=1) == []
+
+    def test_run_falls_back_to_arxiv_when_openalex_is_empty(self, monkeypatch):
+        import citeaudit.preprints as pp
+
+        monkeypatch.setattr(pp, "sample_via_openalex", lambda *a, **k: [])
+        called = {"arxiv": False}
+
+        def fake_arxiv(client, *, categories, per_category):
+            called["arxiv"] = True
+            return iter([])
+
+        monkeypatch.setattr(pp, "sample_preprints", fake_arxiv)
+        pp.run(self._Client({"results": []}), categories=["cs.LG"],
+               per_category=1, workers=1)
+        assert called["arxiv"], "arXiv fallback was not attempted"

@@ -38,7 +38,7 @@ def main() -> int:
     ap.add_argument("--mailto", default="citeaudit-ci@users.noreply.github.com")
     ap.add_argument("--preprints-per-category", type=int, default=14)
     ap.add_argument("--preprint-max-checks", type=int, default=1800)
-    ap.add_argument("--wiki-articles", type=int, default=160)
+    ap.add_argument("--wiki-articles", type=int, default=300)
     ap.add_argument("--wiki-max-checks", type=int, default=1200)
     ap.add_argument("--workers", type=int, default=6)
     args = ap.parse_args()
@@ -152,13 +152,18 @@ def main() -> int:
         wikipedia.write_outputs(wstudy, wsum, ROOT / "evidence" / "wikipedia")
 
         wo = wsum["overall"]
+        sch = wsum["scholarly_templates"]
+        grey = wsum["grey_templates"]
         print(f"\narticles sampled   : {wsum['method']['articles_sampled']:,}")
         print(f"with citations     : {wsum['method']['articles_with_citations']:,}")
         print(f"references checked : {wo['checks']:,}")
-        if wo["unverified_rate"] is not None:
-            lo, hi = wo["unverified_ci95"]
-            print(f"unverified rate    : {wo['unverified_rate']:.2%} "
-                  f"(95% CI {lo:.2%}-{hi:.2%})")
+        if sch["unverified_rate"] is not None:
+            lo, hi = sch["unverified_ci95"]
+            print(f"SCHOLARLY templates: {sch['unverified_rate']:.2%} "
+                  f"(95% CI {lo:.2%}-{hi:.2%})  n={sch['conclusive']}  <- comparable")
+        if grey["unverified_rate"] is not None:
+            print(f"grey templates     : {grey['unverified_rate']:.2%} "
+                  f" n={grey['conclusive']}  (index coverage, not integrity)")
         print(f"http requests      : {client.stats['requests']:,}")
 
     return 0

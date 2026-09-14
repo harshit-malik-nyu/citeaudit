@@ -492,3 +492,49 @@ A stub with no usable title.<ref>{{cite web |url=http://example.com |title=x }}<
 
     def test_malformed_template_is_skipped_not_crashed(self):
         assert parse_citations("{{cite journal |title=unterminated") == []
+
+
+class TestWikipediaTemplateSplit:
+    """
+    The split between scholarly and grey templates is the difference between a
+    measurement and a category error. An earlier run reported 75% unverified by
+    pooling them, which measured whether Crossref indexes journalism rather
+    than whether references were real.
+    """
+
+    def test_scholarly_and_grey_sets_are_disjoint(self):
+        from citeaudit.wikipedia import GREY_TEMPLATES, SCHOLARLY_TEMPLATES
+        assert not (SCHOLARLY_TEMPLATES & GREY_TEMPLATES)
+
+    def test_journal_and_arxiv_are_scholarly(self):
+        from citeaudit.wikipedia import SCHOLARLY_TEMPLATES
+        assert {"journal", "arxiv"} <= SCHOLARLY_TEMPLATES
+
+    def test_news_and_web_are_not_scholarly(self):
+        from citeaudit.wikipedia import SCHOLARLY_TEMPLATES
+        assert "news" not in SCHOLARLY_TEMPLATES
+        assert "web" not in SCHOLARLY_TEMPLATES
+
+    def test_summary_reports_the_comparable_rate_separately(self):
+        from citeaudit.wikipedia import WikiCheck, WikiStudy, summarise
+
+        study = WikiStudy(checks=[
+            WikiCheck(article="A", template="journal", kind="doi",
+                      identifier="10.1/a", claimed_title="t",
+                      verdict="verified", authority="crossref"),
+            WikiCheck(article="A", template="journal", kind="doi",
+                      identifier="10.1/b", claimed_title="t",
+                      verdict="not_found", authority="crossref"),
+            WikiCheck(article="A", template="news", kind="bibliographic",
+                      identifier=None, claimed_title="t",
+                      verdict="not_found", authority="crossref"),
+            WikiCheck(article="A", template="web", kind="bibliographic",
+                      identifier=None, claimed_title="t",
+                      verdict="not_found", authority="crossref"),
+        ])
+        s = summarise(study)
+        assert s["scholarly_templates"]["unverified_rate"] == pytest.approx(0.5)
+        assert s["grey_templates"]["unverified_rate"] == pytest.approx(1.0)
+        # Pooling would report 75% and call it an integrity finding.
+        assert s["overall"]["unverified_rate"] == pytest.approx(0.75)
+        assert s["headline"]["comparable_rate"] == pytest.approx(0.5)

@@ -84,6 +84,20 @@ def clean_wikitext(text: str) -> str:
     return WS.sub(" ", out).strip()
 
 
+# Templates whose sources a scholarly index is the RIGHT authority for.
+#
+# This split is the difference between a measurement and a category error.
+# Checking {{cite news}} or {{cite web}} against Crossref measures whether
+# Crossref indexes journalism — it does not — and would report ~100%
+# "unverified" for references that are perfectly real. Only the scholarly
+# templates are comparable with the arXiv corpus.
+SCHOLARLY_TEMPLATES = {"journal", "arxiv", "conference", "thesis"}
+
+# Everything else is reported separately, and what it measures is index
+# coverage of grey literature, not citation integrity.
+GREY_TEMPLATES = {"book", "report", "web", "news"}
+
+
 @dataclass
 class WikiReference:
     template: str
@@ -140,22 +154,28 @@ def parse_citations(wikitext: str) -> list[WikiReference]:
     return refs
 
 
-def sample_articles(client: Client, *, count: int, min_bytes: int = 30_000
-                    ) -> list[str]:
+def sample_articles(client: Client, *, count: int, min_bytes: int = 8_000,
+                    max_draws: int = 40) -> list[str]:
     """
-    Random article titles, biased toward substantial pages.
+    Random article titles, biased toward pages that carry references.
 
-    Wikipedia's `random` generator is uniform over all articles, and most
-    articles are stubs with no references at all. Filtering by size keeps the
-    sample to pages that actually carry a bibliography, which is what is being
-    measured.
+    Wikipedia's `random` generator is uniform over all articles and most
+    articles are stubs, so an unfiltered draw yields almost nothing citable.
+    An earlier version filtered at 30 kB and returned 2 usable articles from
+    500 draws — the filter was doing almost all the rejecting.
+
+    The threshold is now 8 kB, which still excludes stubs, and the loop draws
+    until it has `count` titles or exhausts `max_draws` rather than a fixed
+    small number of rounds.
     """
     titles: list[str] = []
     seen: set[str] = set()
 
-    for _ in range(max(1, count // 20 + 2)):
+    for _ in range(max_draws):
+        if len(titles) >= count:
+            break
         params = {
-            "action": "query", "format": "json",
+            "action": "query", "format": "json", "formatversion": "2",
             "generator": "random", "grnnamespace": "0",
             "grnlimit": "50", "prop": "info",
         }
@@ -166,7 +186,10 @@ def sample_articles(client: Client, *, count: int, min_bytes: int = 30_000
             log.warning("wikipedia sampling failed: %s", exc)
             break
 
-        for page in (data.get("query") or {}).get("pages", {}).values():
+        pages = (data.get("query") or {}).get("pages") or []
+        if isinstance(pages, dict):
+            pages = list(pages.values())
+        for page in pages:
             t = page.get("title")
             if not t or t in seen:
                 continue
@@ -282,7 +305,24 @@ def summarise(study: WikiStudy) -> dict:
             "unverified_ci95": [lo, hi],
         }
 
+    scholarly = [c for c in study.checks if c.template in SCHOLARLY_TEMPLATES]
+    grey = [c for c in study.checks if c.template in GREY_TEMPLATES]
+
     return {
+        "headline": {
+            "comparable_rate": block(scholarly)["unverified_rate"],
+            "comparable_n": block(scholarly)["conclusive"],
+            "note": (
+                "The comparable figure is the SCHOLARLY-template rate. "
+                "Checking {{cite news}} or {{cite web}} against Crossref and "
+                "OpenAlex measures whether those indexes cover journalism and "
+                "the open web — they do not — so a high rate there says "
+                "nothing about whether the reference is real. Only scholarly "
+                "templates are comparable with the arXiv corpus."
+            ),
+        },
+        "scholarly_templates": block(scholarly),
+        "grey_templates": block(grey),
         "method": {
             "corpus": "English Wikipedia citation templates",
             "articles_sampled": study.articles_sampled,
@@ -350,11 +390,56 @@ def to_markdown(summary: dict) -> str:
     out.append("")
     out.append(m["claim_boundary"])
     out.append("")
+    sch = summary.get("scholarly_templates") or {}
+    grey = summary.get("grey_templates") or {}
+
     out.append("## Result")
     out.append("")
+    out.append("### The comparable figure")
+    out.append("")
     out.append(
-        f"**Unverified rate {pct(o['unverified_rate'])}** of "
-        f"{o['conclusive']:,} conclusive checks (95% CI {ci(o)})."
+        f"**{pct(sch.get('unverified_rate'))} unverified** across "
+        f"{sch.get('conclusive', 0):,} scholarly-template references "
+        f"(95% CI {ci(sch)})."
+    )
+    out.append("")
+    out.append(
+        "This is the number to compare with the arXiv corpus, and the only one "
+        "that measures citation integrity rather than index coverage. "
+        "`{{cite journal}}`, `{{cite arxiv}}`, `{{cite conference}}` and "
+        "`{{cite thesis}}` point at material Crossref and OpenAlex are the "
+        "right authorities for."
+    )
+    out.append("")
+    out.append("### Grey-literature templates, reported separately")
+    out.append("")
+    out.append(
+        f"{pct(grey.get('unverified_rate'))} unverified across "
+        f"{grey.get('conclusive', 0):,} references "
+        f"(`cite web`, `cite news`, `cite book`, `cite report`)."
+    )
+    out.append("")
+    out.append(
+        "**This is not an integrity finding and must not be read as one.** "
+        "Checking journalism and government web pages against a scholarly "
+        "index measures whether that index covers journalism. It does not. A "
+        "high rate here is the expected result for perfectly real references, "
+        "and folding it into a headline would be a category error."
+    )
+    out.append("")
+    out.append(
+        "It is still worth reporting, because it quantifies how much of a "
+        "mixed bibliography sits outside scholarly indexing altogether — which "
+        "is the coverage problem any tool pointed at a consulting report runs "
+        "into first."
+    )
+    out.append("")
+    out.append("### All templates combined")
+    out.append("")
+    out.append(
+        f"{pct(o['unverified_rate'])} across {o['conclusive']:,} checks "
+        f"(95% CI {ci(o)}). Shown for completeness only; the split above is "
+        "the meaningful cut."
     )
     out.append("")
     out.append("| | count |")

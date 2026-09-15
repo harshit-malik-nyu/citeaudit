@@ -126,6 +126,7 @@ def main() -> int:
             per_category=args.preprints_per_category,
             max_checks=args.preprint_max_checks,
             workers=args.workers,
+            accumulate_from=ROOT / "evidence" / "preprints",
         )
         psum = preprints.summarise(study)
         try:

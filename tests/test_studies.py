@@ -884,3 +884,105 @@ class TestOpenAlexPreprintSampling:
         pp.run(self._Client({"results": []}), categories=["cs.LG"],
                per_category=1, workers=1)
         assert called["arxiv"], "arXiv fallback was not attempted"
+
+
+class TestIncrementalAccumulation:
+    """
+    arXiv rate-limits by IP and GitHub runners share address space, so any run
+    may collect a hundred papers or none — and which one it is has nothing to
+    do with this code. Depending on a lucky run means the corpus can never be
+    refreshed.
+
+    Accumulation removes the dependency: each run contributes what it managed
+    to fetch and skips papers already covered.
+    """
+
+    def _rows(self, tmp_path, ids):
+        import csv
+        from dataclasses import asdict
+        from citeaudit.preprints import PreprintCheck
+        checks = [PreprintCheck(
+            arxiv_id=i, category="cs.LG", reference_text="t", kind="doi",
+            identifier=f"10.1/{i}", verdict="verified", authority="crossref")
+            for i in ids]
+        with (tmp_path / "checks.csv").open("w", newline="") as fh:
+            w = csv.DictWriter(fh, fieldnames=list(asdict(checks[0]).keys()))
+            w.writeheader()
+            for c in checks:
+                w.writerow(asdict(c))
+        return checks
+
+    def test_existing_checks_and_ids_are_loaded(self, tmp_path):
+        from citeaudit.preprints import load_existing_checks
+        self._rows(tmp_path, ["2401.1", "2401.2"])
+        rows, seen = load_existing_checks(tmp_path)
+        assert len(rows) == 2
+        assert seen == {"2401.1", "2401.2"}
+
+    def test_absent_file_is_an_empty_start_not_an_error(self, tmp_path):
+        from citeaudit.preprints import load_existing_checks
+        assert load_existing_checks(tmp_path) == ([], set())
+
+    def test_corrupt_file_degrades_to_empty(self, tmp_path):
+        """A damaged prior result must not wedge every future run."""
+        from citeaudit.preprints import load_existing_checks
+        (tmp_path / "checks.csv").write_text("\x00 not a csv at all")
+        rows, seen = load_existing_checks(tmp_path)
+        assert rows == [] and seen == set()
+
+    def test_already_collected_papers_are_skipped(self, tmp_path, monkeypatch):
+        """A throttled run should spend its budget on new material."""
+        import citeaudit.preprints as pp
+        self._rows(tmp_path, ["2401.1", "2401.2"])
+
+        offered = [("2401.1", "arXiv", "old"), ("2401.3", "arXiv", "new")]
+        monkeypatch.setattr(pp, "sample_via_openalex", lambda *a, **k: offered)
+
+        fetched: list[str] = []
+
+        def fake_source(client, aid):
+            fetched.append(aid)
+            return None
+
+        monkeypatch.setattr(pp, "fetch_source", fake_source)
+        pp.run(None, categories=["cs.LG"], per_category=2, workers=1,
+               accumulate_from=tmp_path)
+        assert fetched == ["2401.3"], f"re-fetched known papers: {fetched}"
+
+    def test_carried_checks_are_merged_into_the_result(self, tmp_path, monkeypatch):
+        import citeaudit.preprints as pp
+        self._rows(tmp_path, ["2401.1", "2401.2"])
+        monkeypatch.setattr(pp, "sample_via_openalex", lambda *a, **k: [])
+        monkeypatch.setattr(pp, "sample_preprints", lambda *a, **k: iter([]))
+
+        study = pp.run(None, categories=["cs.LG"], per_category=1, workers=1,
+                       accumulate_from=tmp_path)
+        assert len(study.checks) == 2
+        assert study.carried_checks == 2
+
+    def test_summary_separates_carried_from_newly_collected(self, tmp_path,
+                                                            monkeypatch):
+        """
+        A reader must be able to tell how much of the corpus this run produced.
+        Presenting an accumulated total as a single run's output would overstate
+        what any one execution achieved.
+        """
+        import citeaudit.preprints as pp
+        self._rows(tmp_path, ["2401.1", "2401.2", "2401.3"])
+        monkeypatch.setattr(pp, "sample_via_openalex", lambda *a, **k: [])
+        monkeypatch.setattr(pp, "sample_preprints", lambda *a, **k: iter([]))
+
+        study = pp.run(None, categories=["cs.LG"], per_category=1, workers=1,
+                       accumulate_from=tmp_path)
+        m = pp.summarise(study)["method"]
+        assert m["carried_from_earlier_runs"] == 3
+        assert m["collected_this_run"] == 0
+        assert m["total_checks"] == 3
+
+    def test_accumulation_is_opt_in(self, tmp_path, monkeypatch):
+        import citeaudit.preprints as pp
+        self._rows(tmp_path, ["2401.1"])
+        monkeypatch.setattr(pp, "sample_via_openalex", lambda *a, **k: [])
+        monkeypatch.setattr(pp, "sample_preprints", lambda *a, **k: iter([]))
+        study = pp.run(None, categories=["cs.LG"], per_category=1, workers=1)
+        assert study.checks == []

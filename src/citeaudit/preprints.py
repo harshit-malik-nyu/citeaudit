@@ -343,11 +343,55 @@ class PreprintCheck:
     detail: str = ""
 
 
+def load_existing_checks(directory) -> tuple[list[PreprintCheck], set[str]]:
+    """
+    Read checks already collected, and the arXiv ids they came from.
+
+    Accumulation exists because a single run cannot reliably refresh this
+    corpus. arXiv rate-limits by IP and GitHub runners share address space, so
+    any given run may collect a hundred papers or none, and which one it is has
+    nothing to do with this code.
+
+    Rather than depend on a lucky run, each run contributes what it managed to
+    fetch and skips papers already covered. An unreliable dependency becomes an
+    eventually-sufficient one, and the sample only ever grows.
+    """
+    from pathlib import Path
+    import csv as _csv
+
+    path = Path(directory) / "checks.csv"
+    if not path.exists():
+        return [], set()
+
+    rows: list[PreprintCheck] = []
+    seen: set[str] = set()
+    try:
+        with path.open(newline="") as fh:
+            for r in _csv.DictReader(fh):
+                rows.append(PreprintCheck(
+                    arxiv_id=r.get("arxiv_id", ""),
+                    category=r.get("category", ""),
+                    reference_text=r.get("reference_text", ""),
+                    kind=r.get("kind", ""),
+                    identifier=r.get("identifier") or None,
+                    verdict=r.get("verdict", ""),
+                    authority=r.get("authority", ""),
+                    detail=r.get("detail", ""),
+                ))
+                if r.get("arxiv_id"):
+                    seen.add(r["arxiv_id"])
+    except (OSError, _csv.Error):
+        return [], set()
+
+    return rows, seen
+
+
 @dataclass
 class PreprintStudy:
     checks: list[PreprintCheck] = field(default_factory=list)
     papers_sampled: int = 0
     papers_with_bibliography: int = 0
+    carried_checks: int = 0
     started_utc: str = ""
     finished_utc: str = ""
 
@@ -355,11 +399,22 @@ class PreprintStudy:
 def run(client: Client, *, categories: list[str], per_category: int = 8,
         max_refs_per_paper: int = 12, max_checks: int = 1200,
         workers: int = 4, seed: int = 20260909,
-        prefer_openalex: bool = True) -> PreprintStudy:
+        prefer_openalex: bool = True,
+        accumulate_from=None) -> PreprintStudy:
     verifier = Verifier(client, check_urls=False, workers=workers)
     study = PreprintStudy(
         started_utc=datetime.now(timezone.utc).isoformat(timespec="seconds")
     )
+
+    # Papers already covered by earlier runs are skipped, so a throttled run
+    # spends its budget on new material rather than re-fetching what is done.
+    already: set[str] = set()
+    carried: list[PreprintCheck] = []
+    if accumulate_from is not None:
+        carried, already = load_existing_checks(accumulate_from)
+        if carried:
+            log.info("carrying %s checks from %s papers collected earlier",
+                     len(carried), len(already))
 
     sampled: list[tuple[str, str, str]] = []
     if prefer_openalex:
@@ -370,6 +425,10 @@ def run(client: Client, *, categories: list[str], per_category: int = 8,
         log.warning("falling back to the arXiv API for sampling")
         sampled = list(sample_preprints(
             client, categories=categories, per_category=per_category))
+
+    sampled = [row for row in sampled if row[0] not in already]
+    log.info("%s papers to fetch after skipping ones already collected",
+             len(sampled))
 
     for aid, cat, _title in sampled:
         study.papers_sampled += 1
@@ -401,6 +460,12 @@ def run(client: Client, *, categories: list[str], per_category: int = 8,
                 return study
 
     study.finished_utc = datetime.now(timezone.utc).isoformat(timespec="seconds")
+
+    if carried:
+        study.checks = carried + study.checks
+        study.papers_with_bibliography += len(already)
+        study.carried_checks = len(carried)
+
     return study
 
 
@@ -439,6 +504,8 @@ def summarise(study: PreprintStudy) -> dict:
             "papers_sampled": study.papers_sampled,
             "papers_with_bibliography": study.papers_with_bibliography,
             "total_checks": len(study.checks),
+            "carried_from_earlier_runs": study.carried_checks,
+            "collected_this_run": len(study.checks) - study.carried_checks,
             "started_utc": study.started_utc,
             "finished_utc": study.finished_utc,
             "claim_boundary": (
@@ -470,11 +537,28 @@ def to_markdown(summary: dict) -> str:
     out.append("")
     out.append(
         f"**{m['total_checks']:,} references** from "
-        f"**{m['papers_with_bibliography']:,} arXiv preprints** "
-        f"({m['papers_sampled']:,} sampled), parsed from the authors' own "
-        "`.bbl` and `.bib` source files."
+        f"**{m['papers_with_bibliography']:,} arXiv preprints**, parsed from "
+        "the authors' own `.bbl` and `.bib` source files."
     )
     out.append("")
+    carried = m.get("carried_from_earlier_runs") or 0
+    if carried:
+        out.append(
+            f"Accumulated across runs: {carried:,} references were collected "
+            f"earlier and {m.get('collected_this_run', 0):,} were added by the "
+            "most recent run."
+        )
+        out.append("")
+        out.append(
+            "arXiv rate-limits by IP and CI runners share address space, so "
+            "any single run may collect a hundred papers or none for reasons "
+            "unrelated to this code. Each run therefore contributes what it "
+            "managed to fetch and skips papers already covered, rather than "
+            "depending on one lucky execution. Stating the split matters: an "
+            "accumulated total presented as a single run's output would "
+            "overstate what any one execution achieved."
+        )
+        out.append("")
     out.append("## Why a second corpus")
     out.append("")
     out.append(

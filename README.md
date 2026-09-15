@@ -449,21 +449,25 @@ for finding in report.failures:
     print(finding.citation.raw, finding.detail, finding.evidence_url)
 ```
 
-## One manual step
+## Live report
 
-Everything in this repository runs itself except enabling GitHub Pages, and
-that is a measured limit rather than an assumed one. A
-[workflow](.github/workflows/pages.yml) attempts it with
-`configure-pages@v5 enablement: true`, using the workflow token granted
-`pages: write`. It fails: turning Pages on requires repository-admin
-permission that no workflow token carries.
+**<https://harshit-malik-nyu.github.io/citeaudit/>**
 
-**Settings → Pages → Build and deployment → Source → GitHub Actions**
+Regenerated whenever the live-verification or studies workflows run, with the
+evidence directory served alongside so every figure on the page can be traced
+without cloning.
 
-The workflow deploys on the next run afterwards, and republishes automatically
-whenever the live-verification or studies workflows regenerate the report. Until
-then it skips the deploy job cleanly rather than failing — a red badge for an
-unclicked setting is noise, not signal.
+Getting there took two attempts, and the second one is the interesting part.
+`actions/configure-pages@v5` with `enablement: true` — the documented
+self-bootstrap — returned failure, because enabling Pages that way needs
+repository-admin permission no workflow token carries. Pushing a `gh-pages`
+branch enables Pages automatically and needs only `contents: write`, which a
+workflow token does have.
+
+The first route was abandoned on evidence rather than on assumption: the
+workflow was made to commit its own outcome, because the Actions API was not
+readable and "Pages is not live" was otherwise indistinguishable from "the
+workflow never ran."
 
 ## Live evidence
 

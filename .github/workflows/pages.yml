@@ -17,7 +17,13 @@ on:
     paths:
       - 'docs/**'
       - 'evidence/**'
+      - 'README.md'
       - '.github/workflows/pages.yml'
+  # Republish whenever the live-verification or studies workflows finish, since
+  # those are what regenerate the report and the evidence the site serves.
+  workflow_run:
+    workflows: [live-verification, studies]
+    types: [completed]
   workflow_dispatch:
 
 permissions:

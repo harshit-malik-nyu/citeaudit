@@ -523,6 +523,22 @@ Both scholarly APIs are free and maintained on public goodwill. The client
 paces its requests and identifies itself with a contact address per Crossref's
 polite-pool convention. Please set `--mailto`.
 
+## The case against this tool
+
+**[docs/against.md](docs/against.md)** argues, as strongly as I can make it,
+that this project should not exist — using its own measurements.
+
+The objection I could not dispose of: legitimate bibliographies fail at 13%, so
+a handful of fabricated references is statistically invisible against that
+noise. If that holds, aggregate scoring is close to useless and the honest value
+collapses to per-reference triage. Testing it properly needs a corpus of
+documents with *known* fabrications, which does not publicly exist.
+
+Two others worth reading before adopting it: the tool is weakest on grey
+literature, which is exactly the corpus where fabrication has been found; and
+it would have caught only half of the Deloitte case, since the fabricated
+judicial quote has no retrievable source text.
+
 ## Limitations
 
 Stated plainly, because a verification tool that oversells itself is

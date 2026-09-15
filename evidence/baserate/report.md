@@ -10,27 +10,27 @@ References deposited by publishers in real published papers. Ground truth is gua
 
 | Mode | Checks | Verified | False positives | FP rate |
 |---|---:|---:|---:|---:|
-| Identified (DOI given) | 299 | 298 | 0 | 0.0% (95% CI 0.0%–1.3%) |
-| Described (DOI withheld) | 299 | 296 | 3 | 1.0% (95% CI 0.3%–2.9%) |
+| Identified (DOI given) | 299 | 299 | 0 | 0.0% (95% CI 0.0%–1.3%) |
+| Described (DOI withheld) | 299 | 294 | 5 | 1.7% (95% CI 0.7%–3.9%) |
 
-The OpenAlex fallback rescued **10** references that Crossref alone would have reported as non-existent.
+The OpenAlex fallback rescued **27** references that Crossref alone would have reported as non-existent.
 
 ## By publication year of the citing paper
 
 | Year | Checks | FP rate | 95% CI |
 |---:|---:|---:|---|
-| 2014 | 45 | 0.0% | 0.0%–7.9% |
-| 2017 | 52 | 3.8% | 1.1%–13.0% |
-| 2020 | 47 | 2.1% | 0.4%–11.1% |
-| 2022 | 57 | 0.0% | 0.0%–6.3% |
-| 2023 | 46 | 0.0% | 0.0%–7.7% |
-| 2024 | 52 | 0.0% | 0.0%–6.9% |
+| 2014 | 42 | 0.0% | 0.0%–8.4% |
+| 2017 | 51 | 7.8% | 3.1%–18.5% |
+| 2020 | 47 | 0.0% | 0.0%–7.6% |
+| 2022 | 52 | 0.0% | 0.0%–6.9% |
+| 2023 | 48 | 2.1% | 0.4%–10.9% |
+| 2024 | 59 | 0.0% | 0.0%–6.1% |
 
 ## How to read a document score against this
 
-On references that are genuine, citeaudit reports NOT_FOUND about **1.0%** of the time when no identifier is supplied. A document whose references carry no DOIs should therefore be expected to show roughly that failure rate before any real problem is present.
+On references that are genuine, citeaudit reports NOT_FOUND about **1.7%** of the time when no identifier is supplied. A document whose references carry no DOIs should therefore be expected to show roughly that failure rate before any real problem is present.
 
-A NOT_FOUND rate materially above 1.0% is the signal worth investigating. A rate at or below it is consistent with normal coverage gaps and says nothing about fabrication.
+A NOT_FOUND rate materially above 1.7% is the signal worth investigating. A rate at or below it is consistent with normal coverage gaps and says nothing about fabrication.
 
 ## What the false positives actually are
 
@@ -38,9 +38,11 @@ Every entry below is a genuine work that citeaudit failed to find. Listing them 
 
 | Mode | DOI | Claimed title |
 |---|---|---|
-| described | `10.29309/tpmj/2015.22.04.1313` | Child birth; comparison of complications between lithotomy position an |
-| described | `10.3109/01443618609079206` | The birthing chair: an obstetric hazard? |
-| described | `10.1115/dmd2018-6906` | 2018 Design of Medical Devices Conf |
+| described | `10.1109/tii.2011.2176742` | A fair and high throughput reader‐to‐reader anti‐collision protocol in |
+| described | `10.1109/tie.2009.2021869` | An efficient reader anti‐collision algorithm in dense RFID networks wi |
+| described | `10.1016/s1359-1789(97)00001-3` | Video game violence: A review of the empirical literature |
+| described | `10.4101/jvwr.v7i2.7096` | White man's virtual world: A systematic content analysis of gender and |
+| described | `10.1117/12.2232103` | Proc. SPIE Conf. Ser. Vol. 9908, Ground-based and Airborne Instrumenta |
 
 ## Limits
 

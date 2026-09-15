@@ -38,8 +38,8 @@ def main() -> int:
     ap.add_argument("--mailto", default="citeaudit-ci@users.noreply.github.com")
     ap.add_argument("--preprints-per-category", type=int, default=8)
     ap.add_argument("--preprint-max-checks", type=int, default=1400)
-    ap.add_argument("--wiki-articles", type=int, default=120)
-    ap.add_argument("--wiki-max-checks", type=int, default=900)
+    ap.add_argument("--wiki-articles", type=int, default=260)
+    ap.add_argument("--wiki-max-checks", type=int, default=1600)
     ap.add_argument("--workers", type=int, default=6)
     args = ap.parse_args()
 

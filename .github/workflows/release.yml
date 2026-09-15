@@ -1,0 +1,89 @@
+name: release
+
+# Publishes to PyPI on a tagged release.
+#
+# Uses PyPI Trusted Publishing (OpenID Connect) rather than a stored API token.
+# PyPI verifies the workflow's identity directly against GitHub, so there is no
+# long-lived credential in repository secrets to leak, rotate, or accidentally
+# print in a log — which matters more than usual in a project whose whole
+# subject is not trusting output you cannot verify.
+#
+# One-time setup, at https://pypi.org/manage/account/publishing/:
+#
+#   PyPI project name   citeaudit
+#   Owner               harshit-malik-nyu
+#   Repository name     citeaudit
+#   Workflow name       release.yml
+#   Environment name    pypi
+#
+# After that, publishing is:
+#
+#   git tag v0.1.0 && git push origin v0.1.0
+#
+# The build and verification steps below run on every tag regardless, so a
+# broken artifact fails before it reaches the index rather than after.
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Build wheel and sdist
+        run: |
+          pip install --quiet build
+          python -m build
+
+      - name: Verify the artifact installs clean and the CLI works
+        # An artifact that builds but does not install is worse than no
+        # artifact: it fails for the user rather than for us.
+        run: |
+          python -m venv /tmp/verify
+          /tmp/verify/bin/pip install --quiet dist/*.whl
+          /tmp/verify/bin/citeaudit --version
+          /tmp/verify/bin/citeaudit --help > /dev/null
+          /tmp/verify/bin/python - <<'PY'
+          from citeaudit.extract import extract
+          doc = ('References\n\n[1] Author, A. (2019). "A title of adequate '
+                 'length here". doi:10.1016/j.test.2019.03.011\n')
+          found = extract(doc)
+          assert len(found) == 1, found
+          assert found[0].identifier == "10.1016/j.test.2019.03.011"
+          print("smoke test passed")
+          PY
+
+      - name: Check package metadata
+        run: |
+          pip install --quiet twine
+          twine check dist/*
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/citeaudit
+    permissions:
+      id-token: write        # required for trusted publishing
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1

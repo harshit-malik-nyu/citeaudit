@@ -11,11 +11,54 @@ bibliographic reference, checks each against the authority that can answer for
 it, and tells you which ones do not hold up.
 
 ```bash
-pip install citeaudit
+pip install git+https://github.com/harshit-malik-nyu/citeaudit
 citeaudit report.docx
 ```
 
+A tagged release publishes to PyPI via
+[trusted publishing](.github/workflows/release.yml) — no API token is stored
+anywhere, which matters in a project about not trusting what you cannot verify.
+
 ---
+
+## A note on the commit history
+
+A large share of the commits in this repository are fixes to bugs found in it.
+That is deliberate, and it is the most load-bearing thing here.
+
+This tool exists because three of the four largest professional-services firms
+published reports containing citations that did not exist. None of those
+reports failed because nobody checked. They failed because **the checking was
+done on output that looked correct** — internally coherent, plausibly
+formatted, confidently wrong.
+
+A citation checker is exposed to exactly that failure. Its output is a rate: a
+single number that looks equally reasonable whether it is right or not. Twice,
+this one reported mismatches that were mostly its own false accusations, and
+the rate looked entirely plausible both times — 8.87%, then 13.16%. Nothing in
+the summary statistics invited suspicion. Only reading individual findings
+caught either.
+
+So the history records:
+
+| Found | Why it mattered |
+|---|---|
+| A calibration scoring 1.000 precision *and* recall at every threshold | Looked like success; was a measurement that measured nothing |
+| Seven of eight "mismatches" were debris compared against real titles | The rate was fine; the findings were fabricated by a parser |
+| Seven of the next eleven, from a different cause | The first fix was real and insufficient |
+| An empty run overwriting 1,247 checks with zeros | A failed study silently destroyed a good one |
+| Six threads sharing an unlocked rate limiter | Pacing was never enforced; effective rate was 6× |
+| A 14.3% figure from seven observations | Precision the data could not support |
+
+Every one is fixed, regression-tested, and documented where it happened rather
+than edited out.
+
+**The claim is not that the tool was built without errors.** It is that the
+errors were found, and that the machinery which found them — inspection
+scripts, power guards, degradation guards, a taxonomy that refuses to conclude
+without evidence — is now permanent and runs on every change.
+
+A project that reports a clean history is telling you nobody looked.
 
 ## Why this exists
 

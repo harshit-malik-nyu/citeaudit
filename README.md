@@ -449,6 +449,22 @@ for finding in report.failures:
     print(finding.citation.raw, finding.detail, finding.evidence_url)
 ```
 
+## One manual step
+
+Everything in this repository runs itself except enabling GitHub Pages, and
+that is a measured limit rather than an assumed one. A
+[workflow](.github/workflows/pages.yml) attempts it with
+`configure-pages@v5 enablement: true`, using the workflow token granted
+`pages: write`. It fails: turning Pages on requires repository-admin
+permission that no workflow token carries.
+
+**Settings → Pages → Build and deployment → Source → GitHub Actions**
+
+The workflow deploys on the next run afterwards, and republishes automatically
+whenever the live-verification or studies workflows regenerate the report. Until
+then it skips the deploy job cleanly rather than failing — a red badge for an
+unclicked setting is noise, not signal.
+
 ## Live evidence
 
 This repository does not ask you to take its word for anything.

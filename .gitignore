@@ -17,3 +17,4 @@ citeaudit.json
 citeaudit-report.html
 .env
 *.token
+PAGES_STATUS.txt

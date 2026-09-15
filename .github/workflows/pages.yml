@@ -27,7 +27,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write     # needed only for the self-report step below
+  contents: read
   pages: write
   id-token: write
 
@@ -90,31 +90,43 @@ jobs:
         with:
           enablement: true
 
-      - name: Report whether Pages could enable itself
-        # The Actions API is not readable with the token available here, so the
-        # workflow records its own outcome. Without this, "Pages is not live"
-        # is indistinguishable from "the workflow never ran".
-        if: always()
+      - name: Explain the one manual step, if Pages is not enabled
+        # MEASURED, not assumed: configure-pages with enablement:true was tried
+        # and failed. Turning Pages on requires repository-admin permission,
+        # which the workflow GITHUB_TOKEN does not carry — so this is the one
+        # step in the project that genuinely cannot be automated from inside
+        # the repository.
+        if: steps.configure.outcome != 'success'
         run: |
           {
-            echo "run_at=$(date -u +%FT%TZ)"
-            echo "configure_outcome=${{ steps.configure.outcome }}"
-            echo "page_url=${{ steps.configure.outputs.base_url }}"
-          } > PAGES_STATUS.txt
-          cat PAGES_STATUS.txt
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add PAGES_STATUS.txt
-          git commit -m "pages: self-report [skip ci]" || exit 0
-          git pull --rebase --autostash origin main || true
-          git push || true
+            echo "## GitHub Pages is not enabled"
+            echo
+            echo "This workflow is correct and will deploy on the next run."
+            echo "It needs one manual step first, because enabling Pages"
+            echo "requires repository-admin permission that a workflow token"
+            echo "does not have:"
+            echo
+            echo "**Settings -> Pages -> Build and deployment -> Source ->"
+            echo "GitHub Actions**"
+            echo
+            echo "Nothing else to change. Re-run this workflow afterwards and"
+            echo "the site publishes."
+          } >> "$GITHUB_STEP_SUMMARY"
+          echo "Pages not enabled; skipping deploy. See the job summary."
 
       - uses: actions/upload-pages-artifact@v3
+        if: steps.configure.outcome == 'success'
         with:
           path: _site
 
+    outputs:
+      configured: ${{ steps.configure.outcome }}
+
   deploy:
     needs: build
+    # Skip cleanly rather than failing the workflow when Pages is off. A red
+    # badge for a setting nobody has clicked yet is noise, not signal.
+    if: needs.build.outputs.configured == 'success'
     runs-on: ubuntu-latest
     environment:
       name: github-pages

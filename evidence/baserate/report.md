@@ -1,6 +1,6 @@
 # Base rate: how often does citeaudit flag a genuine reference?
 
-**598 checks** across **72 published papers**, sampled at random from Crossref and stratified by publication year (2014–2024). Seed 20260909.
+**656 checks** across **72 published papers**, sampled at random from Crossref and stratified by publication year (2014–2024). Seed 20260909.
 
 ## Why these references are known to be genuine
 
@@ -10,27 +10,27 @@ References deposited by publishers in real published papers. Ground truth is gua
 
 | Mode | Checks | Verified | False positives | FP rate |
 |---|---:|---:|---:|---:|
-| Identified (DOI given) | 299 | 299 | 0 | 0.0% (95% CI 0.0%–1.3%) |
-| Described (DOI withheld) | 299 | 294 | 5 | 1.7% (95% CI 0.7%–3.9%) |
+| Identified (DOI given) | 328 | 326 | 0 | 0.0% (95% CI 0.0%–1.2%) |
+| Described (DOI withheld) | 328 | 327 | 1 | 0.3% (95% CI 0.1%–1.7%) |
 
-The OpenAlex fallback rescued **27** references that Crossref alone would have reported as non-existent.
+The OpenAlex fallback rescued **18** references that Crossref alone would have reported as non-existent.
 
 ## By publication year of the citing paper
 
 | Year | Checks | FP rate | 95% CI |
 |---:|---:|---:|---|
-| 2014 | 42 | 0.0% | 0.0%–8.4% |
-| 2017 | 51 | 7.8% | 3.1%–18.5% |
-| 2020 | 47 | 0.0% | 0.0%–7.6% |
-| 2022 | 52 | 0.0% | 0.0%–6.9% |
-| 2023 | 48 | 2.1% | 0.4%–10.9% |
-| 2024 | 59 | 0.0% | 0.0%–6.1% |
+| 2014 | 58 | 0.0% | 0.0%–6.2% |
+| 2017 | 50 | 0.0% | 0.0%–7.1% |
+| 2020 | 53 | 0.0% | 0.0%–6.8% |
+| 2022 | 55 | 0.0% | 0.0%–6.5% |
+| 2023 | 56 | 0.0% | 0.0%–6.4% |
+| 2024 | 56 | 1.8% | 0.3%–9.4% |
 
 ## How to read a document score against this
 
-On references that are genuine, citeaudit reports NOT_FOUND about **1.7%** of the time when no identifier is supplied. A document whose references carry no DOIs should therefore be expected to show roughly that failure rate before any real problem is present.
+On references that are genuine, citeaudit reports NOT_FOUND about **0.3%** of the time when no identifier is supplied. A document whose references carry no DOIs should therefore be expected to show roughly that failure rate before any real problem is present.
 
-A NOT_FOUND rate materially above 1.7% is the signal worth investigating. A rate at or below it is consistent with normal coverage gaps and says nothing about fabrication.
+A NOT_FOUND rate materially above 0.3% is the signal worth investigating. A rate at or below it is consistent with normal coverage gaps and says nothing about fabrication.
 
 ## What the false positives actually are
 
@@ -38,11 +38,7 @@ Every entry below is a genuine work that citeaudit failed to find. Listing them 
 
 | Mode | DOI | Claimed title |
 |---|---|---|
-| described | `10.1109/tii.2011.2176742` | A fair and high throughput reader‐to‐reader anti‐collision protocol in |
-| described | `10.1109/tie.2009.2021869` | An efficient reader anti‐collision algorithm in dense RFID networks wi |
-| described | `10.1016/s1359-1789(97)00001-3` | Video game violence: A review of the empirical literature |
-| described | `10.4101/jvwr.v7i2.7096` | White man's virtual world: A systematic content analysis of gender and |
-| described | `10.1117/12.2232103` | Proc. SPIE Conf. Ser. Vol. 9908, Ground-based and Airborne Instrumenta |
+| described | `10.1109/tthz.2012.2183740` | First demonstration of a tunable electronic source in the 2.5 to 2.7 T |
 
 ## Limits
 

@@ -1,0 +1,599 @@
+# citeaudit
+
+**Verify that the citations in a document actually exist.**
+
+[![ci](https://github.com/harshit-malik-nyu/citeaudit/actions/workflows/ci.yml/badge.svg)](https://github.com/harshit-malik-nyu/citeaudit/actions/workflows/ci.yml)
+[![live-verification](https://github.com/harshit-malik-nyu/citeaudit/actions/workflows/live-verification.yml/badge.svg)](https://github.com/harshit-malik-nyu/citeaudit/actions/workflows/live-verification.yml)
+[![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+Point it at a document. It extracts every DOI, arXiv identifier, URL, and
+bibliographic reference, checks each against the authority that can answer for
+it, and tells you which ones do not hold up.
+
+```bash
+pip install git+https://github.com/harshit-malik-nyu/citeaudit
+citeaudit report.docx
+```
+
+A tagged release publishes to PyPI via
+[trusted publishing](.github/workflows/release.yml) — no API token is stored
+anywhere, which matters in a project about not trusting what you cannot verify.
+
+---
+
+## A note on the commit history
+
+A large share of the commits in this repository are fixes to bugs found in it.
+That is deliberate, and it is the most load-bearing thing here.
+
+This tool exists because three of the four largest professional-services firms
+published reports containing citations that did not exist. None of those
+reports failed because nobody checked. They failed because **the checking was
+done on output that looked correct** — internally coherent, plausibly
+formatted, confidently wrong.
+
+A citation checker is exposed to exactly that failure. Its output is a rate: a
+single number that looks equally reasonable whether it is right or not. Twice,
+this one reported mismatches that were mostly its own false accusations, and
+the rate looked entirely plausible both times — 8.87%, then 13.16%. Nothing in
+the summary statistics invited suspicion. Only reading individual findings
+caught either.
+
+So the history records:
+
+| Found | Why it mattered |
+|---|---|
+| A calibration scoring 1.000 precision *and* recall at every threshold | Looked like success; was a measurement that measured nothing |
+| Seven of eight "mismatches" were debris compared against real titles | The rate was fine; the findings were fabricated by a parser |
+| Seven of the next eleven, from a different cause | The first fix was real and insufficient |
+| An empty run overwriting 1,247 checks with zeros | A failed study silently destroyed a good one |
+| Six threads sharing an unlocked rate limiter | Pacing was never enforced; effective rate was 6× |
+| A 14.3% figure from seven observations | Precision the data could not support |
+
+Every one is fixed, regression-tested, and documented where it happened rather
+than edited out.
+
+**The claim is not that the tool was built without errors.** It is that the
+errors were found, and that the machinery which found them — inspection
+scripts, power guards, degradation guards, a taxonomy that refuses to conclude
+without evidence — is now permanent and runs on every change.
+
+A project that reports a clean history is telling you nobody looked.
+
+## Why this exists
+
+Between October 2025 and May 2026, three of the world's four largest
+professional services firms retracted or corrected published reports containing
+citations that did not exist.
+
+- **Deloitte Australia** refunded part of a A$440,000 contract with the
+  Department of Employment and Workplace Relations after a 237-page assurance
+  review was found to contain a fabricated quote attributed to a federal court
+  judge and references to academic papers that had never been written.
+  ([The Guardian](https://www.theguardian.com/australia-news/2025/oct/06/deloitte-to-pay-money-back-to-albanese-government-after-using-ai-in-440000-report))
+- **EY** withdrew a study after a majority of its citations could not be
+  verified.
+- **KPMG** opened a review and withdrew a report over similar failures.
+
+Every one of those documents passed internal quality assurance and partner
+review. Two passed client sign-off.
+
+The reason is not that reviewers were careless. It is that professional review
+was designed to catch the mistakes humans make — arithmetic slips, logical
+gaps, weak sourcing. Machine-generated text fails differently. It produces
+references that are correctly formatted, plausibly titled, attributed to real
+researchers in the right field, and published in journals that exist. Nothing
+about them looks wrong, because nothing about them *is* wrong except that the
+paper was never written.
+
+Checking that by hand takes about ninety seconds per reference. A 237-page
+report has hundreds. That arithmetic is why it does not get done, and it is the
+entire reason this tool exists.
+
+## What it catches that a link checker does not
+
+A link checker asks "does this URL respond". That is the wrong question, and
+answering it well provides false assurance.
+
+The dangerous failure is a **real DOI attached to the wrong paper**. The link
+resolves. A reviewer clicks it and lands on a genuine article in a real journal.
+The citation passes every check that stops at HTTP 200 — and it is still wrong,
+because it is not the source that supports the claim being made.
+
+citeaudit compares what the document *claims* about a reference against what
+the authority actually *holds* under that identifier:
+
+```
+MISM  line 42   10.1038/nature14539
+      document says: 'Procedural fairness in machine-assisted eligibility determination'
+      record holds:  'Deep learning'
+      identifier resolves to a DIFFERENT work (8% title similarity)
+      check it: https://doi.org/10.1038/nature14539
+```
+
+It also catches references carrying no identifier at all, by searching Crossref
+for the described work. If nothing close exists, that is reported — which is
+how a confident reference to a paper nobody ever wrote gets found.
+
+## What the measurements say
+
+> Full write-up: **[docs/findings.md](docs/findings.md)** — the analysis, the
+> reasoning, and the errors found along the way.
+
+
+Three studies against live Crossref, OpenAlex and arXiv. Results committed to
+[`evidence/`](evidence/), refreshed on a schedule.
+
+They exist because a verdict is uninterpretable without them. If a document
+scores 91%, you cannot tell whether that is alarming or ordinary until you know
+what ordinary is — and before this, nobody had measured it.
+
+### The headline: where citation integrity actually breaks down
+
+| Corpus | Who wrote the reference | Unverified | 95% CI | n |
+|---|---|---:|---|---:|
+| Publisher-deposited, DOI supplied | a machine | **0.00%** | 0.00–1.24% | 307 |
+| Publisher-deposited, no identifier | a machine | **1.30%** | 0.51–3.30% | 307 |
+| arXiv bibliographies | expert authors | **13.16%** | 11.36–15.19% | 1,201 |
+| Wikipedia, scholarly citations | non-expert authors | **13.92%** | 10.09–18.91% | 237 |
+
+**A tenfold gap**, and it is the most useful number in this repository.
+
+### The extrapolation is bounded, not assumed
+
+The business case rests on carrying a rate measured on public corpora over to
+consulting deliverables. That was the load-bearing assumption, and it could not
+be validated directly — those documents are not publicly samplable, which is
+exactly why no base rate for them existed.
+
+So it was **bounded** instead, by measuring two author populations chosen to be
+as different as the public web allows. Physicists using reference managers, and
+Wikipedia editors working by hand across news, books, reports and journals.
+
+**They agree: 13.16% and 13.92%, with heavily overlapping intervals.**
+
+That is the strongest result in this repository, and it was not the expected
+one. The rate does not appear to depend on who is writing, only on whether
+anything validated the reference on its way in. Two populations with almost
+nothing else in common land within a point of each other, which makes carrying
+the figure to a third unvalidated corpus far more defensible than any
+disclaimer could have.
+
+It does not make it certain. Wikipedia is community-audited with a culture of
+challenging unsourced claims, so it plausibly sits *cleaner* than an unreviewed
+consulting report — the pair should be read as a floor, not a bracket.
+
+References that publishers deposit are near-perfect: not one of 307 DOI-bearing
+entries failed to resolve. The same kind of works, cited by hand in author-written
+bibliographies, verify at 13.16%.
+
+The difference is not the literature. It is whether anything validated the
+reference on its way in. Deposited metadata is machine-checked at source; a typed
+bibliography is checked by nobody.
+
+That matters because **the corpus where fabrication has been found has no
+pipeline at all.** Consulting deliverables, government reports and internal
+memoranda are written like the third row and checked like nothing.
+
+### Within author-written bibliographies
+
+| How the reference was written | n | Unverified |
+|---|---:|---:|
+| Carries a DOI | 349 | **3.44%** |
+| arXiv identifier | 66 | **6.06%** |
+| Description only | 786 | **18.07%** |
+
+Supplying a DOI cuts the unverified rate by a factor of five. That is a free
+intervention any organisation can mandate tomorrow, and it does not depend on
+any extrapolation being right.
+
+Field variation is wide — 5.5% to 25.5% across twelve arXiv categories — which
+is itself the honest error bar on generalising from any single discipline.
+
+### A correction worth stating
+
+An earlier version of this README reported **8.87%** for this row, from 327
+checks across five fields. Widening to twelve fields and 1,201 checks gave
+**13.16%**. The point estimate moved 48% and the confidence intervals barely
+overlap.
+
+The first figure was published on too little data. It is recorded here rather
+than quietly replaced, because a number that moves that much under resampling
+is a fact about the measurement that a reader deserves.
+
+### Two base rates, and why both are needed
+
+**[Deposited references](evidence/baserate/report.md)** — 614 checks across 72
+randomly sampled published papers, stratified by year.
+
+Ground truth comes free from the construction. Take real papers and their
+deposited reference lists; every entry carries a DOI, so every cited work
+provably exists. Hide the DOI, check by description alone, and **every
+NOT_FOUND is a definite false positive.** No labelling, no annotator judgment.
+
+This measures the tool's error rate. At 0.00% with identifiers and 1.30%
+without, citeaudit does not meaningfully manufacture false alarms.
+
+**[Author-written references](evidence/preprints/report.md)** — 1,247 references
+from 122 arXiv preprints, parsed from the authors' own `.bbl` and `.bib` source
+before any publisher touched them.
+
+This measures the world's error rate. Because the first study bounds the tool's
+contribution at ~1%, the remaining ~12 points are attributable to the
+bibliographies rather than the checker. Neither study means much alone; together
+they separate instrument from signal.
+
+**What 13.16% is not.** It is not a fabrication rate. Non-indexed venues,
+workshop papers, technical reports and transcription errors all land in the same
+bucket. The claim is narrow: this is how often a reference *as written* can be
+verified against public authorities. Results are aggregate; no paper is named
+and no claim is made about any author.
+
+### Inspecting the mismatches — twice
+
+An early version of this README claimed a run surfaced "8 genuine mismatches in
+bibliographies nobody planted." **That claim was wrong and had never been
+checked before it was published.** What follows is what checking it produced.
+
+**First inspection.** Seven of the eight were the tool's own false
+accusations. Title extraction produced debris — an identifier, a page range, an
+author list — which was compared against the record's real title, scored
+13–20%, and reported as citing the wrong paper.
+
+| Recorded as the "claimed title" | Actually |
+|---|---|
+| `arXiv: 2511.20867` | the identifier |
+| `: 0 1443--1450, 2004. 10.1098/rspb...` | a page range |
+| `Holger Bast, Stefan Funke` | the author list |
+
+Root cause: `Proc. R. Soc. Lond. B, 271 (1547): 1443` has an *issue number* of
+1547, which matched as a publication year, sending extraction into the page
+range.
+
+**Second inspection, after the fix.** A larger run reported 11 mismatches.
+Checking those too found roughly seven still false — this time single author
+names:
+
+`Elham Tabassi` · `Qwen Team` · `Mason Youngblood` · `Edsger W. Dijkstra`
+
+The first fix caught author *lists*. A lone name passed everything, because a
+two-word capitalised name and a two-word Title Case title are indistinguishable
+as strings — **"Deep Learning" and "Qwen Team" have identical shape.** No
+in-string rule separates them.
+
+Resolved positionally instead: the leading segment of a reference is the author
+slot, so a bare name there is the author. The same string later in the
+reference could legitimately be a title and is not rejected. Function words
+supply the one usable in-string signal — *"Attention Is All You Need"* is
+all-capitalised but carries three, and no name does.
+
+**The inspection is now a script, not a habit.**
+
+```bash
+python scripts/audit_mismatches.py evidence/preprints/checks.csv
+```
+
+It replays every stored mismatch through the current extraction logic and
+reports which survive. On the 11 from the second round:
+
+```
+  7/11 were false accusations, now resolved
+  1/11 survive and need manual confirmation
+  3/11 cannot be re-adjudicated offline
+```
+
+Those last three matter. Their stored `detail` had been truncated at 200
+characters, cutting off the resolved title, so the finding cannot be re-checked
+without another API call. **The script reports them as unauditable rather than
+counting them either way** — and the storage limit has been raised, because
+evidence you cannot inspect is not evidence.
+
+Surviving mismatches are labelled candidates, not conclusions. Each one is an
+accusation that a document cited the wrong paper, and that is not a claim to
+publish on a heuristic's say-so.
+
+**Why this section exists.** The rate looked entirely plausible both times.
+8.87%, then 13.16% — neither number invited suspicion. Only inspecting
+individual findings caught either bug, and the second surfaced only because
+correcting the first prompted looking again.
+
+A project about unverified claims had published an unverified claim. Recording
+that is not humility for its own sake: it is the only evidence that the numbers
+elsewhere in this repository were checked rather than assumed.
+
+45 regression tests cover both rounds, built from the exact strings that caused
+each false accusation.
+
+### Why the mismatch threshold is 66
+
+[Full report](evidence/calibration/report.md) · 2,501 labelled pairs from 260
+real Crossref records
+
+Same-work pairs take a real record and degrade its title the way bibliographies
+actually degrade. Different-work pairs attach one paper's DOI to the *nearest
+confusable title* in the sample — a plausible title in the right field, which
+is what a fabrication looks like. Labels follow from construction, not judgment.
+
+| Threshold | Precision | Recall |
+|---:|---:|---:|
+| 48 | 1.000 | 0.437 |
+| 54 | 1.000 | 0.881 |
+| 60 | 1.000 | 0.992 |
+| **66** | **1.000** | **1.000** |
+
+Zero false accusations across 1,720 genuine pairs. The operating point is
+chosen on a precision floor rather than by maximising F1, because the two
+errors are not equally costly: a false accusation is what makes someone switch
+the tool off, and a tool that is off catches nothing.
+
+Across independent draws the minimum threshold reaching full recall landed at
+62 and at 66. The upper end is set, so the configured value achieves full
+recall on both draws rather than only on the one that produced it. Reporting
+the band rather than a single run's answer is the honest form — a calibration
+that moves with the sample and is quoted as a point estimate is a calibration
+being oversold.
+
+**A note on how this was reached.** The first calibration run returned perfect
+precision *and* recall at every threshold from 54 to 90 — which looked like
+success and was actually a failed measurement. Positives had been built by
+pairing random titles from unrelated fields, so the two classes never met and
+no threshold had anything to adjudicate. The labelled set was rebuilt around
+nearest-neighbour confusions. The report now states explicitly whether the
+classes overlap, so a future perfect score is visibly either earned or
+meaningless.
+
+### What it is worth
+
+[Full sizing](docs/business-case.md)
+
+A single retraction costs an estimated **A$732k** — of which the publicly
+reported refund is about 15%. Three of the four largest firms had one in eight
+months. Against a mitigation cost near A$35k, breakeven sits at one incident
+every 21 years, and the net stays positive across an order of magnitude on
+every assumption.
+
+Every input in that model is labelled OBSERVED, ESTIMATE, or DERIVED, and the
+weakest one is named rather than buried.
+
+## Quote verification
+
+Checking that a cited work *exists* and checking that it *says what you claim*
+are different questions. Deloitte's retracted report contained a fabricated
+quote attributed to a real federal court judge: the case was real, the judge
+was real, the reference resolved. The quote was simply never said.
+
+```bash
+citeaudit report.docx --check-quotes
+```
+
+citeaudit extracts quoted passages, resolves which source each is attributed to
+— following numbered markers into the bibliography, not just proximity — and
+looks for the passage in openly available source text.
+
+| Verdict | Meaning | Counts as failure |
+|---|---|:---:|
+| `FOUND` | Passage located in the retrieved text | |
+| `NOT_FOUND` | **Complete body text retrieved and the passage is absent** | ✓ |
+| `ABSENT_FROM_ABSTRACT` | Only an abstract was available and it is not there | |
+| `SOURCE_UNAVAILABLE` | No open text; no conclusion | |
+| `NOT_ATTRIBUTED` | No citation attached to check against | |
+
+**Every tier can confirm a quote. Only full text can refute one.**
+
+That asymmetry is the whole design. Refuting a quotation accuses a person of
+fabrication, which is a graver claim than saying a reference is unresolvable,
+so it demands a higher bar. A passage missing from an *abstract* may sit in the
+body — reporting that as fabrication would accuse someone on the strength of a
+paywall.
+
+**The honest ceiling:** most scholarly text is paywalled, so most quotes cannot
+be refuted at all. arXiv is the main corpus where full text is openly
+retrievable at scale. Coverage is reported with every run rather than implied,
+and low coverage is a licensing limit, not a finding.
+
+## Verdicts
+
+The taxonomy is the most important design decision in the tool.
+
+| Verdict | Meaning | Counts as failure |
+|---|---|:---:|
+| `VERIFIED` | Resolves, and the record matches the claim | |
+| `MISMATCH` | Resolves, but to a **different work** than claimed | ✓ |
+| `NOT_FOUND` | Well-formed identifier, no such record exists | ✓ |
+| `MALFORMED` | Identifier is syntactically invalid | ✓ |
+| `UNREACHABLE` | Could not complete the check | |
+| `UNVERIFIABLE` | No identifier and no title specific enough to search | |
+
+**A network timeout is not evidence of fabrication.** A tool that reports
+"citation not found" when an API was slow is committing precisely the error it
+exists to catch: emitting a confident claim its evidence does not support.
+`UNREACHABLE` and `NOT_FOUND` are separate verdicts, counted separately, and
+inconclusive checks are excluded from the integrity score's denominator rather
+than silently passed or failed.
+
+Where nothing could be checked, the score is `n/a` — never 0% or 100%.
+
+## Usage
+
+```bash
+citeaudit report.docx                      # human-readable
+citeaudit paper.pdf --format json -o out.json
+citeaudit *.md --format html -o report.html
+citeaudit thesis.tex --show-verified       # include passing citations
+
+citeaudit draft.md --fail-under 95         # gate on integrity score
+citeaudit draft.md --strict                # inconclusive also fails
+```
+
+Supported inputs: `.md` `.txt` `.rst` `.tex` `.html` `.pdf` `.docx`
+
+Exit codes: `0` clean, `1` failures found, `2` tool error.
+
+### As a GitHub Action
+
+```yaml
+- uses: harshit-malik-nyu/citeaudit@v1
+  with:
+    paths: 'docs/**/*.md reports/*.pdf'
+    fail-under: '95'
+    mailto: 'you@example.com'
+```
+
+### As a library
+
+```python
+from citeaudit.verify import Verifier
+
+report = Verifier().verify_file("manuscript.docx")
+for finding in report.failures:
+    print(finding.citation.raw, finding.detail, finding.evidence_url)
+```
+
+## Live report
+
+**<https://harshit-malik-nyu.github.io/citeaudit/>**
+
+Regenerated whenever the live-verification or studies workflows run, with the
+evidence directory served alongside so every figure on the page can be traced
+without cloning.
+
+Getting there took two attempts, and the second one is the interesting part.
+`actions/configure-pages@v5` with `enablement: true` — the documented
+self-bootstrap — returned failure, because enabling Pages that way needs
+repository-admin permission no workflow token carries. Pushing a `gh-pages`
+branch enables Pages automatically and needs only `contents: write`, which a
+workflow token does have.
+
+The first route was abandoned on evidence rather than on assumption: the
+workflow was made to commit its own outcome, because the Actions API was not
+readable and "Pages is not live" was otherwise indistinguishable from "the
+workflow never ran."
+
+## Live evidence
+
+This repository does not ask you to take its word for anything.
+
+**Most recent live run** against the real Crossref and arXiv APIs
+([full JSON](evidence/demo-report.json)):
+
+| | |
+|---|---:|
+| Citations checked | 14 |
+| Verified | 8 |
+| Resolves to a different work | 1 |
+| No such record | 4 |
+| Could not check (inconclusive) | 1 |
+| **Integrity** | **62% of 13 conclusive checks** |
+
+The mismatch is the one worth looking at:
+
+```
+line 63   10.1038/nature14539
+  document claims : Procedural baselines for administrative automation in social welfare
+  record holds    : Deep learning
+  similarity      : 22%
+  evidence        : https://doi.org/10.1038/nature14539
+```
+
+That DOI is real. [Open it](https://doi.org/10.1038/nature14539) — you land on a
+genuine Nature paper by LeCun, Bengio and Hinton. Every link checker passes it.
+It is still the wrong source for the claim it was attached to.
+
+The unreachable link is equally deliberate: an unresolvable domain, reported as
+inconclusive rather than counted as a fabrication.
+
+A [scheduled workflow](.github/workflows/live-verification.yml) runs the tool
+against the real Crossref and arXiv APIs every week and commits what they
+returned:
+
+- [`evidence/demo-report.json`](evidence/) — full findings with evidence URLs
+- [`evidence/demo-report.md`](evidence/) — the same, readable
+- [`evidence/manifest.json`](evidence/) — timestamps, commit SHA, run URL, artifact hashes
+- [`docs/index.html`](docs/) — rendered report, published to GitHub Pages
+
+Every finding carries an `evidence_url` pointing at the authority record that
+produced the verdict. You can confirm or refute any line of any report without
+running this code.
+
+## Authorities
+
+| Authority | Answers | Limits |
+|---|---|---|
+| [Crossref](https://www.crossref.org) | Does this DOI exist, and what is it | Covers scholarly publishing; not books, reports, or grey literature |
+| [arXiv](https://arxiv.org) | Does this preprint exist | Preprints only |
+| HTTP | Does this URL respond | Liveness only — proves nothing about content |
+
+Both scholarly APIs are free and maintained on public goodwill. The client
+paces its requests and identifies itself with a contact address per Crossref's
+polite-pool convention. Please set `--mailto`.
+
+## The case against this tool
+
+**[docs/against.md](docs/against.md)** argues, as strongly as I can make it,
+that this project should not exist — using its own measurements.
+
+The objection I could not dispose of: legitimate bibliographies fail at 13%, so
+a handful of fabricated references is statistically invisible against that
+noise. If that holds, aggregate scoring is close to useless and the honest value
+collapses to per-reference triage. Testing it properly needs a corpus of
+documents with *known* fabrications, which does not publicly exist.
+
+Two others worth reading before adopting it: the tool is weakest on grey
+literature, which is exactly the corpus where fabrication has been found; and
+it would have caught only half of the Deloitte case, since the fabricated
+judicial quote has no retrievable source text.
+
+## Limitations
+
+Stated plainly, because a verification tool that oversells itself is
+self-refuting.
+
+- **A `NOT_FOUND` is not proof of fabrication.** Crossref does not cover books,
+  government reports, working papers, or most grey literature. A real reference
+  to a real report will fail this check. The tool reports what the authority
+  said; judgment stays with you.
+- **`VERIFIED` does not mean the source supports the claim.** It means the
+  reference points at a real work that matches the description. Whether that
+  work actually says what the document claims is a different problem, and this
+  tool does not attempt it.
+- **Quote verification is not implemented.** Deloitte's fabricated judicial
+  quote would not be caught by this version. Catching it requires full-text
+  retrieval, which is licensing-constrained for most publishers.
+- **Reference parsing is heuristic.** Citation styles vary enormously.
+  Unparsed references are reported as `UNVERIFIABLE` rather than skipped
+  silently, so you can see what the tool could not read.
+- **Title matching has thresholds**, set conservatively so that a false
+  accusation is rarer than a missed detection. See
+  [`src/citeaudit/match.py`](src/citeaudit/match.py) for the reasoning.
+
+## Reproducing the studies
+
+Every figure above is regenerated by one command against live authorities:
+
+```bash
+make install
+python scripts/run_studies.py --study all
+```
+
+Results land in `evidence/`. The workflow runs monthly, or on demand by
+touching `.studies-trigger`. Sampling is seeded, so a given seed redraws the
+same papers.
+
+## Development
+
+```bash
+make install
+make test       # 99 offline tests
+make live       # 9 live tests against real APIs
+make demo
+python -m build # wheel + sdist
+```
+
+The test suite is split deliberately. Offline tests use stub transports so a
+failure always means the code is wrong, never that an API was slow. Live tests
+skip rather than fail when an authority is unreachable — the same distinction
+the tool draws between `NOT_FOUND` and `UNREACHABLE`.
+
+## License
+
+MIT

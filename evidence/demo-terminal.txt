@@ -1,0 +1,105 @@
+
+note: 4 request(s) could not be completed; those citations are reported as inconclusive rather than as failures.
+citeaudit 0.1.0  —  examples/demo.md
+==============================================================================
+
+No such record (4)
+------------------------------------------------------------------------------
+  FAIL line 59    10.1016/j.jpuba.2021.02.014
+       document says: 'Automated compliance frameworks in Australian social security admi'
+       Neither Crossref nor OpenAlex holds a record for this DOI. Two
+       independent indexes have no registration for it.
+       check it: https://api.crossref.org/works/10.1016/j.jpuba.2021.02.014
+
+  FAIL line 61    10.9911/erla.2020.13.4.055
+       document says: 'Comparative analysis of algorithmic welfare assessment across Euro'
+       Neither Crossref nor OpenAlex holds a record for this DOI. Two
+       independent indexes have no registration for it.
+       check it: https://api.crossref.org/works/10.9911/erla.2020.13.4.055
+
+  FAIL line 63    The reasoned decision requirement and automated administrative action
+       document says: 'The reasoned decision requirement and automated administrative act'
+       no indexed record matches this description. Closest was 'Choline
+       Requirement, Distribution and Concentration in Laying Hens.' at 58%
+       similarity, below the threshold for a match.
+       check it: https://doi.org/10.31390/gradschool_disstheses.1478
+
+  FAIL line 69    Procedural fairness in machine-assisted eligibility determination: a l
+       document says: 'Procedural fairness in machine-assisted eligibility determination:'
+       no indexed record matches this description. Closest was 'A
+       longitudinal study of visual function in multiple sclerosis: With a
+       note on the Cambridge Grating Test' at 55% similarity, below the
+       threshold for a match.
+       check it: https://doi.org/10.3109/01658109309038141
+
+
+Resolves to a different work (1)
+------------------------------------------------------------------------------
+  MISM line 73    10.1038/nature14539
+       document says: 'Procedural baselines for administrative automation in social welfa'
+       record holds:  'Deep learning'
+       identifier resolves to a DIFFERENT work. Document claims 'Procedural
+       baselines for administrative automation in social welfare'; record
+       holds 'Deep learning' (22% similarity)
+       check it: https://doi.org/10.1038/nature14539
+
+
+Could not check (3)
+------------------------------------------------------------------------------
+  ??   line 67    1906.02530
+       document says: "Can you trust your model's uncertainty? Evaluating predictive unce"
+       check could not be completed:
+       https://export.arxiv.org/api/query?id_list=1906.02530&max_results=1:
+       HTTP Error 406: Not Acceptable
+
+  ??   line 71    1703.01365
+       document says: 'Axiomatic attribution for deep networks'
+       check could not be completed:
+       https://export.arxiv.org/api/query?id_list=1703.01365&max_results=1:
+       HTTP Error 406: Not Acceptable
+
+  ??   line 76    https://this-domain-does-not-resolve-citeaudit.invalid/report.pdf
+       check could not be completed:
+       https://this-domain-does-not-resolve-citeaudit.invalid/report.pdf
+
+
+Verified (6)
+------------------------------------------------------------------------------
+  OK   line 53    10.1038/nature14539
+       title matches record (100% similarity)
+       check it: https://doi.org/10.1038/nature14539
+
+  OK   line 55    1706.03762
+       title matches record (100% similarity)
+       check it: https://arxiv.org/abs/1706.03762
+
+  OK   line 57    1810.04805
+       title matches record (100% similarity)
+       check it: https://arxiv.org/abs/1810.04805
+
+  OK   line 65    10.1109/cvpr.2009.5206848
+       title matches record (100% similarity)
+       check it: https://doi.org/10.1109/cvpr.2009.5206848
+
+  OK   line 75    https://www.crossref.org/documentation/
+       link responded HTTP 200
+       check it: https://www.crossref.org/documentation/
+
+  OK   line 76    https://arxiv.org/help/api/
+       link responded HTTP 200
+       check it: https://arxiv.org/help/api/
+
+
+QUOTATIONS
+------------------------------------------------------------------------------
+  FAIL line 30    "welfare eligibility determinations should be fully deleg..."
+       complete text of the source was retrieved (4,716 words) and this
+       passage does not appear in it. Closest match scored 49%.
+       source: https://arxiv.org/abs/1706.03762
+
+  2 quotations | 1 located | 1 absent from full text | 0 not checkable
+  quote coverage: 100% (limited by open-access availability, not by the tool)
+==============================================================================
+14 citations  |  6 verified  |  4 not found  |  1 mismatched  |  0 malformed
+inconclusive: 3 unreachable, 0 not machine-checkable (excluded from the score, not counted as failures)
+integrity: 55% of 11 conclusive checks passed

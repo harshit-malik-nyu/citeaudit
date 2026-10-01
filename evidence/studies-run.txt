@@ -4,27 +4,27 @@ INFO citeaudit.corpus: stratum 2020: 12 usable works
 INFO citeaudit.corpus: stratum 2022: 12 usable works
 INFO citeaudit.corpus: stratum 2023: 12 usable works
 INFO citeaudit.corpus: stratum 2024: 12 usable works
-INFO citeaudit.preprints: carrying 1247 checks from 121 papers collected earlier
-INFO citeaudit.preprints: OpenAlex yielded 36 arXiv preprints
-INFO citeaudit.preprints: 36 papers to fetch after skipping ones already collected
+INFO citeaudit.preprints: carrying 1259 checks from 122 papers collected earlier
+INFO citeaudit.preprints: OpenAlex yielded 28 arXiv preprints
+INFO citeaudit.preprints: 27 papers to fetch after skipping ones already collected
 ======================================================================
 BASE RATE STUDY
 ======================================================================
 
 source works      : 72
-total checks      : 656
-identified FP rate: 0.00%
-described FP rate : 0.30% (95% CI 0.05%-1.71%)
-fallback rescues  : 18
-http requests     : 684
+total checks      : 590
+identified FP rate: 0.34%
+described FP rate : 1.36% (95% CI 0.53%-3.43%)
+fallback rescues  : 19
+http requests     : 622
 
 ======================================================================
 CALIBRATION STUDY
 ======================================================================
 
 reference works   : 260
-labelled pairs    : 2,485 (1,705 same / 780 different)
-chosen threshold  : 66
+labelled pairs    : 2,498 (1,718 same / 780 different)
+chosen threshold  : 64
   precision       : 1.000
   recall          : 1.000
   false accusations: 0
@@ -33,20 +33,20 @@ chosen threshold  : 66
 PREPRINT CORPUS STUDY
 ======================================================================
 
-papers sampled     : 36
-with bibliography  : 122
-references checked : 1,259
-conclusive         : 1,211
-unverified rate    : 13.05% (95% CI 11.27%-15.06%)
-http requests      : 734
+papers sampled     : 27
+with bibliography  : 139
+references checked : 1,428
+conclusive         : 1,375
+unverified rate    : 12.65% (95% CI 11.00%-14.52%)
+http requests      : 837
 
 ======================================================================
 WIKIPEDIA CORPUS STUDY
 ======================================================================
 
 articles sampled   : 260
-with citations     : 259
-references checked : 1,472
-SCHOLARLY templates: 16.41% (95% CI 13.61%-19.64%)  n=579  <- comparable
-grey templates     : 59.57%  n=893  (index coverage, not integrity)
-http requests      : 4,185
+with citations     : 260
+references checked : 1,566
+SCHOLARLY templates: 15.17% (95% CI 12.45%-18.35%)  n=567  <- comparable
+grey templates     : 62.56%  n=999  (index coverage, not integrity)
+http requests      : 4,654

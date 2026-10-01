@@ -1,113 +1,101 @@
 {
   "headline": {
-    "comparable_rate": 0.16407599309153714,
-    "comparable_n": 579,
+    "comparable_rate": 0.15167548500881833,
+    "comparable_n": 567,
     "note": "The comparable figure is the SCHOLARLY-template rate. Checking {{cite news}} or {{cite web}} against Crossref and OpenAlex measures whether those indexes cover journalism and the open web \u2014 they do not \u2014 so a high rate there says nothing about whether the reference is real. Only scholarly templates are comparable with the arXiv corpus."
   },
   "scholarly_templates": {
-    "checks": 579,
-    "conclusive": 579,
-    "verified": 484,
-    "not_found": 90,
-    "mismatch": 5,
-    "unverified_rate": 0.16407599309153714,
+    "checks": 567,
+    "conclusive": 567,
+    "verified": 481,
+    "not_found": 83,
+    "mismatch": 3,
+    "unverified_rate": 0.15167548500881833,
     "unverified_ci95": [
-      0.13614194014409647,
-      0.19643830121135925
+      0.12450000062780697,
+      0.18353921725680405
     ]
   },
   "grey_templates": {
-    "checks": 893,
-    "conclusive": 893,
-    "verified": 361,
-    "not_found": 529,
-    "mismatch": 3,
-    "unverified_rate": 0.5957446808510638,
+    "checks": 999,
+    "conclusive": 999,
+    "verified": 374,
+    "not_found": 624,
+    "mismatch": 1,
+    "unverified_rate": 0.6256256256256256,
     "unverified_ci95": [
-      0.5632133757115387,
-      0.6274557457921917
+      0.5951868416653463,
+      0.6551019377390981
     ]
   },
   "method": {
     "corpus": "English Wikipedia citation templates",
     "articles_sampled": 260,
-    "articles_with_citations": 259,
-    "total_checks": 1472,
-    "started_utc": "2026-09-18T01:43:16+00:00",
-    "finished_utc": "2026-09-18T02:38:16+00:00",
+    "articles_with_citations": 260,
+    "total_checks": 1566,
+    "started_utc": "2026-10-01T11:13:03+00:00",
+    "finished_utc": "2026-10-01T12:09:59+00:00",
     "claim_boundary": "Not an audit of Wikipedia and not a judgment about its reliability. The unit is the reference; results are aggregate and no article is named. Wikipedia cites a great deal of material no scholarly index covers, so an unverifiable reference here is expected, not an error."
   },
   "overall": {
-    "checks": 1472,
-    "conclusive": 1472,
-    "verified": 845,
-    "not_found": 619,
-    "mismatch": 8,
-    "unverified_rate": 0.42595108695652173,
+    "checks": 1566,
+    "conclusive": 1566,
+    "verified": 855,
+    "not_found": 707,
+    "mismatch": 4,
+    "unverified_rate": 0.4540229885057471,
     "unverified_ci95": [
-      0.4009146524740499,
-      0.4513730185063587
+      0.42950581909150604,
+      0.4787651809890115
     ]
   },
   "by_template": {
     "book": {
-      "checks": 366,
-      "conclusive": 366,
-      "verified": 204,
-      "not_found": 159,
-      "mismatch": 3,
-      "unverified_rate": 0.4426229508196721,
-      "unverified_ci95": [
-        0.3925933802374022,
-        0.49384448938029346
-      ]
-    },
-    "conference": {
-      "checks": 2,
-      "conclusive": 2,
-      "verified": 0,
-      "not_found": 2,
+      "checks": 315,
+      "conclusive": 315,
+      "verified": 175,
+      "not_found": 140,
       "mismatch": 0,
-      "unverified_rate": 1.0,
+      "unverified_rate": 0.4444444444444444,
       "unverified_ci95": [
-        0.34237195288961925,
-        1.0
+        0.3905664475900919,
+        0.499661176408784
       ]
     },
     "journal": {
-      "checks": 570,
-      "conclusive": 570,
-      "verified": 482,
-      "not_found": 83,
-      "mismatch": 5,
-      "unverified_rate": 0.1543859649122807,
+      "checks": 560,
+      "conclusive": 560,
+      "verified": 479,
+      "not_found": 78,
+      "mismatch": 3,
+      "unverified_rate": 0.14464285714285716,
       "unverified_ci95": [
-        0.1270461805481556,
-        0.18635319656218283
+        0.11792969801517612,
+        0.17619829821638958
       ]
     },
     "news": {
-      "checks": 86,
-      "conclusive": 86,
-      "verified": 8,
-      "not_found": 78,
+      "checks": 103,
+      "conclusive": 103,
+      "verified": 18,
+      "not_found": 85,
       "mismatch": 0,
-      "unverified_rate": 0.9069767441860465,
+      "unverified_rate": 0.8252427184466019,
       "unverified_ci95": [
-        0.8270407914425881,
-        0.9521082887162688
+        0.7405946159787228,
+        0.8865019456601894
       ]
     },
     "report": {
-      "checks": 3,
-      "conclusive": 3,
-      "verified": 1,
-      "not_found": 2,
+      "checks": 9,
+      "conclusive": 9,
+      "verified": 3,
+      "not_found": 6,
       "mismatch": 0,
       "unverified_rate": 0.6666666666666666,
       "unverified_ci95": [
-        0.2076549551264879,
-        0.9385096847238394
+        0.35419734749908977,
+        0.879418401317257
       ]
     },
     "thesis": {
@@ -123,41 +111,41 @@
       ]
     },
     "web": {
-      "checks": 438,
-      "conclusive": 438,
-      "verified": 148,
-      "not_found": 290,
-      "mismatch": 0,
-      "unverified_rate": 0.6621004566210046,
+      "checks": 572,
+      "conclusive": 572,
+      "verified": 178,
+      "not_found": 393,
+      "mismatch": 1,
+      "unverified_rate": 0.6888111888111889,
       "unverified_ci95": [
-        0.6165645033427899,
-        0.7048176390358364
+        0.6497153834157098,
+        0.7253877699514663
       ]
     }
   },
   "by_reference_kind": {
     "bibliographic": {
-      "checks": 992,
-      "conclusive": 992,
-      "verified": 376,
-      "not_found": 616,
+      "checks": 1101,
+      "conclusive": 1101,
+      "verified": 397,
+      "not_found": 704,
       "mismatch": 0,
-      "unverified_rate": 0.6209677419354839,
+      "unverified_rate": 0.6394187102633969,
       "unverified_ci95": [
-        0.5903650909070771,
-        0.6506370925727053
+        0.6106158522999152,
+        0.6672520339201546
       ]
     },
     "doi": {
-      "checks": 480,
-      "conclusive": 480,
-      "verified": 469,
+      "checks": 465,
+      "conclusive": 465,
+      "verified": 458,
       "not_found": 3,
-      "mismatch": 8,
-      "unverified_rate": 0.022916666666666665,
+      "mismatch": 4,
+      "unverified_rate": 0.015053763440860216,
       "unverified_ci95": [
-        0.012843430891358075,
-        0.04056578402525926
+        0.007310665770927368,
+        0.030743977844314967
       ]
     }
   }

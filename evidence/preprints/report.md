@@ -1,8 +1,8 @@
 # Author-written bibliographies: what happens outside the pipeline
 
-**1,259 references** from **122 arXiv preprints**, parsed from the authors' own `.bbl` and `.bib` source files.
+**1,428 references** from **139 arXiv preprints**, parsed from the authors' own `.bbl` and `.bib` source files.
 
-Accumulated across runs: 1,247 references were collected earlier and 12 were added by the most recent run.
+Accumulated across runs: 1,259 references were collected earlier and 169 were added by the most recent run.
 
 arXiv rate-limits by IP and CI runners share address space, so any single run may collect a hundred papers or none for reasons unrelated to this code. Each run therefore contributes what it managed to fetch and skips papers already covered, rather than depending on one lucky execution. Stating the split matters: an accumulated total presented as a single run's output would overstate what any one execution achieved.
 
@@ -20,22 +20,22 @@ Measures whether a reference as written can be verified. An unverified reference
 
 | | count |
 |---|---:|
-| References checked | 1,259 |
-| Verified | 1,053 |
-| Not found | 147 |
-| Resolves to a different work | 11 |
-| Not machine-checkable | 48 |
+| References checked | 1,428 |
+| Verified | 1,201 |
+| Not found | 159 |
+| Resolves to a different work | 15 |
+| Not machine-checkable | 53 |
 | Could not check | 0 |
 
-**Unverified rate: 13.0%** of 1,211 conclusive checks (95% CI 11.3%–15.1%).
+**Unverified rate: 12.7%** of 1,375 conclusive checks (95% CI 11.0%–14.5%).
 
 ## By how the reference was written
 
 | Form | Conclusive | Unverified | 95% CI |
 |---|---:|---:|---|
-| arxiv | 66 | 6.1% | 2.4%–14.6% |
-| bibliographic | 796 | 17.8% | 15.3%–20.7% |
-| doi | 349 | 3.4% | 2.0%–5.9% |
+| arxiv | 83 | 4.8% | 1.9%–11.7% |
+| bibliographic | 914 | 16.8% | 14.6%–19.4% |
+| doi | 378 | 4.2% | 2.6%–6.8% |
 | url | 0 | n/a | — |
 
 The gap between identifier-bearing and description-only references is the cost of omitting a DOI, measured rather than asserted.
@@ -44,7 +44,7 @@ The gap between identifier-bearing and description-only references is the cost o
 
 | Category | Conclusive | Unverified |
 |---|---:|---:|
-| arXiv (Cornell University) | 10 | 0.0% |
+| arXiv (Cornell University) | 174 | 9.2% |
 | astro-ph.GA | 39 | 12.8% |
 | cond-mat.stat-mech | 77 | 6.5% |
 | cs.CR | 112 | 12.5% |

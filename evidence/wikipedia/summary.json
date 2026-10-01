@@ -1,0 +1,152 @@
+{
+  "headline": {
+    "comparable_rate": 0.15167548500881833,
+    "comparable_n": 567,
+    "note": "The comparable figure is the SCHOLARLY-template rate. Checking {{cite news}} or {{cite web}} against Crossref and OpenAlex measures whether those indexes cover journalism and the open web \u2014 they do not \u2014 so a high rate there says nothing about whether the reference is real. Only scholarly templates are comparable with the arXiv corpus."
+  },
+  "scholarly_templates": {
+    "checks": 567,
+    "conclusive": 567,
+    "verified": 481,
+    "not_found": 83,
+    "mismatch": 3,
+    "unverified_rate": 0.15167548500881833,
+    "unverified_ci95": [
+      0.12450000062780697,
+      0.18353921725680405
+    ]
+  },
+  "grey_templates": {
+    "checks": 999,
+    "conclusive": 999,
+    "verified": 374,
+    "not_found": 624,
+    "mismatch": 1,
+    "unverified_rate": 0.6256256256256256,
+    "unverified_ci95": [
+      0.5951868416653463,
+      0.6551019377390981
+    ]
+  },
+  "method": {
+    "corpus": "English Wikipedia citation templates",
+    "articles_sampled": 260,
+    "articles_with_citations": 260,
+    "total_checks": 1566,
+    "started_utc": "2026-10-01T11:13:03+00:00",
+    "finished_utc": "2026-10-01T12:09:59+00:00",
+    "claim_boundary": "Not an audit of Wikipedia and not a judgment about its reliability. The unit is the reference; results are aggregate and no article is named. Wikipedia cites a great deal of material no scholarly index covers, so an unverifiable reference here is expected, not an error."
+  },
+  "overall": {
+    "checks": 1566,
+    "conclusive": 1566,
+    "verified": 855,
+    "not_found": 707,
+    "mismatch": 4,
+    "unverified_rate": 0.4540229885057471,
+    "unverified_ci95": [
+      0.42950581909150604,
+      0.4787651809890115
+    ]
+  },
+  "by_template": {
+    "book": {
+      "checks": 315,
+      "conclusive": 315,
+      "verified": 175,
+      "not_found": 140,
+      "mismatch": 0,
+      "unverified_rate": 0.4444444444444444,
+      "unverified_ci95": [
+        0.3905664475900919,
+        0.499661176408784
+      ]
+    },
+    "journal": {
+      "checks": 560,
+      "conclusive": 560,
+      "verified": 479,
+      "not_found": 78,
+      "mismatch": 3,
+      "unverified_rate": 0.14464285714285716,
+      "unverified_ci95": [
+        0.11792969801517612,
+        0.17619829821638958
+      ]
+    },
+    "news": {
+      "checks": 103,
+      "conclusive": 103,
+      "verified": 18,
+      "not_found": 85,
+      "mismatch": 0,
+      "unverified_rate": 0.8252427184466019,
+      "unverified_ci95": [
+        0.7405946159787228,
+        0.8865019456601894
+      ]
+    },
+    "report": {
+      "checks": 9,
+      "conclusive": 9,
+      "verified": 3,
+      "not_found": 6,
+      "mismatch": 0,
+      "unverified_rate": 0.6666666666666666,
+      "unverified_ci95": [
+        0.35419734749908977,
+        0.879418401317257
+      ]
+    },
+    "thesis": {
+      "checks": 7,
+      "conclusive": 7,
+      "verified": 2,
+      "not_found": 5,
+      "mismatch": 0,
+      "unverified_rate": 0.7142857142857143,
+      "unverified_ci95": [
+        0.35892909014821267,
+        0.9177828342909844
+      ]
+    },
+    "web": {
+      "checks": 572,
+      "conclusive": 572,
+      "verified": 178,
+      "not_found": 393,
+      "mismatch": 1,
+      "unverified_rate": 0.6888111888111889,
+      "unverified_ci95": [
+        0.6497153834157098,
+        0.7253877699514663
+      ]
+    }
+  },
+  "by_reference_kind": {
+    "bibliographic": {
+      "checks": 1101,
+      "conclusive": 1101,
+      "verified": 397,
+      "not_found": 704,
+      "mismatch": 0,
+      "unverified_rate": 0.6394187102633969,
+      "unverified_ci95": [
+        0.6106158522999152,
+        0.6672520339201546
+      ]
+    },
+    "doi": {
+      "checks": 465,
+      "conclusive": 465,
+      "verified": 458,
+      "not_found": 3,
+      "mismatch": 4,
+      "unverified_rate": 0.015053763440860216,
+      "unverified_ci95": [
+        0.007310665770927368,
+        0.030743977844314967
+      ]
+    }
+  }
+}

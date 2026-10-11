@@ -1,0 +1,2403 @@
+{
+  "base_case": {
+    "cost_factor": 1.0,
+    "options": [
+      {
+        "capacity_gate_pass": false,
+        "cash_outlay_usd": 0.0,
+        "components": [
+          {
+            "activity": "Read and resolve references",
+            "cash_outlay_usd": 0.0,
+            "economic_cost_usd": 49500.0,
+            "quantity": 900.0,
+            "unit": "reviewer_hour"
+          }
+        ],
+        "economic_cost_usd": 50850.0,
+        "expected_incidents": 9.0,
+        "feasible": false,
+        "option": "Manual reference audit",
+        "reviewer_hours": 900.0,
+        "risk_gate_pass": true,
+        "scenario_loss_usd": 1350.0,
+        "volume": 3000.0
+      },
+      {
+        "capacity_gate_pass": true,
+        "cash_outlay_usd": 4620.0,
+        "components": [
+          {
+            "activity": "Exception resolution: 35% at 12 minutes",
+            "cash_outlay_usd": 0.0,
+            "economic_cost_usd": 11549.999999999998,
+            "quantity": 209.99999999999997,
+            "unit": "reviewer_hour"
+          },
+          {
+            "activity": "Resolution requests",
+            "cash_outlay_usd": 120.0,
+            "economic_cost_usd": 120.0,
+            "quantity": 3000.0,
+            "unit": "document"
+          }
+        ],
+        "economic_cost_usd": 17070.0,
+        "expected_incidents": 6.0,
+        "feasible": true,
+        "option": "Metadata audit plus human exceptions",
+        "reviewer_hours": 210.0,
+        "risk_gate_pass": true,
+        "scenario_loss_usd": 900.0,
+        "volume": 3000.0
+      },
+      {
+        "capacity_gate_pass": true,
+        "cash_outlay_usd": 2620.0,
+        "components": [
+          {
+            "activity": "Rejection appeal: 8% at 25 minutes",
+            "cash_outlay_usd": 0.0,
+            "economic_cost_usd": 5500.0,
+            "quantity": 100.0,
+            "unit": "reviewer_hour"
+          },
+          {
+            "activity": "Resolution requests",
+            "cash_outlay_usd": 120.0,
+            "economic_cost_usd": 120.0,
+            "quantity": 3000.0,
+            "unit": "document"
+          }
+        ],
+        "economic_cost_usd": 19370.0,
+        "expected_incidents": 75.0,
+        "feasible": false,
+        "option": "Automatic rejection on missing quotation",
+        "reviewer_hours": 100.0,
+        "risk_gate_pass": false,
+        "scenario_loss_usd": 11250.0,
+        "volume": 3000.0
+      }
+    ],
+    "recommended_if_assumptions_hold": "Metadata audit plus human exceptions",
+    "risk_factor": 1.0,
+    "volume_factor": 1.0
+  },
+  "break_even": [
+    {
+      "additional_fixed_usd": 4500,
+      "minimum_integer_volume_to_break_even": 353,
+      "option": "Metadata audit plus human exceptions",
+      "qualification": "Positive unit advantage required; risk and capacity gates still apply.",
+      "relative_to": "Manual reference audit",
+      "unit_economic_advantage_usd": 12.76
+    },
+    {
+      "additional_fixed_usd": 2500,
+      "minimum_integer_volume_to_break_even": 221,
+      "option": "Automatic rejection on missing quotation",
+      "qualification": "Positive unit advantage required; risk and capacity gates still apply.",
+      "relative_to": "Manual reference audit",
+      "unit_economic_advantage_usd": 11.326667
+    }
+  ],
+  "evidence_status": "ILLUSTRATIVE PLANNING ASSUMPTIONS; NOT OBSERVED ROI",
+  "scenarios": [
+    {
+      "cost_factor": 0.75,
+      "options": [
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 0.0,
+          "components": [
+            {
+              "activity": "Read and resolve references",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 18562.5,
+              "quantity": 450.0,
+              "unit": "reviewer_hour"
+            }
+          ],
+          "economic_cost_usd": 19237.5,
+          "expected_incidents": 4.5,
+          "feasible": true,
+          "option": "Manual reference audit",
+          "reviewer_hours": 450.0,
+          "risk_gate_pass": true,
+          "scenario_loss_usd": 675.0,
+          "volume": 1500.0
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 4545.0,
+          "components": [
+            {
+              "activity": "Exception resolution: 35% at 12 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 4331.249999999999,
+              "quantity": 104.99999999999999,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 45.0,
+              "economic_cost_usd": 45.0,
+              "quantity": 1500.0,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 9326.25,
+          "expected_incidents": 3.0,
+          "feasible": true,
+          "option": "Metadata audit plus human exceptions",
+          "reviewer_hours": 105.0,
+          "risk_gate_pass": true,
+          "scenario_loss_usd": 450.0,
+          "volume": 1500.0
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 2545.0,
+          "components": [
+            {
+              "activity": "Rejection appeal: 8% at 25 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 2062.5,
+              "quantity": 50.0,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 45.0,
+              "economic_cost_usd": 45.0,
+              "quantity": 1500.0,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 10232.5,
+          "expected_incidents": 37.5,
+          "feasible": false,
+          "option": "Automatic rejection on missing quotation",
+          "reviewer_hours": 50.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 5625.0,
+          "volume": 1500.0
+        }
+      ],
+      "recommended_if_assumptions_hold": "Metadata audit plus human exceptions",
+      "risk_factor": 1,
+      "volume_factor": 0.5
+    },
+    {
+      "cost_factor": 0.75,
+      "options": [
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 0.0,
+          "components": [
+            {
+              "activity": "Read and resolve references",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 18562.5,
+              "quantity": 450.0,
+              "unit": "reviewer_hour"
+            }
+          ],
+          "economic_cost_usd": 19912.5,
+          "expected_incidents": 9.0,
+          "feasible": false,
+          "option": "Manual reference audit",
+          "reviewer_hours": 450.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 1350.0,
+          "volume": 1500.0
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 4545.0,
+          "components": [
+            {
+              "activity": "Exception resolution: 35% at 12 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 4331.249999999999,
+              "quantity": 104.99999999999999,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 45.0,
+              "economic_cost_usd": 45.0,
+              "quantity": 1500.0,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 9776.25,
+          "expected_incidents": 6.0,
+          "feasible": true,
+          "option": "Metadata audit plus human exceptions",
+          "reviewer_hours": 105.0,
+          "risk_gate_pass": true,
+          "scenario_loss_usd": 900.0,
+          "volume": 1500.0
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 2545.0,
+          "components": [
+            {
+              "activity": "Rejection appeal: 8% at 25 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 2062.5,
+              "quantity": 50.0,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 45.0,
+              "economic_cost_usd": 45.0,
+              "quantity": 1500.0,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 15857.5,
+          "expected_incidents": 75.0,
+          "feasible": false,
+          "option": "Automatic rejection on missing quotation",
+          "reviewer_hours": 50.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 11250.0,
+          "volume": 1500.0
+        }
+      ],
+      "recommended_if_assumptions_hold": "Metadata audit plus human exceptions",
+      "risk_factor": 2,
+      "volume_factor": 0.5
+    },
+    {
+      "cost_factor": 0.75,
+      "options": [
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 0.0,
+          "components": [
+            {
+              "activity": "Read and resolve references",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 18562.5,
+              "quantity": 450.0,
+              "unit": "reviewer_hour"
+            }
+          ],
+          "economic_cost_usd": 21262.5,
+          "expected_incidents": 18.0,
+          "feasible": false,
+          "option": "Manual reference audit",
+          "reviewer_hours": 450.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 2700.0,
+          "volume": 1500.0
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 4545.0,
+          "components": [
+            {
+              "activity": "Exception resolution: 35% at 12 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 4331.249999999999,
+              "quantity": 104.99999999999999,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 45.0,
+              "economic_cost_usd": 45.0,
+              "quantity": 1500.0,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 10676.25,
+          "expected_incidents": 12.0,
+          "feasible": false,
+          "option": "Metadata audit plus human exceptions",
+          "reviewer_hours": 105.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 1800.0,
+          "volume": 1500.0
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 2545.0,
+          "components": [
+            {
+              "activity": "Rejection appeal: 8% at 25 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 2062.5,
+              "quantity": 50.0,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 45.0,
+              "economic_cost_usd": 45.0,
+              "quantity": 1500.0,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 27107.5,
+          "expected_incidents": 150.0,
+          "feasible": false,
+          "option": "Automatic rejection on missing quotation",
+          "reviewer_hours": 50.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 22500.0,
+          "volume": 1500.0
+        }
+      ],
+      "recommended_if_assumptions_hold": null,
+      "risk_factor": 4,
+      "volume_factor": 0.5
+    },
+    {
+      "cost_factor": 1,
+      "options": [
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 0.0,
+          "components": [
+            {
+              "activity": "Read and resolve references",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 24750.0,
+              "quantity": 450.0,
+              "unit": "reviewer_hour"
+            }
+          ],
+          "economic_cost_usd": 25425.0,
+          "expected_incidents": 4.5,
+          "feasible": true,
+          "option": "Manual reference audit",
+          "reviewer_hours": 450.0,
+          "risk_gate_pass": true,
+          "scenario_loss_usd": 675.0,
+          "volume": 1500.0
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 4560.0,
+          "components": [
+            {
+              "activity": "Exception resolution: 35% at 12 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 5774.999999999999,
+              "quantity": 104.99999999999999,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 60.0,
+              "economic_cost_usd": 60.0,
+              "quantity": 1500.0,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 10785.0,
+          "expected_incidents": 3.0,
+          "feasible": true,
+          "option": "Metadata audit plus human exceptions",
+          "reviewer_hours": 105.0,
+          "risk_gate_pass": true,
+          "scenario_loss_usd": 450.0,
+          "volume": 1500.0
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 2560.0,
+          "components": [
+            {
+              "activity": "Rejection appeal: 8% at 25 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 2750.0,
+              "quantity": 50.0,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 60.0,
+              "economic_cost_usd": 60.0,
+              "quantity": 1500.0,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 10935.0,
+          "expected_incidents": 37.5,
+          "feasible": false,
+          "option": "Automatic rejection on missing quotation",
+          "reviewer_hours": 50.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 5625.0,
+          "volume": 1500.0
+        }
+      ],
+      "recommended_if_assumptions_hold": "Metadata audit plus human exceptions",
+      "risk_factor": 1,
+      "volume_factor": 0.5
+    },
+    {
+      "cost_factor": 1,
+      "options": [
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 0.0,
+          "components": [
+            {
+              "activity": "Read and resolve references",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 24750.0,
+              "quantity": 450.0,
+              "unit": "reviewer_hour"
+            }
+          ],
+          "economic_cost_usd": 26100.0,
+          "expected_incidents": 9.0,
+          "feasible": false,
+          "option": "Manual reference audit",
+          "reviewer_hours": 450.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 1350.0,
+          "volume": 1500.0
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 4560.0,
+          "components": [
+            {
+              "activity": "Exception resolution: 35% at 12 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 5774.999999999999,
+              "quantity": 104.99999999999999,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 60.0,
+              "economic_cost_usd": 60.0,
+              "quantity": 1500.0,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 11235.0,
+          "expected_incidents": 6.0,
+          "feasible": true,
+          "option": "Metadata audit plus human exceptions",
+          "reviewer_hours": 105.0,
+          "risk_gate_pass": true,
+          "scenario_loss_usd": 900.0,
+          "volume": 1500.0
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 2560.0,
+          "components": [
+            {
+              "activity": "Rejection appeal: 8% at 25 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 2750.0,
+              "quantity": 50.0,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 60.0,
+              "economic_cost_usd": 60.0,
+              "quantity": 1500.0,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 16560.0,
+          "expected_incidents": 75.0,
+          "feasible": false,
+          "option": "Automatic rejection on missing quotation",
+          "reviewer_hours": 50.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 11250.0,
+          "volume": 1500.0
+        }
+      ],
+      "recommended_if_assumptions_hold": "Metadata audit plus human exceptions",
+      "risk_factor": 2,
+      "volume_factor": 0.5
+    },
+    {
+      "cost_factor": 1,
+      "options": [
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 0.0,
+          "components": [
+            {
+              "activity": "Read and resolve references",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 24750.0,
+              "quantity": 450.0,
+              "unit": "reviewer_hour"
+            }
+          ],
+          "economic_cost_usd": 27450.0,
+          "expected_incidents": 18.0,
+          "feasible": false,
+          "option": "Manual reference audit",
+          "reviewer_hours": 450.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 2700.0,
+          "volume": 1500.0
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 4560.0,
+          "components": [
+            {
+              "activity": "Exception resolution: 35% at 12 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 5774.999999999999,
+              "quantity": 104.99999999999999,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 60.0,
+              "economic_cost_usd": 60.0,
+              "quantity": 1500.0,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 12135.0,
+          "expected_incidents": 12.0,
+          "feasible": false,
+          "option": "Metadata audit plus human exceptions",
+          "reviewer_hours": 105.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 1800.0,
+          "volume": 1500.0
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 2560.0,
+          "components": [
+            {
+              "activity": "Rejection appeal: 8% at 25 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 2750.0,
+              "quantity": 50.0,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 60.0,
+              "economic_cost_usd": 60.0,
+              "quantity": 1500.0,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 27810.0,
+          "expected_incidents": 150.0,
+          "feasible": false,
+          "option": "Automatic rejection on missing quotation",
+          "reviewer_hours": 50.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 22500.0,
+          "volume": 1500.0
+        }
+      ],
+      "recommended_if_assumptions_hold": null,
+      "risk_factor": 4,
+      "volume_factor": 0.5
+    },
+    {
+      "cost_factor": 1.5,
+      "options": [
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 0.0,
+          "components": [
+            {
+              "activity": "Read and resolve references",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 37125.0,
+              "quantity": 450.0,
+              "unit": "reviewer_hour"
+            }
+          ],
+          "economic_cost_usd": 37800.0,
+          "expected_incidents": 4.5,
+          "feasible": true,
+          "option": "Manual reference audit",
+          "reviewer_hours": 450.0,
+          "risk_gate_pass": true,
+          "scenario_loss_usd": 675.0,
+          "volume": 1500.0
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 4590.0,
+          "components": [
+            {
+              "activity": "Exception resolution: 35% at 12 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 8662.499999999998,
+              "quantity": 104.99999999999999,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 90.0,
+              "economic_cost_usd": 90.0,
+              "quantity": 1500.0,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 13702.5,
+          "expected_incidents": 3.0,
+          "feasible": true,
+          "option": "Metadata audit plus human exceptions",
+          "reviewer_hours": 105.0,
+          "risk_gate_pass": true,
+          "scenario_loss_usd": 450.0,
+          "volume": 1500.0
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 2590.0,
+          "components": [
+            {
+              "activity": "Rejection appeal: 8% at 25 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 4125.0,
+              "quantity": 50.0,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 90.0,
+              "economic_cost_usd": 90.0,
+              "quantity": 1500.0,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 12340.0,
+          "expected_incidents": 37.5,
+          "feasible": false,
+          "option": "Automatic rejection on missing quotation",
+          "reviewer_hours": 50.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 5625.0,
+          "volume": 1500.0
+        }
+      ],
+      "recommended_if_assumptions_hold": "Metadata audit plus human exceptions",
+      "risk_factor": 1,
+      "volume_factor": 0.5
+    },
+    {
+      "cost_factor": 1.5,
+      "options": [
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 0.0,
+          "components": [
+            {
+              "activity": "Read and resolve references",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 37125.0,
+              "quantity": 450.0,
+              "unit": "reviewer_hour"
+            }
+          ],
+          "economic_cost_usd": 38475.0,
+          "expected_incidents": 9.0,
+          "feasible": false,
+          "option": "Manual reference audit",
+          "reviewer_hours": 450.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 1350.0,
+          "volume": 1500.0
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 4590.0,
+          "components": [
+            {
+              "activity": "Exception resolution: 35% at 12 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 8662.499999999998,
+              "quantity": 104.99999999999999,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 90.0,
+              "economic_cost_usd": 90.0,
+              "quantity": 1500.0,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 14152.5,
+          "expected_incidents": 6.0,
+          "feasible": true,
+          "option": "Metadata audit plus human exceptions",
+          "reviewer_hours": 105.0,
+          "risk_gate_pass": true,
+          "scenario_loss_usd": 900.0,
+          "volume": 1500.0
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 2590.0,
+          "components": [
+            {
+              "activity": "Rejection appeal: 8% at 25 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 4125.0,
+              "quantity": 50.0,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 90.0,
+              "economic_cost_usd": 90.0,
+              "quantity": 1500.0,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 17965.0,
+          "expected_incidents": 75.0,
+          "feasible": false,
+          "option": "Automatic rejection on missing quotation",
+          "reviewer_hours": 50.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 11250.0,
+          "volume": 1500.0
+        }
+      ],
+      "recommended_if_assumptions_hold": "Metadata audit plus human exceptions",
+      "risk_factor": 2,
+      "volume_factor": 0.5
+    },
+    {
+      "cost_factor": 1.5,
+      "options": [
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 0.0,
+          "components": [
+            {
+              "activity": "Read and resolve references",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 37125.0,
+              "quantity": 450.0,
+              "unit": "reviewer_hour"
+            }
+          ],
+          "economic_cost_usd": 39825.0,
+          "expected_incidents": 18.0,
+          "feasible": false,
+          "option": "Manual reference audit",
+          "reviewer_hours": 450.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 2700.0,
+          "volume": 1500.0
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 4590.0,
+          "components": [
+            {
+              "activity": "Exception resolution: 35% at 12 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 8662.499999999998,
+              "quantity": 104.99999999999999,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 90.0,
+              "economic_cost_usd": 90.0,
+              "quantity": 1500.0,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 15052.5,
+          "expected_incidents": 12.0,
+          "feasible": false,
+          "option": "Metadata audit plus human exceptions",
+          "reviewer_hours": 105.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 1800.0,
+          "volume": 1500.0
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 2590.0,
+          "components": [
+            {
+              "activity": "Rejection appeal: 8% at 25 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 4125.0,
+              "quantity": 50.0,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 90.0,
+              "economic_cost_usd": 90.0,
+              "quantity": 1500.0,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 29215.0,
+          "expected_incidents": 150.0,
+          "feasible": false,
+          "option": "Automatic rejection on missing quotation",
+          "reviewer_hours": 50.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 22500.0,
+          "volume": 1500.0
+        }
+      ],
+      "recommended_if_assumptions_hold": null,
+      "risk_factor": 4,
+      "volume_factor": 0.5
+    },
+    {
+      "cost_factor": 0.75,
+      "options": [
+        {
+          "capacity_gate_pass": false,
+          "cash_outlay_usd": 0.0,
+          "components": [
+            {
+              "activity": "Read and resolve references",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 37125.0,
+              "quantity": 900.0,
+              "unit": "reviewer_hour"
+            }
+          ],
+          "economic_cost_usd": 38475.0,
+          "expected_incidents": 9.0,
+          "feasible": false,
+          "option": "Manual reference audit",
+          "reviewer_hours": 900.0,
+          "risk_gate_pass": true,
+          "scenario_loss_usd": 1350.0,
+          "volume": 3000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 4590.0,
+          "components": [
+            {
+              "activity": "Exception resolution: 35% at 12 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 8662.499999999998,
+              "quantity": 209.99999999999997,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 90.0,
+              "economic_cost_usd": 90.0,
+              "quantity": 3000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 14152.5,
+          "expected_incidents": 6.0,
+          "feasible": true,
+          "option": "Metadata audit plus human exceptions",
+          "reviewer_hours": 210.0,
+          "risk_gate_pass": true,
+          "scenario_loss_usd": 900.0,
+          "volume": 3000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 2590.0,
+          "components": [
+            {
+              "activity": "Rejection appeal: 8% at 25 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 4125.0,
+              "quantity": 100.0,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 90.0,
+              "economic_cost_usd": 90.0,
+              "quantity": 3000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 17965.0,
+          "expected_incidents": 75.0,
+          "feasible": false,
+          "option": "Automatic rejection on missing quotation",
+          "reviewer_hours": 100.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 11250.0,
+          "volume": 3000
+        }
+      ],
+      "recommended_if_assumptions_hold": "Metadata audit plus human exceptions",
+      "risk_factor": 1,
+      "volume_factor": 1
+    },
+    {
+      "cost_factor": 0.75,
+      "options": [
+        {
+          "capacity_gate_pass": false,
+          "cash_outlay_usd": 0.0,
+          "components": [
+            {
+              "activity": "Read and resolve references",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 37125.0,
+              "quantity": 900.0,
+              "unit": "reviewer_hour"
+            }
+          ],
+          "economic_cost_usd": 39825.0,
+          "expected_incidents": 18.0,
+          "feasible": false,
+          "option": "Manual reference audit",
+          "reviewer_hours": 900.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 2700.0,
+          "volume": 3000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 4590.0,
+          "components": [
+            {
+              "activity": "Exception resolution: 35% at 12 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 8662.499999999998,
+              "quantity": 209.99999999999997,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 90.0,
+              "economic_cost_usd": 90.0,
+              "quantity": 3000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 15052.5,
+          "expected_incidents": 12.0,
+          "feasible": true,
+          "option": "Metadata audit plus human exceptions",
+          "reviewer_hours": 210.0,
+          "risk_gate_pass": true,
+          "scenario_loss_usd": 1800.0,
+          "volume": 3000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 2590.0,
+          "components": [
+            {
+              "activity": "Rejection appeal: 8% at 25 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 4125.0,
+              "quantity": 100.0,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 90.0,
+              "economic_cost_usd": 90.0,
+              "quantity": 3000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 29215.0,
+          "expected_incidents": 150.0,
+          "feasible": false,
+          "option": "Automatic rejection on missing quotation",
+          "reviewer_hours": 100.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 22500.0,
+          "volume": 3000
+        }
+      ],
+      "recommended_if_assumptions_hold": "Metadata audit plus human exceptions",
+      "risk_factor": 2,
+      "volume_factor": 1
+    },
+    {
+      "cost_factor": 0.75,
+      "options": [
+        {
+          "capacity_gate_pass": false,
+          "cash_outlay_usd": 0.0,
+          "components": [
+            {
+              "activity": "Read and resolve references",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 37125.0,
+              "quantity": 900.0,
+              "unit": "reviewer_hour"
+            }
+          ],
+          "economic_cost_usd": 42525.0,
+          "expected_incidents": 36.0,
+          "feasible": false,
+          "option": "Manual reference audit",
+          "reviewer_hours": 900.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 5400.0,
+          "volume": 3000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 4590.0,
+          "components": [
+            {
+              "activity": "Exception resolution: 35% at 12 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 8662.499999999998,
+              "quantity": 209.99999999999997,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 90.0,
+              "economic_cost_usd": 90.0,
+              "quantity": 3000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 16852.5,
+          "expected_incidents": 24.0,
+          "feasible": false,
+          "option": "Metadata audit plus human exceptions",
+          "reviewer_hours": 210.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 3600.0,
+          "volume": 3000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 2590.0,
+          "components": [
+            {
+              "activity": "Rejection appeal: 8% at 25 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 4125.0,
+              "quantity": 100.0,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 90.0,
+              "economic_cost_usd": 90.0,
+              "quantity": 3000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 51715.0,
+          "expected_incidents": 300.0,
+          "feasible": false,
+          "option": "Automatic rejection on missing quotation",
+          "reviewer_hours": 100.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 45000.0,
+          "volume": 3000
+        }
+      ],
+      "recommended_if_assumptions_hold": null,
+      "risk_factor": 4,
+      "volume_factor": 1
+    },
+    {
+      "cost_factor": 1,
+      "options": [
+        {
+          "capacity_gate_pass": false,
+          "cash_outlay_usd": 0.0,
+          "components": [
+            {
+              "activity": "Read and resolve references",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 49500.0,
+              "quantity": 900.0,
+              "unit": "reviewer_hour"
+            }
+          ],
+          "economic_cost_usd": 50850.0,
+          "expected_incidents": 9.0,
+          "feasible": false,
+          "option": "Manual reference audit",
+          "reviewer_hours": 900.0,
+          "risk_gate_pass": true,
+          "scenario_loss_usd": 1350.0,
+          "volume": 3000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 4620.0,
+          "components": [
+            {
+              "activity": "Exception resolution: 35% at 12 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 11549.999999999998,
+              "quantity": 209.99999999999997,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 120.0,
+              "economic_cost_usd": 120.0,
+              "quantity": 3000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 17070.0,
+          "expected_incidents": 6.0,
+          "feasible": true,
+          "option": "Metadata audit plus human exceptions",
+          "reviewer_hours": 210.0,
+          "risk_gate_pass": true,
+          "scenario_loss_usd": 900.0,
+          "volume": 3000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 2620.0,
+          "components": [
+            {
+              "activity": "Rejection appeal: 8% at 25 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 5500.0,
+              "quantity": 100.0,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 120.0,
+              "economic_cost_usd": 120.0,
+              "quantity": 3000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 19370.0,
+          "expected_incidents": 75.0,
+          "feasible": false,
+          "option": "Automatic rejection on missing quotation",
+          "reviewer_hours": 100.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 11250.0,
+          "volume": 3000
+        }
+      ],
+      "recommended_if_assumptions_hold": "Metadata audit plus human exceptions",
+      "risk_factor": 1,
+      "volume_factor": 1
+    },
+    {
+      "cost_factor": 1,
+      "options": [
+        {
+          "capacity_gate_pass": false,
+          "cash_outlay_usd": 0.0,
+          "components": [
+            {
+              "activity": "Read and resolve references",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 49500.0,
+              "quantity": 900.0,
+              "unit": "reviewer_hour"
+            }
+          ],
+          "economic_cost_usd": 52200.0,
+          "expected_incidents": 18.0,
+          "feasible": false,
+          "option": "Manual reference audit",
+          "reviewer_hours": 900.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 2700.0,
+          "volume": 3000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 4620.0,
+          "components": [
+            {
+              "activity": "Exception resolution: 35% at 12 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 11549.999999999998,
+              "quantity": 209.99999999999997,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 120.0,
+              "economic_cost_usd": 120.0,
+              "quantity": 3000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 17970.0,
+          "expected_incidents": 12.0,
+          "feasible": true,
+          "option": "Metadata audit plus human exceptions",
+          "reviewer_hours": 210.0,
+          "risk_gate_pass": true,
+          "scenario_loss_usd": 1800.0,
+          "volume": 3000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 2620.0,
+          "components": [
+            {
+              "activity": "Rejection appeal: 8% at 25 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 5500.0,
+              "quantity": 100.0,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 120.0,
+              "economic_cost_usd": 120.0,
+              "quantity": 3000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 30620.0,
+          "expected_incidents": 150.0,
+          "feasible": false,
+          "option": "Automatic rejection on missing quotation",
+          "reviewer_hours": 100.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 22500.0,
+          "volume": 3000
+        }
+      ],
+      "recommended_if_assumptions_hold": "Metadata audit plus human exceptions",
+      "risk_factor": 2,
+      "volume_factor": 1
+    },
+    {
+      "cost_factor": 1,
+      "options": [
+        {
+          "capacity_gate_pass": false,
+          "cash_outlay_usd": 0.0,
+          "components": [
+            {
+              "activity": "Read and resolve references",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 49500.0,
+              "quantity": 900.0,
+              "unit": "reviewer_hour"
+            }
+          ],
+          "economic_cost_usd": 54900.0,
+          "expected_incidents": 36.0,
+          "feasible": false,
+          "option": "Manual reference audit",
+          "reviewer_hours": 900.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 5400.0,
+          "volume": 3000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 4620.0,
+          "components": [
+            {
+              "activity": "Exception resolution: 35% at 12 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 11549.999999999998,
+              "quantity": 209.99999999999997,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 120.0,
+              "economic_cost_usd": 120.0,
+              "quantity": 3000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 19770.0,
+          "expected_incidents": 24.0,
+          "feasible": false,
+          "option": "Metadata audit plus human exceptions",
+          "reviewer_hours": 210.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 3600.0,
+          "volume": 3000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 2620.0,
+          "components": [
+            {
+              "activity": "Rejection appeal: 8% at 25 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 5500.0,
+              "quantity": 100.0,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 120.0,
+              "economic_cost_usd": 120.0,
+              "quantity": 3000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 53120.0,
+          "expected_incidents": 300.0,
+          "feasible": false,
+          "option": "Automatic rejection on missing quotation",
+          "reviewer_hours": 100.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 45000.0,
+          "volume": 3000
+        }
+      ],
+      "recommended_if_assumptions_hold": null,
+      "risk_factor": 4,
+      "volume_factor": 1
+    },
+    {
+      "cost_factor": 1.5,
+      "options": [
+        {
+          "capacity_gate_pass": false,
+          "cash_outlay_usd": 0.0,
+          "components": [
+            {
+              "activity": "Read and resolve references",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 74250.0,
+              "quantity": 900.0,
+              "unit": "reviewer_hour"
+            }
+          ],
+          "economic_cost_usd": 75600.0,
+          "expected_incidents": 9.0,
+          "feasible": false,
+          "option": "Manual reference audit",
+          "reviewer_hours": 900.0,
+          "risk_gate_pass": true,
+          "scenario_loss_usd": 1350.0,
+          "volume": 3000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 4680.0,
+          "components": [
+            {
+              "activity": "Exception resolution: 35% at 12 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 17324.999999999996,
+              "quantity": 209.99999999999997,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 180.0,
+              "economic_cost_usd": 180.0,
+              "quantity": 3000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 22905.0,
+          "expected_incidents": 6.0,
+          "feasible": true,
+          "option": "Metadata audit plus human exceptions",
+          "reviewer_hours": 210.0,
+          "risk_gate_pass": true,
+          "scenario_loss_usd": 900.0,
+          "volume": 3000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 2680.0,
+          "components": [
+            {
+              "activity": "Rejection appeal: 8% at 25 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 8250.0,
+              "quantity": 100.0,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 180.0,
+              "economic_cost_usd": 180.0,
+              "quantity": 3000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 22180.0,
+          "expected_incidents": 75.0,
+          "feasible": false,
+          "option": "Automatic rejection on missing quotation",
+          "reviewer_hours": 100.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 11250.0,
+          "volume": 3000
+        }
+      ],
+      "recommended_if_assumptions_hold": "Metadata audit plus human exceptions",
+      "risk_factor": 1,
+      "volume_factor": 1
+    },
+    {
+      "cost_factor": 1.5,
+      "options": [
+        {
+          "capacity_gate_pass": false,
+          "cash_outlay_usd": 0.0,
+          "components": [
+            {
+              "activity": "Read and resolve references",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 74250.0,
+              "quantity": 900.0,
+              "unit": "reviewer_hour"
+            }
+          ],
+          "economic_cost_usd": 76950.0,
+          "expected_incidents": 18.0,
+          "feasible": false,
+          "option": "Manual reference audit",
+          "reviewer_hours": 900.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 2700.0,
+          "volume": 3000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 4680.0,
+          "components": [
+            {
+              "activity": "Exception resolution: 35% at 12 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 17324.999999999996,
+              "quantity": 209.99999999999997,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 180.0,
+              "economic_cost_usd": 180.0,
+              "quantity": 3000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 23805.0,
+          "expected_incidents": 12.0,
+          "feasible": true,
+          "option": "Metadata audit plus human exceptions",
+          "reviewer_hours": 210.0,
+          "risk_gate_pass": true,
+          "scenario_loss_usd": 1800.0,
+          "volume": 3000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 2680.0,
+          "components": [
+            {
+              "activity": "Rejection appeal: 8% at 25 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 8250.0,
+              "quantity": 100.0,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 180.0,
+              "economic_cost_usd": 180.0,
+              "quantity": 3000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 33430.0,
+          "expected_incidents": 150.0,
+          "feasible": false,
+          "option": "Automatic rejection on missing quotation",
+          "reviewer_hours": 100.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 22500.0,
+          "volume": 3000
+        }
+      ],
+      "recommended_if_assumptions_hold": "Metadata audit plus human exceptions",
+      "risk_factor": 2,
+      "volume_factor": 1
+    },
+    {
+      "cost_factor": 1.5,
+      "options": [
+        {
+          "capacity_gate_pass": false,
+          "cash_outlay_usd": 0.0,
+          "components": [
+            {
+              "activity": "Read and resolve references",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 74250.0,
+              "quantity": 900.0,
+              "unit": "reviewer_hour"
+            }
+          ],
+          "economic_cost_usd": 79650.0,
+          "expected_incidents": 36.0,
+          "feasible": false,
+          "option": "Manual reference audit",
+          "reviewer_hours": 900.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 5400.0,
+          "volume": 3000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 4680.0,
+          "components": [
+            {
+              "activity": "Exception resolution: 35% at 12 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 17324.999999999996,
+              "quantity": 209.99999999999997,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 180.0,
+              "economic_cost_usd": 180.0,
+              "quantity": 3000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 25605.0,
+          "expected_incidents": 24.0,
+          "feasible": false,
+          "option": "Metadata audit plus human exceptions",
+          "reviewer_hours": 210.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 3600.0,
+          "volume": 3000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 2680.0,
+          "components": [
+            {
+              "activity": "Rejection appeal: 8% at 25 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 8250.0,
+              "quantity": 100.0,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 180.0,
+              "economic_cost_usd": 180.0,
+              "quantity": 3000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 55930.0,
+          "expected_incidents": 300.0,
+          "feasible": false,
+          "option": "Automatic rejection on missing quotation",
+          "reviewer_hours": 100.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 45000.0,
+          "volume": 3000
+        }
+      ],
+      "recommended_if_assumptions_hold": null,
+      "risk_factor": 4,
+      "volume_factor": 1
+    },
+    {
+      "cost_factor": 0.75,
+      "options": [
+        {
+          "capacity_gate_pass": false,
+          "cash_outlay_usd": 0.0,
+          "components": [
+            {
+              "activity": "Read and resolve references",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 74250.0,
+              "quantity": 1800.0,
+              "unit": "reviewer_hour"
+            }
+          ],
+          "economic_cost_usd": 76950.0,
+          "expected_incidents": 18.0,
+          "feasible": false,
+          "option": "Manual reference audit",
+          "reviewer_hours": 1800.0,
+          "risk_gate_pass": true,
+          "scenario_loss_usd": 2700.0,
+          "volume": 6000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 4680.0,
+          "components": [
+            {
+              "activity": "Exception resolution: 35% at 12 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 17324.999999999996,
+              "quantity": 419.99999999999994,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 180.0,
+              "economic_cost_usd": 180.0,
+              "quantity": 6000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 23805.0,
+          "expected_incidents": 12.0,
+          "feasible": true,
+          "option": "Metadata audit plus human exceptions",
+          "reviewer_hours": 420.0,
+          "risk_gate_pass": true,
+          "scenario_loss_usd": 1800.0,
+          "volume": 6000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 2680.0,
+          "components": [
+            {
+              "activity": "Rejection appeal: 8% at 25 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 8250.0,
+              "quantity": 200.0,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 180.0,
+              "economic_cost_usd": 180.0,
+              "quantity": 6000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 33430.0,
+          "expected_incidents": 150.0,
+          "feasible": false,
+          "option": "Automatic rejection on missing quotation",
+          "reviewer_hours": 200.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 22500.0,
+          "volume": 6000
+        }
+      ],
+      "recommended_if_assumptions_hold": "Metadata audit plus human exceptions",
+      "risk_factor": 1,
+      "volume_factor": 2
+    },
+    {
+      "cost_factor": 0.75,
+      "options": [
+        {
+          "capacity_gate_pass": false,
+          "cash_outlay_usd": 0.0,
+          "components": [
+            {
+              "activity": "Read and resolve references",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 74250.0,
+              "quantity": 1800.0,
+              "unit": "reviewer_hour"
+            }
+          ],
+          "economic_cost_usd": 79650.0,
+          "expected_incidents": 36.0,
+          "feasible": false,
+          "option": "Manual reference audit",
+          "reviewer_hours": 1800.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 5400.0,
+          "volume": 6000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 4680.0,
+          "components": [
+            {
+              "activity": "Exception resolution: 35% at 12 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 17324.999999999996,
+              "quantity": 419.99999999999994,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 180.0,
+              "economic_cost_usd": 180.0,
+              "quantity": 6000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 25605.0,
+          "expected_incidents": 24.0,
+          "feasible": true,
+          "option": "Metadata audit plus human exceptions",
+          "reviewer_hours": 420.0,
+          "risk_gate_pass": true,
+          "scenario_loss_usd": 3600.0,
+          "volume": 6000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 2680.0,
+          "components": [
+            {
+              "activity": "Rejection appeal: 8% at 25 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 8250.0,
+              "quantity": 200.0,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 180.0,
+              "economic_cost_usd": 180.0,
+              "quantity": 6000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 55930.0,
+          "expected_incidents": 300.0,
+          "feasible": false,
+          "option": "Automatic rejection on missing quotation",
+          "reviewer_hours": 200.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 45000.0,
+          "volume": 6000
+        }
+      ],
+      "recommended_if_assumptions_hold": "Metadata audit plus human exceptions",
+      "risk_factor": 2,
+      "volume_factor": 2
+    },
+    {
+      "cost_factor": 0.75,
+      "options": [
+        {
+          "capacity_gate_pass": false,
+          "cash_outlay_usd": 0.0,
+          "components": [
+            {
+              "activity": "Read and resolve references",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 74250.0,
+              "quantity": 1800.0,
+              "unit": "reviewer_hour"
+            }
+          ],
+          "economic_cost_usd": 85050.0,
+          "expected_incidents": 72.0,
+          "feasible": false,
+          "option": "Manual reference audit",
+          "reviewer_hours": 1800.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 10800.0,
+          "volume": 6000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 4680.0,
+          "components": [
+            {
+              "activity": "Exception resolution: 35% at 12 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 17324.999999999996,
+              "quantity": 419.99999999999994,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 180.0,
+              "economic_cost_usd": 180.0,
+              "quantity": 6000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 29205.0,
+          "expected_incidents": 48.0,
+          "feasible": false,
+          "option": "Metadata audit plus human exceptions",
+          "reviewer_hours": 420.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 7200.0,
+          "volume": 6000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 2680.0,
+          "components": [
+            {
+              "activity": "Rejection appeal: 8% at 25 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 8250.0,
+              "quantity": 200.0,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 180.0,
+              "economic_cost_usd": 180.0,
+              "quantity": 6000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 100930.0,
+          "expected_incidents": 600.0,
+          "feasible": false,
+          "option": "Automatic rejection on missing quotation",
+          "reviewer_hours": 200.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 90000.0,
+          "volume": 6000
+        }
+      ],
+      "recommended_if_assumptions_hold": null,
+      "risk_factor": 4,
+      "volume_factor": 2
+    },
+    {
+      "cost_factor": 1,
+      "options": [
+        {
+          "capacity_gate_pass": false,
+          "cash_outlay_usd": 0.0,
+          "components": [
+            {
+              "activity": "Read and resolve references",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 99000.0,
+              "quantity": 1800.0,
+              "unit": "reviewer_hour"
+            }
+          ],
+          "economic_cost_usd": 101700.0,
+          "expected_incidents": 18.0,
+          "feasible": false,
+          "option": "Manual reference audit",
+          "reviewer_hours": 1800.0,
+          "risk_gate_pass": true,
+          "scenario_loss_usd": 2700.0,
+          "volume": 6000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 4740.0,
+          "components": [
+            {
+              "activity": "Exception resolution: 35% at 12 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 23099.999999999996,
+              "quantity": 419.99999999999994,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 240.0,
+              "economic_cost_usd": 240.0,
+              "quantity": 6000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 29640.0,
+          "expected_incidents": 12.0,
+          "feasible": true,
+          "option": "Metadata audit plus human exceptions",
+          "reviewer_hours": 420.0,
+          "risk_gate_pass": true,
+          "scenario_loss_usd": 1800.0,
+          "volume": 6000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 2740.0,
+          "components": [
+            {
+              "activity": "Rejection appeal: 8% at 25 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 11000.0,
+              "quantity": 200.0,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 240.0,
+              "economic_cost_usd": 240.0,
+              "quantity": 6000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 36240.0,
+          "expected_incidents": 150.0,
+          "feasible": false,
+          "option": "Automatic rejection on missing quotation",
+          "reviewer_hours": 200.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 22500.0,
+          "volume": 6000
+        }
+      ],
+      "recommended_if_assumptions_hold": "Metadata audit plus human exceptions",
+      "risk_factor": 1,
+      "volume_factor": 2
+    },
+    {
+      "cost_factor": 1,
+      "options": [
+        {
+          "capacity_gate_pass": false,
+          "cash_outlay_usd": 0.0,
+          "components": [
+            {
+              "activity": "Read and resolve references",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 99000.0,
+              "quantity": 1800.0,
+              "unit": "reviewer_hour"
+            }
+          ],
+          "economic_cost_usd": 104400.0,
+          "expected_incidents": 36.0,
+          "feasible": false,
+          "option": "Manual reference audit",
+          "reviewer_hours": 1800.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 5400.0,
+          "volume": 6000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 4740.0,
+          "components": [
+            {
+              "activity": "Exception resolution: 35% at 12 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 23099.999999999996,
+              "quantity": 419.99999999999994,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 240.0,
+              "economic_cost_usd": 240.0,
+              "quantity": 6000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 31440.0,
+          "expected_incidents": 24.0,
+          "feasible": true,
+          "option": "Metadata audit plus human exceptions",
+          "reviewer_hours": 420.0,
+          "risk_gate_pass": true,
+          "scenario_loss_usd": 3600.0,
+          "volume": 6000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 2740.0,
+          "components": [
+            {
+              "activity": "Rejection appeal: 8% at 25 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 11000.0,
+              "quantity": 200.0,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 240.0,
+              "economic_cost_usd": 240.0,
+              "quantity": 6000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 58740.0,
+          "expected_incidents": 300.0,
+          "feasible": false,
+          "option": "Automatic rejection on missing quotation",
+          "reviewer_hours": 200.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 45000.0,
+          "volume": 6000
+        }
+      ],
+      "recommended_if_assumptions_hold": "Metadata audit plus human exceptions",
+      "risk_factor": 2,
+      "volume_factor": 2
+    },
+    {
+      "cost_factor": 1,
+      "options": [
+        {
+          "capacity_gate_pass": false,
+          "cash_outlay_usd": 0.0,
+          "components": [
+            {
+              "activity": "Read and resolve references",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 99000.0,
+              "quantity": 1800.0,
+              "unit": "reviewer_hour"
+            }
+          ],
+          "economic_cost_usd": 109800.0,
+          "expected_incidents": 72.0,
+          "feasible": false,
+          "option": "Manual reference audit",
+          "reviewer_hours": 1800.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 10800.0,
+          "volume": 6000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 4740.0,
+          "components": [
+            {
+              "activity": "Exception resolution: 35% at 12 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 23099.999999999996,
+              "quantity": 419.99999999999994,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 240.0,
+              "economic_cost_usd": 240.0,
+              "quantity": 6000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 35040.0,
+          "expected_incidents": 48.0,
+          "feasible": false,
+          "option": "Metadata audit plus human exceptions",
+          "reviewer_hours": 420.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 7200.0,
+          "volume": 6000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 2740.0,
+          "components": [
+            {
+              "activity": "Rejection appeal: 8% at 25 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 11000.0,
+              "quantity": 200.0,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 240.0,
+              "economic_cost_usd": 240.0,
+              "quantity": 6000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 103740.0,
+          "expected_incidents": 600.0,
+          "feasible": false,
+          "option": "Automatic rejection on missing quotation",
+          "reviewer_hours": 200.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 90000.0,
+          "volume": 6000
+        }
+      ],
+      "recommended_if_assumptions_hold": null,
+      "risk_factor": 4,
+      "volume_factor": 2
+    },
+    {
+      "cost_factor": 1.5,
+      "options": [
+        {
+          "capacity_gate_pass": false,
+          "cash_outlay_usd": 0.0,
+          "components": [
+            {
+              "activity": "Read and resolve references",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 148500.0,
+              "quantity": 1800.0,
+              "unit": "reviewer_hour"
+            }
+          ],
+          "economic_cost_usd": 151200.0,
+          "expected_incidents": 18.0,
+          "feasible": false,
+          "option": "Manual reference audit",
+          "reviewer_hours": 1800.0,
+          "risk_gate_pass": true,
+          "scenario_loss_usd": 2700.0,
+          "volume": 6000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 4860.0,
+          "components": [
+            {
+              "activity": "Exception resolution: 35% at 12 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 34649.99999999999,
+              "quantity": 419.99999999999994,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 360.0,
+              "economic_cost_usd": 360.0,
+              "quantity": 6000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 41310.0,
+          "expected_incidents": 12.0,
+          "feasible": true,
+          "option": "Metadata audit plus human exceptions",
+          "reviewer_hours": 420.0,
+          "risk_gate_pass": true,
+          "scenario_loss_usd": 1800.0,
+          "volume": 6000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 2860.0,
+          "components": [
+            {
+              "activity": "Rejection appeal: 8% at 25 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 16500.0,
+              "quantity": 200.0,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 360.0,
+              "economic_cost_usd": 360.0,
+              "quantity": 6000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 41860.0,
+          "expected_incidents": 150.0,
+          "feasible": false,
+          "option": "Automatic rejection on missing quotation",
+          "reviewer_hours": 200.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 22500.0,
+          "volume": 6000
+        }
+      ],
+      "recommended_if_assumptions_hold": "Metadata audit plus human exceptions",
+      "risk_factor": 1,
+      "volume_factor": 2
+    },
+    {
+      "cost_factor": 1.5,
+      "options": [
+        {
+          "capacity_gate_pass": false,
+          "cash_outlay_usd": 0.0,
+          "components": [
+            {
+              "activity": "Read and resolve references",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 148500.0,
+              "quantity": 1800.0,
+              "unit": "reviewer_hour"
+            }
+          ],
+          "economic_cost_usd": 153900.0,
+          "expected_incidents": 36.0,
+          "feasible": false,
+          "option": "Manual reference audit",
+          "reviewer_hours": 1800.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 5400.0,
+          "volume": 6000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 4860.0,
+          "components": [
+            {
+              "activity": "Exception resolution: 35% at 12 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 34649.99999999999,
+              "quantity": 419.99999999999994,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 360.0,
+              "economic_cost_usd": 360.0,
+              "quantity": 6000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 43110.0,
+          "expected_incidents": 24.0,
+          "feasible": true,
+          "option": "Metadata audit plus human exceptions",
+          "reviewer_hours": 420.0,
+          "risk_gate_pass": true,
+          "scenario_loss_usd": 3600.0,
+          "volume": 6000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 2860.0,
+          "components": [
+            {
+              "activity": "Rejection appeal: 8% at 25 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 16500.0,
+              "quantity": 200.0,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 360.0,
+              "economic_cost_usd": 360.0,
+              "quantity": 6000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 64360.0,
+          "expected_incidents": 300.0,
+          "feasible": false,
+          "option": "Automatic rejection on missing quotation",
+          "reviewer_hours": 200.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 45000.0,
+          "volume": 6000
+        }
+      ],
+      "recommended_if_assumptions_hold": "Metadata audit plus human exceptions",
+      "risk_factor": 2,
+      "volume_factor": 2
+    },
+    {
+      "cost_factor": 1.5,
+      "options": [
+        {
+          "capacity_gate_pass": false,
+          "cash_outlay_usd": 0.0,
+          "components": [
+            {
+              "activity": "Read and resolve references",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 148500.0,
+              "quantity": 1800.0,
+              "unit": "reviewer_hour"
+            }
+          ],
+          "economic_cost_usd": 159300.0,
+          "expected_incidents": 72.0,
+          "feasible": false,
+          "option": "Manual reference audit",
+          "reviewer_hours": 1800.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 10800.0,
+          "volume": 6000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 4860.0,
+          "components": [
+            {
+              "activity": "Exception resolution: 35% at 12 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 34649.99999999999,
+              "quantity": 419.99999999999994,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 360.0,
+              "economic_cost_usd": 360.0,
+              "quantity": 6000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 46710.0,
+          "expected_incidents": 48.0,
+          "feasible": false,
+          "option": "Metadata audit plus human exceptions",
+          "reviewer_hours": 420.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 7200.0,
+          "volume": 6000
+        },
+        {
+          "capacity_gate_pass": true,
+          "cash_outlay_usd": 2860.0,
+          "components": [
+            {
+              "activity": "Rejection appeal: 8% at 25 minutes",
+              "cash_outlay_usd": 0.0,
+              "economic_cost_usd": 16500.0,
+              "quantity": 200.0,
+              "unit": "reviewer_hour"
+            },
+            {
+              "activity": "Resolution requests",
+              "cash_outlay_usd": 360.0,
+              "economic_cost_usd": 360.0,
+              "quantity": 6000,
+              "unit": "document"
+            }
+          ],
+          "economic_cost_usd": 109360.0,
+          "expected_incidents": 600.0,
+          "feasible": false,
+          "option": "Automatic rejection on missing quotation",
+          "reviewer_hours": 200.0,
+          "risk_gate_pass": false,
+          "scenario_loss_usd": 90000.0,
+          "volume": 6000
+        }
+      ],
+      "recommended_if_assumptions_hold": null,
+      "risk_factor": 4,
+      "volume_factor": 2
+    }
+  ]
+}

@@ -1,0 +1,120 @@
+{
+  "project": "citeaudit",
+  "title": "Reduce reference-review work without turning missing text into a refutation",
+  "decision_owner": "Editorial quality lead",
+  "observed_evidence": "The frozen preprint checks retain references clustered within papers. Partial retrieved LaTeX is explicitly an excerpt; absent text cannot establish fabrication. Nine live API tests passed during publication.",
+  "executive_recommendation": "Use Citeaudit to prioritize editorial review, retaining inconclusive verdicts. The product objective is a usable, correctly qualified report, not maximum rejection rate.",
+  "priorities": [
+    "Keep partial-text and unreachable-source outcomes separate from conclusive failures.",
+    "Prioritize exception explanations and report export before adding more source integrations.",
+    "Evaluate paper-level false refutations alongside time to a usable report."
+  ],
+  "reversal": "If automation increases false refutations or exception resolution erases saved review effort, retain manual review for that source class.",
+  "uncertainty": "Synthetic author journeys do not establish adoption; metadata agreement does not prove a paper supports a claim.",
+  "economics": {
+    "evidence_status": "ILLUSTRATIVE ASSUMPTIONS, NOT MEASURED COSTS OR RISK",
+    "period": "one planning year",
+    "volume": 3000,
+    "review_capacity_hours": 800,
+    "loss_per_incident_usd": 150,
+    "max_incident_rate": 0.004,
+    "options": [
+      {
+        "name": "Manual reference audit",
+        "fixed_usd": 0,
+        "incident_rate": 0.003,
+        "activities": [
+          {
+            "name": "Read and resolve references",
+            "unit": "reviewer_hour",
+            "units_per_case": 0.3,
+            "usd_per_unit": 55,
+            "cash": false
+          }
+        ]
+      },
+      {
+        "name": "Metadata audit plus human exceptions",
+        "fixed_usd": 4500,
+        "incident_rate": 0.002,
+        "activities": [
+          {
+            "name": "Exception resolution: 35% at 12 minutes",
+            "unit": "reviewer_hour",
+            "units_per_case": 0.06999999999999999,
+            "usd_per_unit": 55,
+            "cash": false
+          },
+          {
+            "name": "Resolution requests",
+            "unit": "document",
+            "units_per_case": 1,
+            "usd_per_unit": 0.04,
+            "cash": true
+          }
+        ]
+      },
+      {
+        "name": "Automatic rejection on missing quotation",
+        "fixed_usd": 2500,
+        "incident_rate": 0.025,
+        "activities": [
+          {
+            "name": "Rejection appeal: 8% at 25 minutes",
+            "unit": "reviewer_hour",
+            "units_per_case": 0.03333333333333333,
+            "usd_per_unit": 55,
+            "cash": false
+          },
+          {
+            "name": "Resolution requests",
+            "unit": "document",
+            "units_per_case": 1,
+            "usd_per_unit": 0.04,
+            "cash": true
+          }
+        ]
+      }
+    ]
+  },
+  "product": {
+    "seed": 733,
+    "randomization_unit": "editor account; papers grouped within editor",
+    "stages": [
+      "document_opened",
+      "audit_completed",
+      "qualified_report_exported"
+    ],
+    "incident_definition": "false refutation in report",
+    "retention_interpretation": "editor audits another eligible document",
+    "observation_day": 56,
+    "minimum_activation_lift": 0.02,
+    "maximum_incident_increase": 0.005,
+    "planning_baseline": 0.45,
+    "minimum_detectable_effect": 0.05,
+    "segments": [
+      {
+        "name": "doi_rich_document",
+        "start_probability": 0.9,
+        "control_activation": 0.64,
+        "treatment_delta": 0.18,
+        "apply_probability": 0.88,
+        "control_incident": 0.004,
+        "treatment_incident": 0.004,
+        "return7": 0.55,
+        "return28": 0.35
+      },
+      {
+        "name": "partial_text_document",
+        "start_probability": 0.8200000000000001,
+        "control_activation": 0.52,
+        "treatment_delta": -0.1,
+        "apply_probability": 0.8,
+        "control_incident": 0.01,
+        "treatment_incident": 0.064,
+        "return7": 0.43000000000000005,
+        "return28": 0.24999999999999997
+      }
+    ]
+  }
+}

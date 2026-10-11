@@ -450,7 +450,7 @@ class TestArxivFullText:
         body = "This is the paper body. " * 60
         client = BodyClient(_tarball({"main.tex": body}))
         got = arxiv_fulltext(client, "1706.03762")
-        assert got.coverage is Coverage.FULL
+        assert got.coverage is Coverage.EXCERPT
         assert "paper body" in got.text
         assert got.url == "https://arxiv.org/abs/1706.03762"
 
@@ -465,7 +465,7 @@ class TestArxivFullText:
         client = BodyClient(_tarball({
             "intro.tex": "alpha " * 150, "method.tex": "beta " * 150}))
         got = arxiv_fulltext(client, "1234.5678")
-        assert got.coverage is Coverage.FULL
+        assert got.coverage is Coverage.EXCERPT
         assert "alpha" in got.text and "beta" in got.text
 
     def test_a_stub_document_is_rejected_rather_than_claimed_as_full(self):
@@ -482,7 +482,7 @@ class TestArxivFullText:
         import gzip
         from citeaudit.fulltext import Coverage, arxiv_fulltext
         client = BodyClient(gzip.compress(("content " * 300).encode()))
-        assert arxiv_fulltext(client, "1.1").coverage is Coverage.FULL
+        assert arxiv_fulltext(client, "1.1").coverage is Coverage.EXCERPT
 
     def test_unreadable_payload_degrades_to_no_coverage(self):
         from citeaudit.fulltext import Coverage, arxiv_fulltext

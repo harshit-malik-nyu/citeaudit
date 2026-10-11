@@ -1,5 +1,8 @@
 # citeaudit
 
+> **Validation update (2026-10-10):** Binary cache now preserves source archives. Extracted LaTeX is an excerpt, not proof of complete coverage. The action installs its selected revision. See the [current decision brief](docs/decision-brief.md) and [reproducible analysis](analysis/README.md). Historical evidence and figures retain their original run context; this update supersedes conflicting claims below.
+
+
 **Verify that the citations in a document actually exist.**
 
 [![ci](https://github.com/harshit-malik-nyu/citeaudit/actions/workflows/ci.yml/badge.svg)](https://github.com/harshit-malik-nyu/citeaudit/actions/workflows/ci.yml)
@@ -374,6 +377,7 @@ looks for the passage in openly available source text.
 |---|---|:---:|
 | `FOUND` | Passage located in the retrieved text | |
 | `NOT_FOUND` | **Complete body text retrieved and the passage is absent** | ✓ |
+| `ABSENT_FROM_EXCERPT` | Retrieved LaTeX is partial; passage absent from extraction | |
 | `ABSENT_FROM_ABSTRACT` | Only an abstract was available and it is not there | |
 | `SOURCE_UNAVAILABLE` | No open text; no conclusion | |
 | `NOT_ATTRIBUTED` | No citation attached to check against | |
@@ -556,8 +560,8 @@ self-refuting.
   reference points at a real work that matches the description. Whether that
   work actually says what the document claims is a different problem, and this
   tool does not attempt it.
-- **Quote verification is not implemented.** Deloitte's fabricated judicial
-  quote would not be caught by this version. Catching it requires full-text
+- **Quote verification is implemented but coverage is limited.** An unavailable judicial
+  source cannot support a verdict. Refutation requires demonstrably complete text;
   retrieval, which is licensing-constrained for most publishers.
 - **Reference parsing is heuristic.** Citation styles vary enormously.
   Unparsed references are reported as `UNVERIFIABLE` rather than skipped

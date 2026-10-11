@@ -50,6 +50,7 @@ ATOM = "{http://www.w3.org/2005/Atom}"
 class Coverage(str, Enum):
     FULL = "full"
     ABSTRACT = "abstract"
+    EXCERPT = "excerpt"
     NONE = "none"
 
     @property
@@ -147,7 +148,9 @@ def arxiv_fulltext(client: Client, arxiv_id: str) -> SourceText:
         # Too short to be a body; treat as unusable rather than claim coverage.
         return SourceText(Coverage.NONE, origin="arxiv")
 
-    return SourceText(Coverage.FULL, text=text, origin="arxiv-source",
+    # Extracted LaTeX omits figures, tables and potentially included files.
+    # Word count cannot establish complete coverage or license refutation.
+    return SourceText(Coverage.EXCERPT, text=text, origin="arxiv-source",
                       url=f"https://arxiv.org/abs/{base}")
 
 
@@ -241,7 +244,7 @@ def retrieve(client: Client, *, doi: str | None = None,
     """
     if arxiv_id:
         full = arxiv_fulltext(client, arxiv_id)
-        if full.coverage is Coverage.FULL:
+        if full.coverage in (Coverage.FULL, Coverage.EXCERPT):
             return full
         abs_ = arxiv_abstract(client, arxiv_id)
         if abs_.coverage is not Coverage.NONE:
@@ -252,7 +255,7 @@ def retrieve(client: Client, *, doi: str | None = None,
         if doi.startswith("10.48550/arxiv."):
             aid = doi.split("arxiv.", 1)[1]
             full = arxiv_fulltext(client, aid)
-            if full.coverage is Coverage.FULL:
+            if full.coverage in (Coverage.FULL, Coverage.EXCERPT):
                 return full
 
         for fn in (openalex_abstract, crossref_abstract):

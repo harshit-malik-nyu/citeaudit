@@ -125,7 +125,7 @@ def to_terminal(report: Report, *, colour: bool = True,
         lines.append(
             f"  {qs['total_quotes']} quotations | {qs['found']} located | "
             f"{qs['not_found']} absent from full text | "
-            f"{qs['source_unavailable'] + qs['absent_from_abstract'] + qs['not_attributed']} "
+            f"{qs['source_unavailable'] + qs['absent_from_abstract'] + qs['absent_from_excerpt'] + qs['not_attributed']} "
             f"not checkable"
         )
         if qs["coverage_rate"] is not None:
@@ -229,6 +229,7 @@ def to_markdown(report: Report) -> str:
         out.append("|---|---:|")
         out.append(f"| Located in source | {qs['found']} |")
         out.append(f"| **Absent from full text** | **{qs['not_found']}** |")
+        out.append(f"| Not in excerpt (inconclusive) | {qs['absent_from_excerpt']} |")
         out.append(f"| Not in abstract (inconclusive) | {qs['absent_from_abstract']} |")
         out.append(f"| No open text available | {qs['source_unavailable']} |")
         out.append(f"| No citation attached | {qs['not_attributed']} |")
@@ -344,6 +345,7 @@ _QUOTE_CLASS = {
     "found": "verified",
     "not_found": "not_found",
     "absent_from_abstract": "unreachable",
+    "absent_from_excerpt": "unreachable",
     "source_unavailable": "unreachable",
     "not_attributed": "unverifiable",
 }
@@ -352,6 +354,7 @@ _QUOTE_LABEL = {
     "found": "Located in source",
     "not_found": "Absent from the complete source text",
     "absent_from_abstract": "Not in the abstract (inconclusive)",
+    "absent_from_excerpt": "Not in the excerpt (inconclusive)",
     "source_unavailable": "No open text available",
     "not_attributed": "No citation attached",
 }
@@ -436,7 +439,7 @@ def to_html(report: Report, *, title: str = "citeaudit report",
         parts.append(_card(qs["found"], "located", "ok"))
         parts.append(_card(qs["not_found"], "absent from source", "bad"))
         parts.append(_card(
-            qs["absent_from_abstract"] + qs["source_unavailable"]
+            qs["absent_from_abstract"] + qs["absent_from_excerpt"] + qs["source_unavailable"]
             + qs["not_attributed"], "not checkable", "unk"))
         parts.append("</div>")
 

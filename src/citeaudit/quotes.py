@@ -68,6 +68,7 @@ class QuoteVerdict(str, Enum):
     FOUND = "found"
     NOT_FOUND = "not_found"
     ABSENT_FROM_ABSTRACT = "absent_from_abstract"
+    ABSENT_FROM_EXCERPT = "absent_from_excerpt"
     SOURCE_UNAVAILABLE = "source_unavailable"
     NOT_ATTRIBUTED = "not_attributed"
 
@@ -78,7 +79,7 @@ class QuoteVerdict(str, Enum):
 
     @property
     def is_inconclusive(self) -> bool:
-        return self in (QuoteVerdict.ABSENT_FROM_ABSTRACT,
+        return self in (QuoteVerdict.ABSENT_FROM_ABSTRACT, QuoteVerdict.ABSENT_FROM_EXCERPT,
                         QuoteVerdict.SOURCE_UNAVAILABLE,
                         QuoteVerdict.NOT_ATTRIBUTED)
 
@@ -346,11 +347,12 @@ class QuoteVerifier:
             )
 
         return QuoteFinding(
-            quote=quote, verdict=QuoteVerdict.ABSENT_FROM_ABSTRACT,
+            quote=quote, verdict=(QuoteVerdict.ABSENT_FROM_ABSTRACT if src.coverage is Coverage.ABSTRACT
+                                  else QuoteVerdict.ABSENT_FROM_EXCERPT),
             coverage=src.coverage.value, similarity=score,
             best_passage=passage, source_origin=src.origin,
             evidence_url=src.url,
-            detail=("not present in the abstract, which is all that was "
+            detail=(f"not present in the {src.coverage.value}, which is all that was "
                     "openly available. The passage may well appear in the "
                     "body. INCONCLUSIVE, not a failure."),
         )
@@ -368,6 +370,7 @@ def summarise(findings: list[QuoteFinding]) -> dict:
         "total_quotes": len(findings),
         "found": counts.get(QuoteVerdict.FOUND.value, 0),
         "not_found": counts.get(QuoteVerdict.NOT_FOUND.value, 0),
+        "absent_from_excerpt": counts.get(QuoteVerdict.ABSENT_FROM_EXCERPT.value, 0),
         "absent_from_abstract": counts.get(QuoteVerdict.ABSENT_FROM_ABSTRACT.value, 0),
         "source_unavailable": counts.get(QuoteVerdict.SOURCE_UNAVAILABLE.value, 0),
         "not_attributed": counts.get(QuoteVerdict.NOT_ATTRIBUTED.value, 0),

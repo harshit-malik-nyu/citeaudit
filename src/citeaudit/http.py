@@ -23,6 +23,7 @@ of its own. A citation checker with a large supply chain is an awkward artifact.
 
 from __future__ import annotations
 
+import base64
 import hashlib
 import json
 import logging
@@ -105,10 +106,14 @@ class Cache:
             rec = json.loads(p.read_text())
         except (json.JSONDecodeError, OSError):
             return None
-        return Response(
-            url=rec["url"], status=rec["status"],
-            body=rec["body"].encode("utf-8"), from_cache=True,
-        )
+        try:
+            if rec.get("url") != url or not isinstance(rec.get("status"), int):
+                return None
+            return Response(url=url, status=rec["status"],
+                            body=base64.b64decode(rec["body_base64"], validate=True),
+                            from_cache=True)
+        except (KeyError, ValueError, TypeError, AttributeError):
+            return None  # corrupt and legacy text caches are cache misses
 
     def put(self, resp: Response) -> None:
         if not self.enabled or resp.status >= 500:
@@ -116,7 +121,7 @@ class Cache:
         rec = {
             "url": resp.url,
             "status": resp.status,
-            "body": resp.body.decode("utf-8", errors="replace"),
+            "body_base64": base64.b64encode(resp.body).decode("ascii"),
             "cached_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         }
         try:

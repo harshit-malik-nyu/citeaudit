@@ -1,0 +1,45 @@
+category,verdict,checks,papers,share_within_category
+arXiv (Cornell University),mismatch,4,1,0.022099447513812154
+arXiv (Cornell University),not_found,12,7,0.06629834254143646
+arXiv (Cornell University),unverifiable,7,5,0.03867403314917127
+arXiv (Cornell University),verified,158,17,0.8729281767955801
+astro-ph.GA,mismatch,1,1,0.024390243902439025
+astro-ph.GA,not_found,4,4,0.0975609756097561
+astro-ph.GA,unverifiable,2,1,0.04878048780487805
+astro-ph.GA,verified,34,9,0.8292682926829268
+cond-mat.stat-mech,not_found,5,3,0.06493506493506493
+cond-mat.stat-mech,verified,72,8,0.935064935064935
+cs.CR,not_found,14,9,0.11764705882352941
+cs.CR,unverifiable,7,1,0.058823529411764705
+cs.CR,verified,98,11,0.8235294117647058
+cs.CY,mismatch,1,1,0.009009009009009009
+cs.CY,not_found,24,7,0.21621621621621623
+cs.CY,unverifiable,13,3,0.11711711711711711
+cs.CY,verified,73,10,0.6576576576576577
+cs.LG,mismatch,4,3,0.026143790849673203
+cs.LG,not_found,20,8,0.13071895424836602
+cs.LG,unverifiable,6,1,0.0392156862745098
+cs.LG,verified,123,13,0.803921568627451
+econ.GN,mismatch,1,1,0.012195121951219513
+econ.GN,not_found,8,5,0.0975609756097561
+econ.GN,verified,73,7,0.8902439024390244
+eess.SY,not_found,10,7,0.07194244604316546
+eess.SY,unverifiable,1,1,0.007194244604316547
+eess.SY,verified,128,14,0.920863309352518
+math.ST,mismatch,1,1,0.007751937984496124
+math.ST,not_found,6,5,0.046511627906976744
+math.ST,unverifiable,2,1,0.015503875968992248
+math.ST,verified,120,12,0.9302325581395349
+physics.soc-ph,mismatch,3,2,0.036585365853658534
+physics.soc-ph,not_found,7,6,0.08536585365853659
+physics.soc-ph,unverifiable,1,1,0.012195121951219513
+physics.soc-ph,verified,71,8,0.8658536585365854
+q-bio.QM,not_found,11,7,0.10891089108910891
+q-bio.QM,unverifiable,5,2,0.04950495049504951
+q-bio.QM,verified,85,9,0.8415841584158416
+q-fin.GN,not_found,18,7,0.16981132075471697
+q-fin.GN,unverifiable,8,2,0.07547169811320754
+q-fin.GN,verified,80,9,0.7547169811320755
+stat.AP,not_found,20,8,0.18691588785046728
+stat.AP,unverifiable,1,1,0.009345794392523364
+stat.AP,verified,86,10,0.8037383177570093

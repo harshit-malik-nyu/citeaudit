@@ -1,0 +1,19 @@
+{
+  "external_services_required": false,
+  "input_sha256": {
+    "evidence/preprints/checks.csv": "f07bfc410f3052dbcf36392b3f9081749cccb2289cf550831f2b51367ef0a6da"
+  },
+  "outputs": {
+    "query_1.csv": "aa42220038b20e35d8db5aba942f05fbbe3a8f60f247adae2db73842794b311e",
+    "query_2.csv": "d6c99c4be9018ae4f51ad73524a517345dc0373af08bb31ab8cc56c19268bc66"
+  },
+  "project": "citeaudit",
+  "quality_checks": [
+    "SQL type and domain constraints",
+    "row-count reconciliation",
+    "SQLite integrity"
+  ],
+  "query_sha256": "7ea6d0c5ca77a4c1aa6688d7de66d6d7574e186be554dc4e2b195b88f0daa061",
+  "rows": 1428,
+  "scope": "Frozen preprint reference checks; unresolved is not fabricated. References cluster within papers."
+}

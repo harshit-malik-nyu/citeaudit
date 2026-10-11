@@ -1,0 +1,23 @@
+{
+  "decision": "Route citation problems to useful author review without treating incomplete retrieval as contradiction.",
+  "primary_outcome": "Confirmed actionable citation issues per reviewed paper, with reviewer minutes per confirmed issue.",
+  "denominator": "All eligible papers and all attempted references, including retrieval failures; report reference coverage separately.",
+  "independence_unit": "Paper; references within a paper share authors, topics and retrieval sources.",
+  "quality_guardrail": "False refutation rate and unresolved-reference rate, with adjudicated labels separate from metadata matches.",
+  "minimum_data": "Paper/reference IDs, retrieval completeness, source hash, verdict, adjudication status, reviewer time and resolved/unresolved outcome.",
+  "failure_handling": "Failed retrieval and partial excerpts are unresolved, not clean citations or refutations. Keep them in coverage reporting.",
+  "release_rule": "Require sufficiently bounded false refutation and useful issue yield before expanding automatic decisions; metadata agreement alone never establishes claim support.",
+  "reversal": "Rising unresolved coverage or false refutations makes automatic rejection inappropriate; return to exception review.",
+  "project": "citeaudit",
+  "status": "PROPOSED MEASUREMENT CONTRACT; NOT AN EXECUTED DOMAIN EXPERIMENT",
+  "defense": [
+    [
+      "Why is a missing quote not enough?",
+      "An excerpt may omit the relevant passage. Absence becomes meaningful only under adequate retrieval and an appropriate comparison."
+    ],
+    [
+      "What would adoption tell us?",
+      "Repeat use shows workflow engagement. It does not show that citation verdicts are correct, so I measure adjudicated quality separately."
+    ]
+  ]
+}

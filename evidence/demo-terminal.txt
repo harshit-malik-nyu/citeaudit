@@ -88,13 +88,14 @@ Verified (8)
 
 QUOTATIONS
 ------------------------------------------------------------------------------
-  FAIL line 30    "welfare eligibility determinations should be fully deleg..."
-       complete text of the source was retrieved (4,716 words) and this
-       passage does not appear in it. Closest match scored 49%.
+  ??   line 30    "welfare eligibility determinations should be fully deleg..."
+       not present in the excerpt, which is all that was openly available.
+       The passage may well appear in the body. INCONCLUSIVE, not a
+       failure.
        source: https://arxiv.org/abs/1706.03762
 
-  2 quotations | 1 located | 1 absent from full text | 0 not checkable
-  quote coverage: 100% (limited by open-access availability, not by the tool)
+  2 quotations | 1 located | 0 absent from full text | 1 not checkable
+  quote coverage: 50% (limited by open-access availability, not by the tool)
 ==============================================================================
 14 citations  |  8 verified  |  4 not found  |  1 mismatched  |  0 malformed
 inconclusive: 1 unreachable, 0 not machine-checkable (excluded from the score, not counted as failures)

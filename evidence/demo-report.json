@@ -1,7 +1,7 @@
 {
   "summary": {
     "document": "examples/demo.md",
-    "generated_at": "2026-10-05T14:42:01+00:00",
+    "generated_at": "2026-10-11T14:36:56+00:00",
     "tool_version": "0.1.0",
     "total_citations": 14,
     "verified": 8,
@@ -43,7 +43,7 @@
       "title_similarity": 100.0,
       "author_overlap": 1.0,
       "evidence_url": "https://doi.org/10.1038/nature14539",
-      "checked_at": "2026-10-05T14:41:43+00:00"
+      "checked_at": "2026-10-11T14:36:39+00:00"
     },
     {
       "citation": {
@@ -79,7 +79,7 @@
       "title_similarity": 100.0,
       "author_overlap": 1.0,
       "evidence_url": "https://arxiv.org/abs/1706.03762",
-      "checked_at": "2026-10-05T14:41:43+00:00"
+      "checked_at": "2026-10-11T14:36:39+00:00"
     },
     {
       "citation": {
@@ -112,7 +112,7 @@
       "title_similarity": 100.0,
       "author_overlap": 1.0,
       "evidence_url": "https://arxiv.org/abs/1810.04805",
-      "checked_at": "2026-10-05T14:41:46+00:00"
+      "checked_at": "2026-10-11T14:36:42+00:00"
     },
     {
       "citation": {
@@ -138,7 +138,7 @@
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": "https://api.crossref.org/works/10.1016/j.jpuba.2021.02.014",
-      "checked_at": "2026-10-05T14:41:47+00:00"
+      "checked_at": "2026-10-11T14:36:43+00:00"
     },
     {
       "citation": {
@@ -163,7 +163,7 @@
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": "https://api.crossref.org/works/10.9911/erla.2020.13.4.055",
-      "checked_at": "2026-10-05T14:41:47+00:00"
+      "checked_at": "2026-10-11T14:36:43+00:00"
     },
     {
       "citation": {
@@ -188,7 +188,7 @@
       "title_similarity": 58.208955223880594,
       "author_overlap": null,
       "evidence_url": "https://doi.org/10.31390/gradschool_disstheses.1478",
-      "checked_at": "2026-10-05T14:41:54+00:00"
+      "checked_at": "2026-10-11T14:36:46+00:00"
     },
     {
       "citation": {
@@ -224,7 +224,7 @@
       "title_similarity": 100.0,
       "author_overlap": 0.8,
       "evidence_url": "https://doi.org/10.1109/cvpr.2009.5206848",
-      "checked_at": "2026-10-05T14:41:47+00:00"
+      "checked_at": "2026-10-11T14:36:43+00:00"
     },
     {
       "citation": {
@@ -261,7 +261,7 @@
       "title_similarity": 100.0,
       "author_overlap": 1.0,
       "evidence_url": "https://arxiv.org/abs/1906.02530",
-      "checked_at": "2026-10-05T14:41:50+00:00"
+      "checked_at": "2026-10-11T14:36:46+00:00"
     },
     {
       "citation": {
@@ -286,7 +286,7 @@
       "title_similarity": 55.33980582524272,
       "author_overlap": null,
       "evidence_url": "https://doi.org/10.3109/01658109309038141",
-      "checked_at": "2026-10-05T14:41:54+00:00"
+      "checked_at": "2026-10-11T14:36:50+00:00"
     },
     {
       "citation": {
@@ -315,7 +315,7 @@
       "title_similarity": 100.0,
       "author_overlap": 1.0,
       "evidence_url": "https://arxiv.org/abs/1703.01365",
-      "checked_at": "2026-10-05T14:41:53+00:00"
+      "checked_at": "2026-10-11T14:36:49+00:00"
     },
     {
       "citation": {
@@ -344,7 +344,7 @@
       "title_similarity": 22.22222222222223,
       "author_overlap": 0.0,
       "evidence_url": "https://doi.org/10.1038/nature14539",
-      "checked_at": "2026-10-05T14:41:53+00:00"
+      "checked_at": "2026-10-11T14:36:50+00:00"
     },
     {
       "citation": {
@@ -367,7 +367,7 @@
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": "https://www.crossref.org/documentation/",
-      "checked_at": "2026-10-05T14:41:54+00:00"
+      "checked_at": "2026-10-11T14:36:50+00:00"
     },
     {
       "citation": {
@@ -390,7 +390,7 @@
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": "https://arxiv.org/help/api/",
-      "checked_at": "2026-10-05T14:41:54+00:00"
+      "checked_at": "2026-10-11T14:36:50+00:00"
     },
     {
       "citation": {
@@ -413,18 +413,19 @@
       "title_similarity": null,
       "author_overlap": null,
       "evidence_url": null,
-      "checked_at": "2026-10-05T14:42:01+00:00"
+      "checked_at": "2026-10-11T14:36:56+00:00"
     }
   ],
   "quote_summary": {
     "total_quotes": 2,
     "found": 1,
-    "not_found": 1,
+    "not_found": 0,
+    "absent_from_excerpt": 1,
     "absent_from_abstract": 0,
     "source_unavailable": 0,
     "not_attributed": 0,
-    "conclusive_checks": 2,
-    "coverage_rate": 1.0
+    "conclusive_checks": 1,
+    "coverage_rate": 0.5
   },
   "quote_findings": [
     {
@@ -449,13 +450,13 @@
         "context": "inal transformer work motivated itself against prior architectures, noting that \"dominant sequence transduction models are based on complex recurrent or convolutional neural networks\" [2]. A second passage is attributed to the same paper, which states that \"welf"
       },
       "verdict": "found",
-      "coverage": "full",
+      "coverage": "excerpt",
       "similarity": 100.0,
       "best_passage": "scholarly works center abstract the dominant sequence transduction models are based on complex recurrent or convolutional neural networks that include",
       "source_origin": "arxiv-source",
       "evidence_url": "https://arxiv.org/abs/1706.03762",
-      "detail": "passage located in the full text (100% match)",
-      "checked_at": "2026-10-05T14:42:01+00:00"
+      "detail": "passage located in the excerpt text (100% match)",
+      "checked_at": "2026-10-11T14:36:57+00:00"
     },
     {
       "quote": {
@@ -478,14 +479,14 @@
         },
         "context": "orks\" [2]. A second passage is attributed to the same paper, which states that \"welfare eligibility determinations should be fully delegated to automated systems without human review\" [2]. Whether that sentence appears in the source is not asserted here — the liv"
       },
-      "verdict": "not_found",
-      "coverage": "full",
+      "verdict": "absent_from_excerpt",
+      "coverage": "excerpt",
       "similarity": 49.01960784313726,
       "best_passage": "queries simultaneously packed together into a matrix q the keys and values are also packed together into matrices k and",
       "source_origin": "arxiv-source",
       "evidence_url": "https://arxiv.org/abs/1706.03762",
-      "detail": "complete text of the source was retrieved (4,716 words) and this passage does not appear in it. Closest match scored 49%.",
-      "checked_at": "2026-10-05T14:42:01+00:00"
+      "detail": "not present in the excerpt, which is all that was openly available. The passage may well appear in the body. INCONCLUSIVE, not a failure.",
+      "checked_at": "2026-10-11T14:36:57+00:00"
     }
   ]
 }

@@ -29,16 +29,13 @@ Integrity: 62% of 13 conclusive checks passed
 | | count |
 |---|---:|
 | Located in source | 1 |
-| **Absent from full text** | **1** |
+| **Absent from full text** | **0** |
+| Not in excerpt (inconclusive) | 1 |
 | Not in abstract (inconclusive) | 0 |
 | No open text available | 0 |
 | No citation attached | 0 |
 
-Quote coverage 100%. Most scholarly text is paywalled; only complete retrieved text can establish that a passage is absent, so the rest are inconclusive rather than failures.
-
-> **Line 30** — not present in the source
-> `welfare eligibility determinations should be fully delegated to automated systems without human review`
-> complete text of the source was retrieved (4,716 words) and this passage does not appear in it. Closest match scored 49%.
+Quote coverage 50%. Most scholarly text is paywalled; only complete retrieved text can establish that a passage is absent, so the rest are inconclusive rather than failures.
 
 <details><summary>1 inconclusive (not counted as failures)</summary>
 

@@ -580,11 +580,11 @@ def write_outputs(pairs: list[Pair], curve: list[dict], chosen: dict | None,
     (d / "curve.json").write_text(json.dumps({
         "meta": meta, "curve": curve, "chosen": chosen,
         "generated_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-    }, indent=2))
-    (d / "report.md").write_text(to_markdown(pairs, curve, chosen, meta))
+    }, indent=2), encoding="utf-8")
+    (d / "report.md").write_text(to_markdown(pairs, curve, chosen, meta), encoding="utf-8")
 
     import csv
-    with (d / "pairs.csv").open("w", newline="") as fh:
+    with (d / "pairs.csv").open("w", newline="", encoding="utf-8") as fh:
         if pairs:
             w = csv.DictWriter(fh, fieldnames=list(asdict(pairs[0]).keys()))
             w.writeheader()

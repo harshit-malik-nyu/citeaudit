@@ -1,7 +1,7 @@
 name: studies
 
 # Runs the base-rate and calibration studies against live Crossref and OpenAlex,
-# then commits the results. These are the two measurements that let a reader
+# then uploads the results for review. These are the two measurements that let a reader
 # interpret any citeaudit score: what normal looks like, and what the detector's
 # error rates actually are.
 #
@@ -36,7 +36,7 @@ on:
         default: '12'
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: studies
@@ -89,16 +89,8 @@ jobs:
             [ -f evidence/wikipedia/report.md ] && cat evidence/wikipedia/report.md
           } >> "$GITHUB_STEP_SUMMARY" || true
 
-      - name: Commit results
+      - uses: actions/upload-artifact@v4
         if: always()
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A evidence
-          if git diff --staged --quiet; then
-            echo "no change"
-          else
-            git commit -m "studies: base rate and calibration run [skip ci]"
-            git pull --rebase --autostash origin main || true
-            git push
-          fi
+        with:
+          name: live-study-evidence
+          path: evidence/

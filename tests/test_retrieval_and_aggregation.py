@@ -324,7 +324,7 @@ class TestCalibrationReport:
         assert (tmp_path / "curve.json").exists()
         assert (tmp_path / "report.md").exists()
         assert (tmp_path / "pairs.csv").exists()
-        data = json.loads((tmp_path / "curve.json").read_text())
+        data = json.loads((tmp_path / "curve.json").read_text(encoding="utf-8"))
         assert "curve" in data and "meta" in data
 
 

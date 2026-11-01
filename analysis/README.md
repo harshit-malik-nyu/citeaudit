@@ -13,3 +13,7 @@ Grain: `paper,category,verdict`. Primary and unique keys in `build.py` identify 
 Read `decision_spec.json` for the units, incident definition, randomization unit and every assumption. The original domain evidence remains in `output/manifest.json`; decision-lab outputs have a separate manifest. No generated behavioral row is a real user.
 
 See `output/decision_lab/executive-summary.md`, `economics.json`, `funnel.csv`, `cohorts.csv`, `segments.csv` and `experiment.json`. The deliberately adverse treatment segment checks that improved completion cannot automatically justify a launch.
+
+## Fallback evidence and coverage
+
+`python analysis/fallback_review.py` rebuilds [the synthetic coverage readout](output/fallback_review/decision.md). Routing regression tests distinguish unavailable, disabled and completed-negative secondary lookups. Historical live evidence remains scoped to its original run.

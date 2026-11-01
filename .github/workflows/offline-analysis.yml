@@ -17,4 +17,5 @@ jobs:
       - run: python analysis/decision_lab.py
       - run: python analysis/test_assurance.py
       - run: python analysis/assurance.py
+      - run: python analysis/fallback_review.py
       - run: git diff --exit-code -- analysis/output

@@ -1,0 +1,98 @@
+{
+  "cases": {
+    "completed_negative_lookups": {
+      "all_citation_pass_share_bounds": [
+        0.0,
+        0.0
+      ],
+      "check_coverage": 1.0,
+      "conclusive_checks": 1,
+      "document": "completed_negative_lookups",
+      "integrity_score": 0.0,
+      "malformed": 0,
+      "mismatch": 0,
+      "not_found": 1,
+      "pass_share_scope": "Bounds on check outcomes if inconclusive checks fail or pass; not confidence intervals or factual truth rates.",
+      "total_citations": 1,
+      "unreachable": 0,
+      "unverifiable": 0,
+      "verified": 0
+    },
+    "empty_document": {
+      "all_citation_pass_share_bounds": null,
+      "check_coverage": null,
+      "conclusive_checks": 0,
+      "document": "empty_document",
+      "integrity_score": null,
+      "malformed": 0,
+      "mismatch": 0,
+      "not_found": 0,
+      "pass_share_scope": "Bounds on check outcomes if inconclusive checks fail or pass; not confidence intervals or factual truth rates.",
+      "total_citations": 0,
+      "unreachable": 0,
+      "unverifiable": 0,
+      "verified": 0
+    },
+    "fallback_disabled": {
+      "all_citation_pass_share_bounds": [
+        0.0,
+        1.0
+      ],
+      "check_coverage": 0.0,
+      "conclusive_checks": 0,
+      "document": "fallback_disabled",
+      "integrity_score": null,
+      "malformed": 0,
+      "mismatch": 0,
+      "not_found": 0,
+      "pass_share_scope": "Bounds on check outcomes if inconclusive checks fail or pass; not confidence intervals or factual truth rates.",
+      "total_citations": 1,
+      "unreachable": 0,
+      "unverifiable": 1,
+      "verified": 0
+    },
+    "fallback_outage": {
+      "all_citation_pass_share_bounds": [
+        0.0,
+        1.0
+      ],
+      "check_coverage": 0.0,
+      "conclusive_checks": 0,
+      "document": "fallback_outage",
+      "integrity_score": null,
+      "malformed": 0,
+      "mismatch": 0,
+      "not_found": 0,
+      "pass_share_scope": "Bounds on check outcomes if inconclusive checks fail or pass; not confidence intervals or factual truth rates.",
+      "total_citations": 1,
+      "unreachable": 1,
+      "unverifiable": 0,
+      "verified": 0
+    },
+    "one_verified_two_inconclusive": {
+      "all_citation_pass_share_bounds": [
+        0.3333333333333333,
+        1.0
+      ],
+      "check_coverage": 0.3333333333333333,
+      "conclusive_checks": 1,
+      "document": "one_verified_two_inconclusive",
+      "integrity_score": 1.0,
+      "malformed": 0,
+      "mismatch": 0,
+      "not_found": 0,
+      "pass_share_scope": "Bounds on check outcomes if inconclusive checks fail or pass; not confidence intervals or factual truth rates.",
+      "total_citations": 3,
+      "unreachable": 1,
+      "unverifiable": 1,
+      "verified": 1
+    }
+  },
+  "scope": "Synthetic report aggregation examples, not live citation outcomes. Routing behavior is verified in tests/test_fallback_evidence.py.",
+  "source_sha256": {
+    "analysis/fallback_review.py": "563d5b7fd276e7631a7ad3303ecff714e22ce3f3997eaeaf03749d2ecdaa22a8",
+    "src/citeaudit/models.py": "50c6f78aa8908a65e8480dfeba307a5fbcfa92df8382db7d4897071b872ae4a8",
+    "src/citeaudit/verify.py": "2bd4ccffc0b5a457440ad63c40280fc59becc18d6d9839c25bd6b5b1a3ba28ea",
+    "tests/test_fallback_evidence.py": "825ea22dba5eccd969fa71b51dad6774823d68067f7d171b47cd741f1362bcc3"
+  }
+}

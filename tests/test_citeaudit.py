@@ -389,7 +389,8 @@ class TestVerifier:
         f = v.check(c)
         assert f.verdict is Verdict.NOT_FOUND
         assert f.authority == "crossref+openalex"
-        assert "no registration" in f.detail.lower()
+        assert "completed lookups" in f.detail.lower()
+        assert "not proof" in f.detail.lower()
         # both authorities were actually consulted
         assert any("api.crossref.org" in u for u in stub.calls)
         assert any("api.openalex.org" in u for u in stub.calls)
@@ -613,22 +614,22 @@ class TestFallbackAuthority:
         )
         assert v.check(c).verdict is Verdict.MISMATCH
 
-    def test_unreachable_fallback_does_not_mask_the_crossref_miss(self):
-        """A failed second opinion is not evidence; the first verdict stands."""
+    def test_unreachable_fallback_keeps_the_check_inconclusive(self):
+        """A failed second opinion cannot be reported as a completed negative."""
         stub = StubClient({
             "api.crossref.org": (404, ""),
             "api.openalex.org": (503, ""),
         })
         v = Verifier(stub, workers=1)
         c = Citation(raw="x", kind=Kind.DOI, identifier="10.9999/nope")
-        assert v.check(c).verdict is Verdict.NOT_FOUND
+        assert v.check(c).verdict is Verdict.UNREACHABLE
 
     def test_fallback_can_be_disabled(self):
         stub = StubClient({"api.crossref.org": (404, "")})
         v = Verifier(stub, use_fallback=False, workers=1)
         c = Citation(raw="x", kind=Kind.DOI, identifier="10.9999/nope")
         f = v.check(c)
-        assert f.verdict is Verdict.NOT_FOUND
+        assert f.verdict is Verdict.UNVERIFIABLE
         assert not any("openalex" in u for u in stub.calls)
 
     def test_bibliographic_reference_found_only_in_openalex(self):

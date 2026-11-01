@@ -99,8 +99,8 @@ class Verifier:
             return Finding(
                 citation=c, verdict=Verdict.NOT_FOUND, authority="crossref+openalex",
                 detail=("Neither Crossref nor OpenAlex holds a record for this "
-                        "DOI. Two independent indexes have no registration for "
-                        "it."),
+                        "DOI in these completed lookups. Index coverage is "
+                        "incomplete; this is not proof that the work never existed."),
                 evidence_url=f"https://api.crossref.org/works/{doi}",
             )
 
@@ -236,16 +236,22 @@ class Verifier:
         Second opinion on a DOI Crossref does not hold.
 
         Returns a Finding when OpenAlex resolves it, or None to let the caller
-        report NOT_FOUND. An Unreachable fallback also returns None rather than
-        propagating: failing to get a second opinion is not itself evidence,
-        and the Crossref miss already stands on its own.
+        report NOT_FOUND after a completed negative lookup. Disabled or
+        unreachable fallback checks return an explicitly inconclusive Finding;
+        the Crossref miss is retained in its explanation.
         """
         if not self.use_fallback:
-            return None
+            return Finding(citation=c, verdict=Verdict.UNVERIFIABLE,
+                           authority="crossref",
+                           detail="Crossref did not match this citation; OpenAlex fallback was disabled. The two-index check is incomplete.")
         try:
             rec = self.openalex.resolve_doi(doi)
-        except (NotFound, Unreachable):
+        except NotFound:
             return None
+        except Unreachable as exc:
+            return Finding(citation=c, verdict=Verdict.UNREACHABLE,
+                           authority="crossref+openalex",
+                           detail=f"Crossref did not match this citation; OpenAlex could not be checked: {exc}. No negative OpenAlex result was obtained.")
 
         mismatch, sim, overlap, detail = match.assess(
             c.claimed_title, c.claimed_authors, c.claimed_year,
@@ -265,11 +271,17 @@ class Verifier:
     def _fallback_search(self, c: Citation, title: str) -> Finding | None:
         """Second opinion on a description Crossref cannot match."""
         if not self.use_fallback:
-            return None
+            return Finding(citation=c, verdict=Verdict.UNVERIFIABLE,
+                           authority="crossref",
+                           detail="Crossref did not match this citation; OpenAlex fallback was disabled. The two-index check is incomplete.")
         try:
             candidates = self.openalex.search_title(title)
-        except (NotFound, Unreachable):
+        except NotFound:
             return None
+        except Unreachable as exc:
+            return Finding(citation=c, verdict=Verdict.UNREACHABLE,
+                           authority="crossref+openalex",
+                           detail=f"Crossref did not match this citation; OpenAlex could not be checked: {exc}. No negative OpenAlex result was obtained.")
 
         for cand in candidates:
             ok, sim = match.is_plausible_search_hit(

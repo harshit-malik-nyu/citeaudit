@@ -35,7 +35,7 @@ class Verdict(str, Enum):
 
     NOT_FOUND = "not_found"
     """Identifier is well-formed but does not resolve against the authority.
-    This is the fabrication signature."""
+    This describes the completed lookup, not proof of fabrication or nonexistence."""
 
     UNREACHABLE = "unreachable"
     """The check could not be completed — timeout, rate limit, service error.
@@ -43,7 +43,7 @@ class Verdict(str, Enum):
 
     UNVERIFIABLE = "unverifiable"
     """No machine-checkable identifier and no title specific enough to search.
-    The tool declines to guess."""
+    Also used when a required fallback is disabled. The tool declines to guess."""
 
     MALFORMED = "malformed"
     """Identifier is syntactically invalid and cannot be resolved by anyone."""
@@ -195,7 +195,14 @@ class Report:
             "unreachable": self.count(Verdict.UNREACHABLE),
             "unverifiable": self.count(Verdict.UNVERIFIABLE),
             "conclusive_checks": self.conclusive,
+            "check_coverage": self.conclusive / self.total if self.total else None,
             "integrity_score": self.integrity_score,
+            "all_citation_pass_share_bounds": (
+                [self.count(Verdict.VERIFIED) / self.total,
+                 (self.count(Verdict.VERIFIED) + len(self.inconclusive)) / self.total]
+                if self.total else None
+            ),
+            "pass_share_scope": "Bounds on check outcomes if inconclusive checks fail or pass; not confidence intervals or factual truth rates.",
         }
 
     def quote_summary(self) -> dict[str, Any] | None:
